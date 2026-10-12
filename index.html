@@ -154,20 +154,21 @@ a[href^="tel:"]:active { opacity: .75; }
 .ic-ov-left h2{font-size:20px;font-weight:700;margin-bottom:8px;line-height:1.4;}
 .ic-ov-left h2 span{color:var(--teal-light);}
 .ic-ov-left p{font-size:12px;color:rgba(255,255,255,.65);line-height:1.7;margin-bottom:16px;}
-.ic-ov-stats{display:flex;gap:16px;}
-.ic-stat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:12px 16px;text-align:center;flex:1;}
+.ic-ov-stats{display:flex;gap:0;}
+.ic-stat{text-align:left;padding:0 20px 0 0;margin-right:20px;border-right:1px solid rgba(255,255,255,.18);}
+.ic-stat:last-child{border-right:none;margin-right:0;padding-right:0;}
 .ic-stat-num{font-size:22px;font-weight:800;color:var(--teal-light);}
 .ic-stat-label{font-size:10px;color:rgba(255,255,255,.6);margin-top:2px;}
 .ic-ov-right{}
 
 /* 흐름도 */
-.flow-title{font-size:12px;font-weight:700;color:rgba(255,255,255,.7);margin-bottom:12px;letter-spacing:.5px;}
-.flow-steps{display:flex;flex-direction:column;gap:0;}
-.flow-step{display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(255,255,255,.08);border-radius:9px;margin-bottom:4px;border-left:3px solid var(--teal-light);}
-.flow-step-num{width:22px;height:22px;border-radius:50%;background:var(--teal-light);color:white;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.flow-step-text{font-size:12px;font-weight:600;color:white;flex:1;}
-.flow-step-sub{font-size:10px;color:rgba(255,255,255,.55);}
-.flow-arrow{text-align:center;color:rgba(255,255,255,.3);font-size:12px;padding:1px 0;}
+.flow-title{font-size:12px;font-weight:700;color:rgba(255,255,255,.7);margin-bottom:14px;letter-spacing:.5px;}
+.flow-steps{display:flex;flex-direction:column;gap:16px;position:relative;padding-left:32px;}
+.flow-steps::before{content:'';position:absolute;left:10px;top:11px;bottom:11px;width:1.5px;background:rgba(255,255,255,.22);}
+.flow-step{position:relative;}
+.flow-step-num{position:absolute;left:-32px;top:0;width:21px;height:21px;border-radius:50%;background:var(--navy-light);border:1.5px solid var(--teal-light);color:var(--teal-light);font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.flow-step-text{font-size:12.5px;font-weight:700;color:white;}
+.flow-step-sub{font-size:10.5px;color:rgba(255,255,255,.55);margin-top:1px;}
 
 /* 통합 돌봄 서비스 목록 */
 .ic-service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
@@ -1262,17 +1263,12 @@ footer strong{color:rgba(255,255,255,.85);}
       <div class="ic-ov-right">
         <div class="flow-title">🔄 통합지원 법정 절차 (2026.3.27 시행)</div>
         <div class="flow-steps">
-          <div class="flow-step"><div class="flow-step-num">1</div><div><div class="flow-step-text">신청</div><div class="flow-step-sub">읍면동 행정복지센터 / 공단 지사 (방문·우편·팩스)</div></div></div>
-          <div class="flow-arrow">↓</div>
-          <div class="flow-step"><div class="flow-step-num">2</div><div><div class="flow-step-text">사전조사</div><div class="flow-step-sub">퇴원연계 대상자는 면제</div></div></div>
-          <div class="flow-arrow">↓</div>
-          <div class="flow-step"><div class="flow-step-num">3</div><div><div class="flow-step-text">통합판정조사</div><div class="flow-step-sub">공단 지사, 필요 시 읍면동 동행</div></div></div>
-          <div class="flow-arrow">↓</div>
-          <div class="flow-step"><div class="flow-step-num">4</div><div><div class="flow-step-text">통합지원회의 · 개인별지원계획 승인</div><div class="flow-step-sub">시군구 전담부서·읍면동·보건소·공단·제공기관</div></div></div>
-          <div class="flow-arrow">↓</div>
-          <div class="flow-step"><div class="flow-step-num">5</div><div><div class="flow-step-text">서비스 제공</div><div class="flow-step-sub">개인별지원계획에 따른 서비스 개시</div></div></div>
-          <div class="flow-arrow">↓</div>
-          <div class="flow-step"><div class="flow-step-num">6</div><div><div class="flow-step-text">모니터링</div><div class="flow-step-sub">최초 1개월 내, 이후 3개월마다</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">1</div><div class="flow-step-text">신청</div><div class="flow-step-sub">읍면동 행정복지센터 / 공단 지사 (방문·우편·팩스)</div></div>
+          <div class="flow-step"><div class="flow-step-num">2</div><div class="flow-step-text">사전조사</div><div class="flow-step-sub">퇴원연계 대상자는 면제</div></div>
+          <div class="flow-step"><div class="flow-step-num">3</div><div class="flow-step-text">통합판정조사</div><div class="flow-step-sub">공단 지사, 필요 시 읍면동 동행</div></div>
+          <div class="flow-step"><div class="flow-step-num">4</div><div class="flow-step-text">통합지원회의 · 개인별지원계획 승인</div><div class="flow-step-sub">시군구 전담부서·읍면동·보건소·공단·제공기관</div></div>
+          <div class="flow-step"><div class="flow-step-num">5</div><div class="flow-step-text">서비스 제공</div><div class="flow-step-sub">개인별지원계획에 따른 서비스 개시</div></div>
+          <div class="flow-step"><div class="flow-step-num">6</div><div class="flow-step-text">모니터링</div><div class="flow-step-sub">최초 1개월 내, 이후 3개월마다</div></div>
         </div>
       </div>
     </div>
