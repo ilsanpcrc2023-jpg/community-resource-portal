@@ -7,10 +7,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy:#0d6cb0; --navy-light:#2e93d6;
-  --teal:#2a7f7f; --teal-light:#3aa3a3;
-  --gold:#c8972a; --green:#3a7a5a;
-  --purple:#6a4a8a; --coral:#c05a3a;
+  --navy:#2f6690; --navy-light:#5b93b8;
+  --teal:#44797a; --teal-light:#5fa3a3;
+  --gold:#b8923f; --green:#4a7a66;
+  --purple:#705a8a; --coral:#b06b56;
   --orange:#d4701e;
   --gray-100:#f5f7fa; --gray-200:#eaecf0;
   --gray-400:#9aa3b0; --text:#1e2a3a;
@@ -105,6 +105,9 @@ header{background:white;color:var(--text);padding:0 28px;display:flex;align-item
 
 /* ── 공공 자원 탭 ── */
 .domain-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:28px;}
+.mono-accent .dom-ico,.mono-accent .dom-tel,.mono-accent .di-tag,.mono-accent .dom-apply{background:rgba(47,102,144,.1)!important;color:var(--navy)!important;border-color:rgba(47,102,144,.22)!important;}
+.mono-accent .di-dot{background:var(--navy)!important;}
+.mono-accent .dom-hd{background:linear-gradient(135deg,rgba(47,102,144,.06),rgba(47,102,144,.02))!important;}
 .dom-card{background:white;border-radius:var(--radius);border:1.5px solid var(--gray-200);overflow:hidden;transition:.25s;box-shadow:var(--shadow);}
 .dom-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);border-color:transparent;}
 .dom-hd{padding:16px 20px 12px;display:flex;align-items:center;gap:11px;}
@@ -1250,7 +1253,7 @@ footer strong{color:rgba(255,255,255,.85);}
     <div class="sec-title">지역사회 연계 자원 4영역</div>
     <a class="sec-link" onclick="openModal('allResources')">전체 자원 보기 →</a>
   </div>
-  <div class="domain-grid">
+  <div class="domain-grid mono-accent">
 
     <div class="dom-card">
       <div class="dom-hd" style="background:linear-gradient(135deg,rgba(42,127,127,.06),rgba(42,127,127,.02));">
