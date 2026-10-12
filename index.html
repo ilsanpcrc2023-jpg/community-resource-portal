@@ -988,17 +988,17 @@ footer strong{color:rgba(255,255,255,.85);}
 <!-- ──────── 빠른 메뉴 (히어로 하단에 겹치는 카드 행) ──────── -->
 <div class="quick-access">
   <div class="qa-inner">
-    <a class="qa-card" onclick="switchTab('pilot', document.querySelectorAll('.tab-btn')[0]);document.querySelector('.tabs-wrap').scrollIntoView({behavior:'smooth'})">
+    <a class="qa-card" onclick="switchTab('pilot', document.querySelector('.tab-btn[data-tab=&quot;pilot&quot;]'));document.querySelector('.tabs-wrap').scrollIntoView({behavior:'smooth'})">
       <div class="qa-ico">🩺</div>
       <div class="qa-label">시범사업 의원</div>
-      <div class="qa-sub">11개소 바로 전화</div>
+      <div class="qa-sub">12개소 바로 전화</div>
     </a>
-    <a class="qa-card" onclick="switchTab('homecare', document.querySelectorAll('.tab-btn')[5]);document.querySelector('.tabs-wrap').scrollIntoView({behavior:'smooth'})">
+    <a class="qa-card" onclick="switchTab('homecare', document.querySelector('.tab-btn[data-tab=&quot;homecare&quot;]'));document.querySelector('.tabs-wrap').scrollIntoView({behavior:'smooth'})">
       <div class="qa-ico">🏠</div>
       <div class="qa-label">재택의료·방문진료</div>
       <div class="qa-sub">8개소 운영 확인</div>
     </a>
-    <a class="qa-card" onclick="switchTab('integrated', document.querySelectorAll('.tab-btn')[2]);document.querySelector('.tabs-wrap').scrollIntoView({behavior:'smooth'})">
+    <a class="qa-card" onclick="switchTab('integrated', document.querySelector('.tab-btn[data-tab=&quot;integrated&quot;]'));document.querySelector('.tabs-wrap').scrollIntoView({behavior:'smooth'})">
       <div class="qa-ico">🔗</div>
       <div class="qa-label">통합돌봄 신청</div>
       <div class="qa-sub">법정 절차·신청창구</div>
@@ -1014,13 +1014,13 @@ footer strong{color:rgba(255,255,255,.85);}
 <!-- ──────── TABS ──────── -->
 <div class="tabs-wrap">
   <div class="tabs-inner">
-    <button class="tab-btn" onclick="switchTab('pilot', this)">🩺 시범사업 의원 <span class="tab-count">12</span></button>
-    <button class="tab-btn active" onclick="switchTab('public', this)">🏛️ 공공 자원 <span class="tab-count">4영역</span></button>
-    <button class="tab-btn" onclick="switchTab('integrated', this)">🔗 통합 돌봄 <span class="tab-count">NEW</span></button>
-    <button class="tab-btn" onclick="switchTab('private', this)">🏘️ 민간 자원 <span class="tab-count">4유형</span></button>
-    <button class="tab-btn" onclick="switchTab('apply', this)">🖱️ 서비스 신청 <span class="tab-count">6</span></button>
-    <button class="tab-btn" onclick="switchTab('homecare', this)">🏠 재택의료 <span class="tab-count">8</span></button>
-    <button class="tab-btn" onclick="switchTab('assess', this)">📋 사정 도구 <span class="tab-count" id="assess-count-badge">13종</span></button>
+    <button class="tab-btn active" data-tab="public" onclick="switchTab('public', this)">🏛️ 공공 자원 <span class="tab-count">4영역</span></button>
+    <button class="tab-btn" data-tab="integrated" onclick="switchTab('integrated', this)">🔗 통합 돌봄 <span class="tab-count">NEW</span></button>
+    <button class="tab-btn" data-tab="private" onclick="switchTab('private', this)">🏘️ 민간 자원 <span class="tab-count">4유형</span></button>
+    <button class="tab-btn" data-tab="apply" onclick="switchTab('apply', this)">🖱️ 서비스 신청 <span class="tab-count">6</span></button>
+    <button class="tab-btn" data-tab="pilot" onclick="switchTab('pilot', this)">🩺 시범사업 의원 <span class="tab-count">12</span></button>
+    <button class="tab-btn" data-tab="homecare" onclick="switchTab('homecare', this)">🏠 재택의료 <span class="tab-count">8</span></button>
+    <button class="tab-btn" data-tab="assess" onclick="switchTab('assess', this)">📋 사정 도구 <span class="tab-count" id="assess-count-badge">13종</span></button>
   </div>
 </div>
 
@@ -1164,7 +1164,7 @@ footer strong{color:rgba(255,255,255,.85);}
         <div class="dom-item" onclick="openModal('emergency_care')"><div class="di-l"><div class="di-dot" style="background:var(--purple)"></div><div class="di-nm">긴급돌봄 파견</div></div><span class="di-tag bg-ps pc">긴급</span><span class="di-lk">상세 보기</span></div>
         <div class="dom-item" onclick="openModal('care_sos')"><div class="di-l"><div class="di-dot" style="background:var(--purple)"></div><div class="di-nm">돌봄SOS 서비스</div></div><span class="di-tag bg-ps pc">지자체</span><span class="di-lk">상세 보기</span></div>
         <div class="dom-item" onclick="openModal('elderly_check')"><div class="di-l"><div class="di-dot" style="background:var(--purple)"></div><div class="di-nm">독거노인 안전확인</div></div><span class="di-tag bg-ps pc">예방</span><span class="di-lk">상세 보기</span></div>
-        <div class="dom-item" onclick="switchTab('integrated', document.querySelectorAll('.tab-btn')[1]);document.querySelector('.tabs-wrap').scrollIntoView()"><div class="di-l"><div class="di-dot" style="background:var(--purple)"></div><div class="di-nm">통합사례관리 연계</div></div><span class="di-tag bg-ps pc">통합돌봄</span><span class="di-lk">→ 통합돌봄 탭</span></div>
+        <div class="dom-item" onclick="switchTab('integrated', document.querySelector('.tab-btn[data-tab=&quot;integrated&quot;]'));document.querySelector('.tabs-wrap').scrollIntoView()"><div class="di-l"><div class="di-dot" style="background:var(--purple)"></div><div class="di-nm">통합사례관리 연계</div></div><span class="di-tag bg-ps pc">통합돌봄</span><span class="di-lk">→ 통합돌봄 탭</span></div>
       </div>
       <div class="dom-ft"><span class="dom-ft-txt">💡 주민등록 주소지 읍면동 주민센터</span><a class="dom-apply bg-ps pc" href="https://www.bokjiro.go.kr" target="_blank">✍️ 복지로 신청</a></div>
     </div>
@@ -1181,7 +1181,7 @@ footer strong{color:rgba(255,255,255,.85);}
         <div class="dom-item" onclick="openModal('housing')"><div class="di-l"><div class="di-dot" style="background:var(--green)"></div><div class="di-nm">주거환경 개선</div></div><span class="di-tag bg-gs gc">환경</span><span class="di-lk">상세 보기</span></div>
         <div class="dom-item" onclick="openModal('energy')"><div class="di-l"><div class="di-dot" style="background:var(--green)"></div><div class="di-nm">에너지바우처·생계지원</div></div><span class="di-tag bg-gs gc">경제</span><span class="di-lk">상세 보기</span></div>
       </div>
-      <div class="dom-ft"><span class="dom-ft-txt">💡 고양시 사회복지관·자원봉사센터 연계</span><button class="dom-apply bg-gs gc" style="border:none;cursor:pointer;" onclick="switchTab('private', document.querySelectorAll('.tab-btn')[2]);document.querySelector('.tabs-wrap').scrollIntoView()">🏘️ 민간 자원 탭</button></div>
+      <div class="dom-ft"><span class="dom-ft-txt">💡 고양시 사회복지관·자원봉사센터 연계</span><button class="dom-apply bg-gs gc" style="border:none;cursor:pointer;" onclick="switchTab('private', document.querySelector('.tab-btn[data-tab=&quot;private&quot;]'));document.querySelector('.tabs-wrap').scrollIntoView()">🏘️ 민간 자원 탭</button></div>
     </div>
 
     <div class="dom-card">
