@@ -149,26 +149,26 @@ a[href^="tel:"]:active { opacity: .75; }
 
 /* ── 통합 돌봄 탭 ── */
 /* 개요 카드 */
-.ic-overview{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:var(--radius);padding:24px;margin-bottom:24px;color:white;}
+.ic-overview{background:linear-gradient(135deg,rgba(13,108,176,.05),rgba(46,147,214,.02));border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:24px;margin-bottom:24px;color:var(--text);}
 .ic-overview-inner{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;}
-.ic-ov-left h2{font-size:20px;font-weight:700;margin-bottom:8px;line-height:1.4;}
-.ic-ov-left h2 span{color:var(--teal-light);}
-.ic-ov-left p{font-size:12px;color:rgba(255,255,255,.65);line-height:1.7;margin-bottom:16px;}
+.ic-ov-left h2{font-size:20px;font-weight:700;margin-bottom:8px;line-height:1.4;color:var(--navy);}
+.ic-ov-left h2 span{color:var(--teal);}
+.ic-ov-left p{font-size:12px;color:var(--gray-400);line-height:1.7;margin-bottom:16px;}
 .ic-ov-stats{display:flex;gap:0;}
-.ic-stat{text-align:left;padding:0 20px 0 0;margin-right:20px;border-right:1px solid rgba(255,255,255,.18);}
+.ic-stat{text-align:left;padding:0 20px 0 0;margin-right:20px;border-right:1px solid var(--gray-200);}
 .ic-stat:last-child{border-right:none;margin-right:0;padding-right:0;}
-.ic-stat-num{font-size:22px;font-weight:800;color:var(--teal-light);}
-.ic-stat-label{font-size:10px;color:rgba(255,255,255,.6);margin-top:2px;}
+.ic-stat-num{font-size:22px;font-weight:800;color:var(--teal);}
+.ic-stat-label{font-size:10px;color:var(--gray-400);margin-top:2px;}
 .ic-ov-right{}
 
 /* 흐름도 */
-.flow-title{font-size:12px;font-weight:700;color:rgba(255,255,255,.7);margin-bottom:14px;letter-spacing:.5px;}
+.flow-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:14px;letter-spacing:.5px;}
 .flow-steps{display:flex;flex-direction:column;gap:16px;position:relative;padding-left:32px;}
-.flow-steps::before{content:'';position:absolute;left:10px;top:11px;bottom:11px;width:1.5px;background:rgba(255,255,255,.22);}
+.flow-steps::before{content:'';position:absolute;left:10px;top:11px;bottom:11px;width:1.5px;background:var(--gray-200);}
 .flow-step{position:relative;}
-.flow-step-num{position:absolute;left:-32px;top:0;width:21px;height:21px;border-radius:50%;background:var(--navy-light);border:1.5px solid var(--teal-light);color:var(--teal-light);font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.flow-step-text{font-size:12.5px;font-weight:700;color:white;}
-.flow-step-sub{font-size:10.5px;color:rgba(255,255,255,.55);margin-top:1px;}
+.flow-step-num{position:absolute;left:-32px;top:0;width:21px;height:21px;border-radius:50%;background:white;border:1.5px solid var(--teal);color:var(--teal);font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.flow-step-text{font-size:12.5px;font-weight:700;color:var(--navy);}
+.flow-step-sub{font-size:10.5px;color:var(--gray-400);margin-top:1px;}
 
 /* 통합 돌봄 서비스 목록 */
 .ic-service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
