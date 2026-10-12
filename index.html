@@ -3290,7 +3290,7 @@ function hcCardHTML(c){
     <div class="hc-card-note">${c.note}${s.memo?`<br><b style="color:var(--teal)">메모:</b> ${s.memo}`:''}</div>
     <div class="hc-actions">
       <a class="hc-act tel" href="tel:${c.phone}">📞 ${c.phone}</a>
-      <a class="hc-act map" href="https://map.kakao.com/?q=${encodeURIComponent(c.name+' '+c.district)}" target="_blank">🗺️ 지도</a>
+      <a class="hc-act map" href="https://map.kakao.com/link/search/${encodeURIComponent(c.address || (c.name+' '+c.district))}" target="_blank" rel="noopener">🗺️ 지도</a>
       <button class="hc-act hira" onclick="hcOpenHira('${c.name.replace(/'/g,"&apos;")}')">🔍 심평원</button>
       <button class="hc-act edit" onclick="hcOpenEdit('${c.id}')" title="운영 확인 / 정보 갱신">✏️</button>
     </div>
@@ -3506,7 +3506,7 @@ function vnCardHTML(c){
     </div>
     <div class="hc-actions">
       <a class="hc-act tel" href="tel:${c.phone}">📞 ${c.phone}</a>
-      <a class="hc-act map" href="https://map.kakao.com/?q=${encodeURIComponent(c.name+' '+c.district)}" target="_blank">🗺️ 지도</a>
+      <a class="hc-act map" href="https://map.kakao.com/link/search/${encodeURIComponent(c.address || (c.name+' '+c.district))}" target="_blank" rel="noopener">🗺️ 지도</a>
     </div>
   </div>`;
 }
