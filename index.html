@@ -279,6 +279,10 @@ a[href^="tel:"]:active { opacity: .75; }
 .chk-item.checked .chk-box{background:#3a7a5a;border-color:#3a7a5a;color:white;}
 .chk-label{font-size:12px;color:var(--text);font-weight:500;}
 .chk-item.checked .chk-label{text-decoration:line-through;color:var(--gray-400);}
+.gy-mini-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 2px;border-bottom:1px dashed var(--gray-200);}
+.gy-mini-row:last-child{border-bottom:none;}
+.gy-mini-name{font-size:12px;font-weight:600;color:var(--text);}
+.gy-mini-row .hc-act.tel{padding:4px 10px;font-size:10.5px;flex-shrink:0;}
 .ref-hd{background:linear-gradient(135deg,var(--navy),var(--navy-light))!important;}
 .ref-item{display:flex;align-items:center;gap:10px;padding:9px 9px;border-radius:8px;cursor:pointer;transition:.15s;border:1.5px solid transparent;margin-bottom:3px;}
 .ref-item:hover{background:var(--gray-100);border-color:var(--gray-200);}
@@ -1322,15 +1326,17 @@ footer strong{color:rgba(255,255,255,.85);}
       </div>
     </div>
     <div class="chk-card">
-      <div class="chk-hd ref-hd"><h3>📋 지역사회 자원 연계 서식</h3><p>[별지 제12호 서식] 연계 기관·사업 — 클릭하면 관련 정보로 이동</p></div>
-      <div class="chk-body">
-        <div class="ref-item" onclick="openModal('dementia')"><div class="ref-num">①</div><div class="ref-cont"><div class="ref-ti">치매안심센터</div><div class="ref-sub">치매 선별검사·등록관리·가족 지원</div></div><span class="ref-arrow">상세 보기 ›</span></div>
-        <div class="ref-item" onclick="openModal('mental')"><div class="ref-num">②</div><div class="ref-cont"><div class="ref-ti">기초정신건강복지센터</div><div class="ref-sub">정신건강 상담·사례관리</div></div><span class="ref-arrow">상세 보기 ›</span></div>
-        <div class="ref-item" onclick="openModal('polypharmacy')"><div class="ref-num">③</div><div class="ref-cont"><div class="ref-ti">다제약물관리사업</div><div class="ref-sub">다약제 복용 점검·조정 (지역사회 모형·약속이음)</div></div><span class="ref-arrow">상세 보기 ›</span></div>
-        <div class="ref-item" onclick="openModal('visit_health')"><div class="ref-num">④</div><div class="ref-cont"><div class="ref-ti">건강관리·예방사업</div><div class="ref-sub">보건소 방문건강관리</div></div><span class="ref-arrow">상세 보기 ›</span></div>
-        <div class="ref-item" onclick="icScrollTo('.proc-card')"><div class="ref-num">⑤</div><div class="ref-cont"><div class="ref-ti">장기요양 인정신청 및 관련 제도 안내</div><div class="ref-sub">신청 5단계 바로가기</div></div><span class="ref-arrow">↑ 위로 이동 ›</span></div>
-        <div class="ref-item" onclick="icScrollTo('#dom-livelihood')"><div class="ref-num">⑥</div><div class="ref-cont"><div class="ref-ti">일상생활돌봄</div><div class="ref-sub">긴급돌봄·돌봄SOS·독거노인 안전확인</div></div><span class="ref-arrow">↑ 위로 이동 ›</span></div>
-        <div class="ref-item" onclick="switchTab('apply', document.querySelector('.tab-btn[data-tab=&quot;apply&quot;]'))"><div class="ref-num">⑦</div><div class="ref-cont"><div class="ref-ti">기타</div><div class="ref-sub">그 외 서비스 신청 안내</div></div><span class="ref-arrow">→ 서비스 신청 탭</span></div>
+      <div class="chk-hd" style="background:linear-gradient(135deg,var(--gold),#d9a93a);"><h3>📞 주요 공공기관 전화번호</h3><p>자주 연락하는 고양시 기관을 모아 바로 전화</p></div>
+      <div class="chk-body" style="padding:6px 16px;">
+        <div class="gy-mini-row"><span class="gy-mini-name">일산동구보건소</span><a class="hc-act tel" href="tel:031-8075-4800">📞 031-8075-4800</a></div>
+        <div class="gy-mini-row"><span class="gy-mini-name">일산서구보건소</span><a class="hc-act tel" href="tel:031-8075-4600">📞 031-8075-4600</a></div>
+        <div class="gy-mini-row"><span class="gy-mini-name">덕양구보건소</span><a class="hc-act tel" href="tel:031-8075-4000">📞 031-8075-4000</a></div>
+        <div class="gy-mini-row"><span class="gy-mini-name">치매안심센터 (일산동)</span><a class="hc-act tel" href="tel:031-8075-4870">📞 031-8075-4870</a></div>
+        <div class="gy-mini-row"><span class="gy-mini-name">치매안심센터 (일산서)</span><a class="hc-act tel" href="tel:031-8075-4670">📞 031-8075-4670</a></div>
+        <div class="gy-mini-row"><span class="gy-mini-name">치매안심센터 (덕양)</span><a class="hc-act tel" href="tel:031-8075-4090">📞 031-8075-4090</a></div>
+        <div class="gy-mini-row"><span class="gy-mini-name">고양시정신건강복지센터</span><a class="hc-act tel" href="tel:031-968-2333">📞 031-968-2333</a></div>
+        <div class="gy-mini-row"><span class="gy-mini-name">건강보험공단 고양일산지사</span><a class="hc-act tel" href="tel:1577-1000">📞 1577-1000</a></div>
+        <div class="gy-mini-row"><span class="gy-mini-name">고양시 일산노인복지관</span><a class="hc-act tel" href="tel:031-910-9000">📞 031-910-9000</a></div>
       </div>
     </div>
   </div>
