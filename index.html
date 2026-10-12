@@ -59,6 +59,15 @@ header{background:var(--navy);color:white;padding:0 28px;display:flex;align-item
 .hc-tel{font-size:14px;font-weight:800;color:var(--teal-light);text-decoration:none;}
 .hc-tel:hover{text-decoration:underline;}
 
+/* ── 빠른 메뉴 (히어로 하단 플로팅 카드) ── */
+.quick-access{padding:0 28px;margin:-32px 0 14px;position:relative;z-index:5;}
+.qa-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.qa-card{background:white;border-radius:14px;border:1px solid var(--gray-200);box-shadow:0 10px 28px rgba(26,46,74,.16);padding:18px 16px;text-align:center;cursor:pointer;transition:.22s;text-decoration:none;display:block;}
+.qa-card:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(26,46,74,.22);border-color:var(--teal);}
+.qa-ico{font-size:25px;margin-bottom:7px;}
+.qa-label{font-weight:800;color:var(--navy);font-size:13px;}
+.qa-sub{font-size:10.5px;color:var(--gray-400);margin-top:3px;font-weight:600;}
+
 /* ── TABS ── */
 .tabs-wrap{background:white;border-bottom:2px solid var(--gray-200);position:sticky;top:60px;z-index:90;box-shadow:0 2px 8px rgba(0,0,0,.06);}
 .tabs-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;gap:0;}
@@ -832,9 +841,17 @@ footer strong{color:rgba(255,255,255,.85);}
   .btn-p,.btn-o{font-size:12px;padding:10px 14px;}
   .hero-top{flex-direction:column;gap:14px;}
   .hero-contacts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-  .hc-card{padding:9px 12px;}
+  .qc-card{padding:9px 12px;}
   .hc-name{font-size:12px;}
   .hc-tel{font-size:13px;}
+
+  /* ── 빠른 메뉴 ── */
+  .quick-access{padding:0 10px;margin:-20px 0 10px;}
+  .qa-inner{grid-template-columns:1fr 1fr;gap:8px;}
+  .qa-card{padding:13px 10px;border-radius:11px;}
+  .qa-ico{font-size:20px;margin-bottom:4px;}
+  .qa-label{font-size:11.5px;}
+  .qa-sub{font-size:9.5px;}
 
   /* ── 본문 ── */
   .main{padding:14px 12px 48px;}
@@ -955,6 +972,32 @@ footer strong{color:rgba(255,255,255,.85);}
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ──────── 빠른 메뉴 (히어로 하단에 겹치는 카드 행) ──────── -->
+<div class="quick-access">
+  <div class="qa-inner">
+    <a class="qa-card" onclick="switchTab('pilot', document.querySelectorAll('.tab-btn')[0]);document.querySelector('.tabs-wrap').scrollIntoView({behavior:'smooth'})">
+      <div class="qa-ico">🩺</div>
+      <div class="qa-label">시범사업 의원</div>
+      <div class="qa-sub">11개소 바로 전화</div>
+    </a>
+    <a class="qa-card" onclick="switchTab('homecare', document.querySelectorAll('.tab-btn')[5]);document.querySelector('.tabs-wrap').scrollIntoView({behavior:'smooth'})">
+      <div class="qa-ico">🏠</div>
+      <div class="qa-label">재택의료·방문진료</div>
+      <div class="qa-sub">8개소 운영 확인</div>
+    </a>
+    <a class="qa-card" onclick="switchTab('integrated', document.querySelectorAll('.tab-btn')[2]);document.querySelector('.tabs-wrap').scrollIntoView({behavior:'smooth'})">
+      <div class="qa-ico">🔗</div>
+      <div class="qa-label">통합돌봄 신청</div>
+      <div class="qa-sub">법정 절차·신청창구</div>
+    </a>
+    <a class="qa-card" onclick="openModal('allContacts')">
+      <div class="qa-ico">📞</div>
+      <div class="qa-label">전체 기관 연락처</div>
+      <div class="qa-sub">고양시 + 전국 공공기관</div>
+    </a>
   </div>
 </div>
 
