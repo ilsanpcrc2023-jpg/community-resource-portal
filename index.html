@@ -612,18 +612,23 @@ footer strong{color:rgba(255,255,255,.85);}
 .hc-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .hc-empty{padding:32px;text-align:center;color:var(--gray-400);font-size:12px;}
 
-/* 시범사업 의원 — 리스트형 (클릭 시 상세 모달) */
-.pc-list{display:flex;flex-direction:column;border:1.5px solid var(--gray-200);border-radius:11px;background:white;overflow:hidden;}
-.pc-row{display:flex;align-items:center;gap:10px;padding:11px 14px;transition:.15s;cursor:pointer;border-bottom:1px solid var(--gray-200);}
-.pc-row:last-child{border-bottom:none;}
-.pc-row:hover{background:var(--gray-100);}
-.pc-row-badges{display:flex;flex-shrink:0;}
-.pc-row-main{flex:1;min-width:0;}
-.pc-row-name{font-size:13px;font-weight:800;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pc-row-director{font-size:11px;font-weight:600;color:var(--gray-400);margin-left:6px;}
-.pc-row-sub{font-size:10.5px;color:var(--gray-400);margin-top:1px;}
-.pc-row .hc-act.tel{flex-shrink:0;padding:6px 12px;font-size:10.5px;}
-.pc-row-inactive .pc-row-name{color:#5a5a5a;}
+/* 시범사업 의원 — 표 형식 (클릭 시 상세 모달) */
+.pc-download-btn{background:linear-gradient(135deg,#2d7a4f,#3a9663);color:white;border:none;padding:7px 14px;border-radius:7px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:.15s;}
+.pc-download-btn:hover{opacity:.88;}
+.pc-table-wrap{border:1.5px solid var(--gray-200);border-radius:11px;background:white;overflow:hidden;overflow-x:auto;}
+.pc-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+.pc-table thead th{background:var(--gray-100);color:var(--text);font-weight:700;font-size:11.5px;padding:10px 14px;text-align:left;border-bottom:1.5px solid var(--gray-200);white-space:nowrap;}
+.pc-table thead th:last-child{text-align:right;}
+.pc-tr{cursor:pointer;transition:.15s;border-bottom:1px solid var(--gray-200);}
+.pc-tr:last-child{border-bottom:none;}
+.pc-tr:hover{background:var(--gray-100);}
+.pc-td-name,.pc-td-addr,.pc-td-tel{padding:11px 14px;vertical-align:middle;}
+.pc-td-name{font-weight:800;color:var(--navy);white-space:nowrap;}
+.pc-row-director{font-size:10.5px;font-weight:600;color:var(--gray-400);margin-top:2px;}
+.pc-td-addr{color:var(--gray-400);line-height:1.5;}
+.pc-td-tel{text-align:right;}
+.pc-table .hc-act.tel{padding:6px 12px;font-size:10.5px;white-space:nowrap;}
+.pc-row-inactive .pc-td-name{color:#5a5a5a;}
 
 /* 지역사회 자원 연계 서식 — 상세 펼침형 (시범사업 탭) */
 .ref-item2{display:flex;align-items:center;gap:10px;padding:0;border-radius:8px;transition:.15s;border:1.5px solid transparent;margin-bottom:2px;}
@@ -651,7 +656,8 @@ footer strong{color:rgba(255,255,255,.85);}
   .hc-actions{gap:4px;}
   .hc-act{font-size:10.5px;padding:5px 8px;}
   .hc-act.edit{padding:5px 6px;font-size:13px;}
-  .pc-row-name{max-width:150px;}
+  .pc-table{font-size:11.5px;}
+  .pc-td-name,.pc-td-addr,.pc-td-tel{padding:9px 10px;}
   .ref-detail{padding-left:9px;}
 }
 
@@ -1093,11 +1099,14 @@ footer strong{color:rgba(255,255,255,.85);}
         <div class="hc-stat"><div class="hc-stat-num" id="pc-st-total">13</div><div class="hc-stat-lbl">🩺 참여 의원</div></div>
       </div>
     </div>
-    <div class="hc-filter-row">
-      <button class="hc-fbtn active" data-filter="dist" data-val="all" onclick="pcFilter('dist','all',this)">전체 구</button>
-      <button class="hc-fbtn" data-filter="dist" data-val="덕양구" onclick="pcFilter('dist','덕양구',this)">덕양구</button>
-      <button class="hc-fbtn" data-filter="dist" data-val="일산동구" onclick="pcFilter('dist','일산동구',this)">일산동구</button>
-      <button class="hc-fbtn" data-filter="dist" data-val="일산서구" onclick="pcFilter('dist','일산서구',this)">일산서구</button>
+    <div class="hc-filter-row" style="justify-content:space-between;">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="hc-fbtn active" data-filter="dist" data-val="all" onclick="pcFilter('dist','all',this)">전체 구</button>
+        <button class="hc-fbtn" data-filter="dist" data-val="덕양구" onclick="pcFilter('dist','덕양구',this)">덕양구</button>
+        <button class="hc-fbtn" data-filter="dist" data-val="일산동구" onclick="pcFilter('dist','일산동구',this)">일산동구</button>
+        <button class="hc-fbtn" data-filter="dist" data-val="일산서구" onclick="pcFilter('dist','일산서구',this)">일산서구</button>
+      </div>
+      <button class="pc-download-btn" onclick="pcDownloadCSV()">📥 다운로드</button>
     </div>
   </div>
 
@@ -3507,19 +3516,16 @@ function pcFilter(key, val, btn){
 
 function pcRowHTML(c){
   const isInactive = c.status === '미개시';
-  const inactiveBadge = isInactive ? `<span class="hc-b hc-b-inactive">미개시</span>` : '';
   const isSolo = c.model === '단독';
   const modelBadge = c.model
-    ? `<span class="hc-b" style="background:${isSolo?'rgba(200,146,26,.16)':'rgba(42,127,127,.12)'};color:${isSolo?'var(--gold)':'var(--teal)'};">${c.model}모형</span>`
+    ? `<span class="hc-b" style="background:${isSolo?'rgba(200,146,26,.16)':'rgba(42,127,127,.12)'};color:${isSolo?'var(--gold)':'var(--teal)'};margin-left:6px;">${c.model}모형</span>`
     : '';
-  return `<div class="pc-row${isInactive?' pc-row-inactive':''}" onclick="pcOpenDetail('${c.id}')">
-    <div class="pc-row-badges">${modelBadge}${inactiveBadge}</div>
-    <div class="pc-row-main">
-      <div class="pc-row-name">${c.name}<span class="pc-row-director">원장 ${c.director}</span></div>
-      <div class="pc-row-sub">${c.district}${isInactive?' · ⚠ 미개시':''}</div>
-    </div>
-    <a class="hc-act tel" href="tel:${c.phone}" onclick="event.stopPropagation()">📞 ${c.phone}</a>
-  </div>`;
+  const inactiveBadge = isInactive ? `<span class="hc-b hc-b-inactive" style="margin-left:6px;">미개시</span>` : '';
+  return `<tr class="pc-tr${isInactive?' pc-row-inactive':''}" onclick="pcOpenDetail('${c.id}')">
+    <td class="pc-td-name">${c.name}${modelBadge}${inactiveBadge}<div class="pc-row-director">원장 ${c.director}</div></td>
+    <td class="pc-td-addr">${c.address}</td>
+    <td class="pc-td-tel"><a class="hc-act tel" href="tel:${c.phone}" onclick="event.stopPropagation()">📞 ${c.phone}</a></td>
+  </tr>`;
 }
 
 function pcOpenDetail(id){
@@ -3542,16 +3548,43 @@ function pcOpenDetail(id){
   document.body.style.overflow = 'hidden';
 }
 
-function pcRenderList(){
-  const container = document.getElementById('pc-render');
-  if(!container || !PC_DATA) return;
-  const list = PC_DATA.clinics.filter(c=>{
+function pcFilteredList(){
+  if(!PC_DATA) return [];
+  return PC_DATA.clinics.filter(c=>{
     if(PC_FILTERS.dist!=='all' && c.district!==PC_FILTERS.dist) return false;
     return true;
   });
+}
+
+function pcRenderList(){
+  const container = document.getElementById('pc-render');
+  if(!container || !PC_DATA) return;
+  const list = pcFilteredList();
   container.innerHTML = list.length
-    ? `<div class="pc-list">${list.map(pcRowHTML).join('')}</div>`
+    ? `<div class="pc-table-wrap">
+        <table class="pc-table">
+          <thead><tr><th>병원명</th><th>소재지</th><th>전화</th></tr></thead>
+          <tbody>${list.map(pcRowHTML).join('')}</tbody>
+        </table>
+      </div>`
     : '<div class="hc-empty">선택한 조건에 해당하는 의원이 없습니다.</div>';
+}
+
+function pcDownloadCSV(){
+  const list = pcFilteredList();
+  if(!list.length) return;
+  const header = ['병원명','원장','구','소재지','진료과','보상방식','전화번호','모형','상태'];
+  const rows = list.map(c => [c.name, c.director, c.district, c.address, c.specialty, c.paymentModel, c.phone, c.model ? c.model+'모형' : '', c.status==='미개시' ? '미개시' : '운영']);
+  const csv = [header, ...rows].map(r => r.map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\r\n');
+  const blob = new Blob(['﻿' + csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `일차의료_혁신시범사업_참여의원_${(PC_DATA && PC_DATA.asOf) || ''}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 function pcRender(){
