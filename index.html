@@ -34,8 +34,9 @@ header{background:var(--navy);color:white;padding:0 28px;display:flex;align-item
 .h-btn:hover{background:rgba(255,255,255,.2);}
 
 /* ── HERO ── */
-.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 60%,#1e4a6e 100%);padding:36px 28px 44px;position:relative;overflow:hidden;}
-.hero::before{content:'';position:absolute;top:-80px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(42,127,127,.22) 0%,transparent 70%);border-radius:50%;}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 60%,#1e4a6e 100%);padding:40px 28px 48px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-80px;right:-60px;width:320px;height:320px;background:radial-gradient(circle,rgba(42,127,127,.24) 0%,transparent 70%);border-radius:50%;}
+.hero::after{content:'';position:absolute;bottom:-120px;left:-80px;width:280px;height:280px;background:radial-gradient(circle,rgba(255,255,255,.05) 0%,transparent 70%);border-radius:50%;}
 .hero-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1;}
 .hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;}
 .hero-left{}
@@ -50,8 +51,9 @@ header{background:var(--navy);color:white;padding:0 28px;display:flex;align-item
 .btn-o:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.6);}
 
 /* 고양시 빠른 연락 카드 */
-.hero-contacts{display:flex;flex-direction:column;gap:8px;min-width:200px;}
-.hc-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:11px;padding:11px 14px;backdrop-filter:blur(8px);}
+.hero-contacts{display:flex;flex-direction:column;gap:8px;min-width:210px;}
+.qc-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:11px;padding:11px 14px;backdrop-filter:blur(8px);transition:.2s;}
+.qc-card:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.32);transform:translateY(-1px);}
 .hc-label{font-size:10px;color:rgba(255,255,255,.55);font-weight:600;margin-bottom:3px;}
 .hc-name{font-size:13px;font-weight:700;color:white;margin-bottom:2px;}
 .hc-tel{font-size:14px;font-weight:800;color:var(--teal-light);text-decoration:none;}
@@ -301,8 +303,15 @@ a[href^="tel:"]:active { opacity: .75; }
 .bg-ns{background:rgba(26,46,74,.07);} .nc{color:var(--navy);}
 .bg-os{background:rgba(212,112,30,.1);} .oc{color:var(--orange);}
 
-footer{background:var(--navy);color:rgba(255,255,255,.45);padding:24px 32px;text-align:center;font-size:11px;line-height:1.9;}
-footer strong{color:rgba(255,255,255,.75);}
+footer{background:var(--navy);border-top:3px solid var(--teal);color:rgba(255,255,255,.5);padding:28px 28px 22px;}
+footer strong{color:rgba(255,255,255,.85);}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;}
+.footer-main{font-size:11.5px;line-height:1.85;}
+.footer-main .f-title{font-size:13px;font-weight:700;color:white;margin-bottom:6px;}
+.footer-links{display:flex;gap:18px;flex-wrap:wrap;}
+.footer-links a{color:rgba(255,255,255,.6);text-decoration:none;font-size:11.5px;font-weight:600;transition:.2s;cursor:pointer;}
+.footer-links a:hover{color:var(--teal-light);}
+.footer-rule{max-width:1100px;margin:18px auto 0;border-top:1px solid rgba(255,255,255,.12);padding-top:14px;font-size:10.5px;color:rgba(255,255,255,.35);text-align:center;}
 
 /* ── 사정 도구 스타일 ── */
 .assess-wrap{display:flex;gap:16px;align-items:flex-start;}
@@ -929,17 +938,17 @@ footer strong{color:rgba(255,255,255,.75);}
         </div>
       </div>
       <div class="hero-contacts">
-        <div class="hc-card">
+        <div class="qc-card">
           <div class="hc-label">📞 장기요양 신청·문의</div>
           <div class="hc-name">국민건강보험공단 고양지사</div>
           <a class="hc-tel" href="tel:1577-1000">☎ 1577-1000</a>
         </div>
-        <div class="hc-card">
+        <div class="qc-card">
           <div class="hc-label">🧠 치매안심센터 (일산동)</div>
           <div class="hc-name">고양시 일산동구 치매안심</div>
           <a class="hc-tel" href="tel:031-8075-4870">☎ 031-8075-4870</a>
         </div>
-        <div class="hc-card">
+        <div class="qc-card">
           <div class="hc-label">💚 정신건강 위기상담</div>
           <div class="hc-name">고양시정신건강복지센터</div>
           <a class="hc-tel" href="tel:031-968-2333">☎ 031-968-2333</a>
@@ -2030,9 +2039,20 @@ footer strong{color:rgba(255,255,255,.75);}
 </div><!-- /main -->
 
 <footer>
-  <strong>일차의료개발센터 지역사회 자원 연계 포털 v3.0</strong> — 고양특례시 맞춤형<br>
-  공공·민간·통합 돌봄 자원을 통합하여 재택 환자의 지역사회 연계를 지원합니다.<br>
-  수록 정보는 변경될 수 있으니 각 기관에 사전 확인 바랍니다 | 일차의료개발센터 사회복지팀
+  <div class="footer-inner">
+    <div class="footer-main">
+      <div class="f-title">지역사회 자원 연계 포털</div>
+      국민건강보험 일산병원 일차의료개발센터 · 사회복지팀<br>
+      공공·민간·통합 돌봄 자원을 통합하여 재택 환자의 지역사회 연계를 지원합니다.
+    </div>
+    <div class="footer-links">
+      <a onclick="openModal('guide')">이용 안내</a>
+      <a onclick="openModal('allContacts')">기관 연락처</a>
+      <a onclick="openModal('addResource')">기관 추가 제안</a>
+      <a href="https://www.nhimc.or.kr" target="_blank">일산병원 홈페이지 ↗</a>
+    </div>
+  </div>
+  <div class="footer-rule">수록 정보는 변경될 수 있으니 이용 전 각 기관에 사전 확인 바랍니다 · Community Resource Portal</div>
 </footer>
 
 <!-- MODAL -->
@@ -3238,7 +3258,7 @@ function hcOpenEdit(id){
   `;
   document.getElementById('mBody').dataset.hcNight = s.night || 'unknown';
   document.getElementById('mBody').dataset.hcWeekend = s.weekend || 'unknown';
-  document.getElementById('modalOverlay').classList.add('show');
+  document.getElementById('modalOverlay').classList.add('open');
 }
 
 function hcEditPick(btn){
@@ -3276,7 +3296,7 @@ function hcShowGuide(){
     <div class="info-row"><div class="info-label">분기 갱신</div><div class="info-val">매 분기 첫 주에 ①센터 담당자가 8개소에 전화 ②결과를 카드에서 갱신 ③상단 '다음 갱신 예정일'을 다음 분기로 업데이트하는 흐름을 권장합니다.</div></div>
     <div class="info-row"><div class="info-label">데이터 출처</div><div class="info-val">2026-10-12 기준 보건복지부 장기요양 재택의료센터 시범사업 + 건강보험심사평가원 일차의료 방문진료 수가 시범사업 자료. 미운영·확인필요 기관은 제외.</div></div>
   `;
-  document.getElementById('modalOverlay').classList.add('show');
+  document.getElementById('modalOverlay').classList.add('open');
 }
 
 /* ════════════════════ PILOT CLINICS MODULE (§4-1, data/pilot_clinics.json) ════════════════════ */
