@@ -612,16 +612,17 @@ footer strong{color:rgba(255,255,255,.85);}
 .hc-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .hc-empty{padding:32px;text-align:center;color:var(--gray-400);font-size:12px;}
 
-/* 시범사업 의원 — 리스트형 */
-.pc-list{display:flex;flex-direction:column;gap:6px;border:1.5px solid var(--gray-200);border-radius:11px;background:white;padding:8px;}
-.pc-row{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;transition:.15s;}
+/* 시범사업 의원 — 리스트형 (클릭 시 상세 모달) */
+.pc-list{display:flex;flex-direction:column;border:1.5px solid var(--gray-200);border-radius:11px;background:white;overflow:hidden;}
+.pc-row{display:flex;align-items:center;gap:10px;padding:11px 14px;transition:.15s;cursor:pointer;border-bottom:1px solid var(--gray-200);}
+.pc-row:last-child{border-bottom:none;}
 .pc-row:hover{background:var(--gray-100);}
-.pc-row-badges{display:flex;flex-direction:column;gap:3px;flex-shrink:0;align-items:flex-start;}
+.pc-row-badges{display:flex;flex-shrink:0;}
 .pc-row-main{flex:1;min-width:0;}
-.pc-row-name{font-size:13px;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.pc-row-sub{font-size:10.5px;color:var(--gray-400);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.pc-row-note{font-size:9.5px;margin-top:2px;}
-.pc-row .hc-act.tel{flex-shrink:0;padding:6px 12px;}
+.pc-row-name{font-size:13px;font-weight:800;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pc-row-director{font-size:11px;font-weight:600;color:var(--gray-400);margin-left:6px;}
+.pc-row-sub{font-size:10.5px;color:var(--gray-400);margin-top:1px;}
+.pc-row .hc-act.tel{flex-shrink:0;padding:6px 12px;font-size:10.5px;}
 .pc-row-inactive .pc-row-name{color:#5a5a5a;}
 
 /* 지역사회 자원 연계 서식 — 상세 펼침형 (시범사업 탭) */
@@ -650,8 +651,7 @@ footer strong{color:rgba(255,255,255,.85);}
   .hc-actions{gap:4px;}
   .hc-act{font-size:10.5px;padding:5px 8px;}
   .hc-act.edit{padding:5px 6px;font-size:13px;}
-  .pc-row{flex-wrap:wrap;}
-  .pc-row-badges{flex-direction:row;}
+  .pc-row-name{max-width:150px;}
   .ref-detail{padding-left:9px;}
 }
 
@@ -3506,23 +3506,40 @@ function pcFilter(key, val, btn){
 }
 
 function pcRowHTML(c){
-  const needCk = (v)=> v==='확인 필요' ? `<span class="hc-ex-v v-ck">❓ 확인 필요</span>` : v;
-  const confirmedTel = c.phoneType && c.phoneType.startsWith('기관 대표번호');
   const isInactive = c.status === '미개시';
   const inactiveBadge = isInactive ? `<span class="hc-b hc-b-inactive">미개시</span>` : '';
   const isSolo = c.model === '단독';
   const modelBadge = c.model
     ? `<span class="hc-b" style="background:${isSolo?'rgba(200,146,26,.16)':'rgba(42,127,127,.12)'};color:${isSolo?'var(--gold)':'var(--teal)'};">${c.model}모형</span>`
     : '';
-  return `<div class="pc-row${isInactive?' pc-row-inactive':''}">
+  return `<div class="pc-row${isInactive?' pc-row-inactive':''}" onclick="pcOpenDetail('${c.id}')">
     <div class="pc-row-badges">${modelBadge}${inactiveBadge}</div>
     <div class="pc-row-main">
-      <div class="pc-row-name">${c.name} <span style="font-size:10.5px;font-weight:600;color:var(--gray-400);">원장 ${c.director}</span></div>
-      <div class="pc-row-sub">📍 ${needCk(c.district)} · ${needCk(c.address)} · 진료과 ${needCk(c.specialty)}</div>
-      <div class="pc-row-note" style="color:${confirmedTel?'var(--teal)':'var(--gold)'};">☎ ${c.phoneType||'확인 필요'}${isInactive?` · ⚠ ${c.statusNote||'현재 미개시 — 연계 전 운영 재개 여부 전화 확인 필요'}`:''}</div>
+      <div class="pc-row-name">${c.name}<span class="pc-row-director">원장 ${c.director}</span></div>
+      <div class="pc-row-sub">${c.district}${isInactive?' · ⚠ 미개시':''}</div>
     </div>
-    <a class="hc-act tel" href="tel:${c.phone}">📞 ${c.phone}</a>
+    <a class="hc-act tel" href="tel:${c.phone}" onclick="event.stopPropagation()">📞 ${c.phone}</a>
   </div>`;
+}
+
+function pcOpenDetail(id){
+  const c = PC_DATA && PC_DATA.clinics.find(x=>x.id===id);
+  if(!c) return;
+  const needCk = (v)=> v==='확인 필요' ? `<span class="hc-ex-v v-ck">❓ 확인 필요</span>` : v;
+  const confirmedTel = c.phoneType && c.phoneType.startsWith('기관 대표번호');
+  const isInactive = c.status === '미개시';
+  const inactiveBanner = isInactive ? `<div class="hc-inactive-banner">⚠ 현재 미개시 <span class="reason">${c.statusNote || '연계 전 운영 재개 여부 전화 확인 필요'}</span></div>` : '';
+  document.getElementById('mTitle').textContent = c.name;
+  document.getElementById('mSub').textContent = `원장 ${c.director} · ${c.model?c.model+'모형':''}`;
+  document.getElementById('mBody').innerHTML = `
+    ${inactiveBanner}
+    <div class="info-row"><div class="info-label">주소</div><div class="info-val">${needCk(c.district)} · ${needCk(c.address)}${c.addressSource?`<br><span style="opacity:.65;">※ ${c.addressSource}</span>`:''}</div></div>
+    <div class="info-row"><div class="info-label">진료과</div><div class="info-val">${needCk(c.specialty)}</div></div>
+    <div class="info-row"><div class="info-label">보상방식</div><div class="info-val">${c.paymentModel}</div></div>
+    <div class="info-row"><div class="info-label">전화번호</div><div class="info-val" style="color:${confirmedTel?'var(--teal)':'var(--gold)'};">☎ <a href="tel:${c.phone}">${c.phone}</a><br><span style="opacity:.75;font-size:11px;">${c.phoneType||'확인 필요'}</span></div></div>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
 function pcRenderList(){
