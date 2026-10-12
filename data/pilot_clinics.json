@@ -16,7 +16,7 @@
     {"id":"pc-08","name":"연세신일의원","director":"박태경","phone":"031-966-0206","phoneType":"기관 대표번호 (센터 확인, 2026-10-12)","paymentModel":"행위별수가제","district":"덕양구","address":"경기도 고양시 덕양구 호국로 788, 2층 (성사동, 하나빌딩)","addressSource":"센터 확인, 2026-10-12","specialty":"확인 필요"},
     {"id":"pc-09","name":"연세가정의원","director":"이기성","phone":"031-969-9226","phoneType":"기관 대표번호 (센터 확인, 2026-10-12)","paymentModel":"통합수가제","district":"덕양구","address":"경기도 고양시 덕양구 은빛로29번길 28 (화정1동)","addressSource":"모두닥(modoodoc.com)","specialty":"가정의학과(추정)"},
     {"id":"pc-10","name":"해맑은신경외과의원","director":"이성주","phone":"031-905-9117","phoneType":"기관 대표번호 (센터 확인, 2026-10-12)","paymentModel":"행위별수가제","district":"일산동구","address":"경기도 고양시 일산동구 일산로 217 (마두동 738-1)","addressSource":"굿닥(goodoc.co.kr)","specialty":"내과·소아청소년과·신경과·외과·심장혈관흉부외과·정형외과"},
-    {"id":"pc-11","name":"일산역훈내과의원","director":"김영훈","phone":"031-976-3356","phoneType":"기관 대표번호 (센터 확인, 2026-10-12)","paymentModel":"통합수가제","district":"일산서구","address":"경기도 고양시 일산서구 원일로 69, 씨티프라자 101호, 102호 일부, 121호, 122호 (일산동)","addressSource":"센터 확인, 2026-10-12","specialty":"확인 필요"},
+    {"id":"pc-11","name":"일산역훈내과의원","director":"김영훈","phone":"031-976-3356","phoneType":"기관 대표번호 (센터 확인, 2026-10-12)","paymentModel":"통합수가제","district":"일산서구","address":"경기도 고양시 일산서구 원일로 69, 씨티프라자 101호, 102호 일부, 121호, 122호 (일산동)","addressSource":"센터 확인, 2026-10-12","specialty":"내과"},
     {"id":"pc-12","name":"연세더나은의원","director":"최준호","phone":"031-994-2575","phoneType":"기관 대표번호 (센터 확인, 2026-10-12)","paymentModel":"행위별수가제","district":"일산동구","address":"경기도 고양시 일산동구 일산로 219 502호 (마두동)","addressSource":"굿닥·모두닥","specialty":"내과·피부과·가정의학과"}
   ]
 }
