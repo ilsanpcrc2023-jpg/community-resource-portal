@@ -177,6 +177,7 @@ a[href^="tel:"]:active { opacity: .75; }
 .ic-prov-service{font-size:11px;color:var(--gray-400);line-height:1.5;}
 .ic-prov-tel{font-size:12px;font-weight:700;color:var(--teal);margin-top:6px;display:block;text-decoration:none;}
 .ic-prov-tel:hover{text-decoration:underline;}
+.ic-prov-pending{font-size:12px;font-weight:700;color:var(--gold);margin-top:6px;display:block;font-style:italic;}
 
 /* 퇴원 연계 절차 */
 .discharge-flow{background:white;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:22px;margin-bottom:24px;box-shadow:var(--shadow);}
@@ -951,17 +952,59 @@ footer strong{color:rgba(255,255,255,.75);}
 <!-- ──────── TABS ──────── -->
 <div class="tabs-wrap">
   <div class="tabs-inner">
+    <button class="tab-btn" onclick="switchTab('pilot', this)">🩺 시범사업 의원 <span class="tab-count">12</span></button>
     <button class="tab-btn active" onclick="switchTab('public', this)">🏛️ 공공 자원 <span class="tab-count">4영역</span></button>
     <button class="tab-btn" onclick="switchTab('integrated', this)">🔗 통합 돌봄 <span class="tab-count">NEW</span></button>
     <button class="tab-btn" onclick="switchTab('private', this)">🏘️ 민간 자원 <span class="tab-count">4유형</span></button>
     <button class="tab-btn" onclick="switchTab('apply', this)">🖱️ 서비스 신청 <span class="tab-count">6</span></button>
-    <button class="tab-btn" onclick="switchTab('homecare', this)">🏠 재택의료 <span class="tab-count">15</span></button>
+    <button class="tab-btn" onclick="switchTab('homecare', this)">🏠 재택의료 <span class="tab-count">8</span></button>
     <button class="tab-btn" onclick="switchTab('assess', this)">📋 사정 도구 <span class="tab-count" id="assess-count-badge">13종</span></button>
   </div>
 </div>
 
 <!-- ──────── MAIN ──────── -->
 <div class="main">
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━ 시범사업 참여 의원 TAB (§4-1 신설) ━━━━━━━━━━━━━━━━━━━━━ -->
+<div class="tab-panel" id="tab-pilot">
+
+  <!-- 안내 배너 -->
+  <div class="hc-banner">
+    <div class="hc-banner-icon">🩺</div>
+    <div class="hc-banner-body">
+      <div class="hc-banner-title">지역사회 일차의료 혁신 시범사업 참여 의원 (12개소)</div>
+      <div class="hc-banner-desc">국민건강보험 일산병원 일차의료개발센터가 거점지원기관인 지역사회 일차의료 혁신 시범사업 참여 의원 명단입니다. <b>구·주소·진료과·야간/주말 진료</b> 등은 아직 확인되지 않아 "확인 필요"로 표시했습니다. <b style="color:var(--gold);">전화번호는 원장 개인번호이며, 추후 병원(의원) 대표번호로 교체될 예정입니다.</b></div>
+      <div class="hc-banner-meta">
+        <div class="hc-bm-item">📅 기준일 <b id="pc-asof">-</b></div>
+        <div class="hc-bm-item">🏥 거점 <b>국민건강보험 일산병원 일차의료개발센터</b></div>
+        <div class="hc-bm-item">📚 출처 <b>일차의료개발센터 제공 명단</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 통계 바 -->
+  <div class="hc-statbar">
+    <div class="hc-stat-row">
+      <div class="hc-stat-group">
+        <div class="hc-stat"><div class="hc-stat-num" id="pc-st-total">12</div><div class="hc-stat-lbl">🩺 참여 의원</div></div>
+        <div class="hc-stat"><div class="hc-stat-num t" id="pc-st-bundled">-</div><div class="hc-stat-lbl">📦 통합수가제</div></div>
+        <div class="hc-stat"><div class="hc-stat-num g" id="pc-st-fee">-</div><div class="hc-stat-lbl">📋 행위별수가제</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 의원 카드 그리드 (JS 렌더링) -->
+  <div id="pc-render" style="padding:30px;text-align:center;color:var(--gray-400);font-size:12px;">불러오는 중…</div>
+
+  <!-- 하단 안내 -->
+  <div style="background:rgba(200,146,26,.07);border:1px solid rgba(200,146,26,.25);border-radius:11px;padding:14px 18px;margin-top:18px;font-size:11.5px;color:var(--text);line-height:1.7;">
+    <b style="color:var(--gold);">💡 활용 안내</b><br>
+    ① 환자 등록 → 건강위험평가 → 케어플랜 → 다학제팀 교육·상담 → 지역사회 연계의 흐름에서, 센터는 참여 의원의 <b>의뢰를 받아 본 포털의 자원과 연결</b>하는 거점 역할을 합니다.<br>
+    ② 등록 대상(50세 이상 등)·관할 참여의원 이용 여부는 환자별로 직접 확인이 필요합니다.<br>
+    ③ 구·주소 등 "확인 필요" 항목은 센터가 명단을 확정하는 대로 갱신됩니다. 전화 연결 전 반드시 소속 의원명을 먼저 확인해 주세요.
+  </div>
+
+</div><!-- /tab-pilot -->
 
 <!-- ════════════════════════════
      탭 1: 공공 자원
@@ -1150,56 +1193,77 @@ footer strong{color:rgba(255,255,255,.75);}
         </div>
       </div>
       <div class="ic-ov-right">
-        <div class="flow-title">🔄 통합 돌봄 연계 흐름도</div>
+        <div class="flow-title">🔄 통합지원 법정 절차 (2026.3.27 시행)</div>
         <div class="flow-steps">
-          <div class="flow-step"><div class="flow-step-num">1</div><div><div class="flow-step-text">의뢰·발굴</div><div class="flow-step-sub">병원 퇴원 / 주민센터 신청 / 의사소견</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">1</div><div><div class="flow-step-text">신청</div><div class="flow-step-sub">읍면동 행정복지센터 / 공단 지사 (방문·우편·팩스)</div></div></div>
           <div class="flow-arrow">↓</div>
-          <div class="flow-step"><div class="flow-step-num">2</div><div><div class="flow-step-text">초기 상담 및 욕구 사정</div><div class="flow-step-sub">통합사례관리사 방문 사정</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">2</div><div><div class="flow-step-text">사전조사</div><div class="flow-step-sub">퇴원연계 대상자는 면제</div></div></div>
           <div class="flow-arrow">↓</div>
-          <div class="flow-step"><div class="flow-step-num">3</div><div><div class="flow-step-text">서비스 계획 수립</div><div class="flow-step-sub">의료·요양·돌봄·주거 통합 계획</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">3</div><div><div class="flow-step-text">통합판정조사</div><div class="flow-step-sub">공단 지사, 필요 시 읍면동 동행</div></div></div>
           <div class="flow-arrow">↓</div>
-          <div class="flow-step"><div class="flow-step-num">4</div><div><div class="flow-step-text">자원 연계 및 서비스 제공</div><div class="flow-step-sub">기관별 의뢰 → 서비스 시작</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">4</div><div><div class="flow-step-text">통합지원회의 · 개인별지원계획 승인</div><div class="flow-step-sub">시군구 전담부서·읍면동·보건소·공단·제공기관</div></div></div>
           <div class="flow-arrow">↓</div>
-          <div class="flow-step"><div class="flow-step-num">5</div><div><div class="flow-step-text">모니터링 및 재사정</div><div class="flow-step-sub">정기 방문·전화 확인, 계획 조정</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">5</div><div><div class="flow-step-text">서비스 제공</div><div class="flow-step-sub">개인별지원계획에 따른 서비스 개시</div></div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-step-num">6</div><div><div class="flow-step-text">모니터링</div><div class="flow-step-sub">최초 1개월 내, 이후 3개월마다</div></div></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 병원 퇴원 연계 흐름도 -->
-  <div class="sec-hd"><div class="sec-title">🏥 퇴원 후 지역 연계 절차</div></div>
+  <!-- 신청 자격·창구 -->
+  <div class="sec-hd"><div class="sec-title">📋 누가·어디에 신청하나 (법정 기준)</div></div>
+  <div class="ic-goyang-box" style="margin-bottom:24px;">
+    <div class="ic-goyang-body" style="padding:18px;">
+      <div class="info-row"><div class="info-label">신청 자격</div><div class="info-val">노쇠·장애·질병 등으로 일상생활 유지가 어려워 복합 지원이 필요한 노인·장애인, 지자체장이 인정하는 사람. 우선 대상 예시: 장기요양 재가급여자(1~5등급·인지지원), 등급외자, 노인맞춤돌봄 중점군, <b>퇴원환자 등 입원·입소 경계선상의 65세 이상</b>. 장기요양 등급이 없어도 신청 가능합니다.</div></div>
+      <div class="info-row"><div class="info-label">신청 창구</div><div class="info-val">주소지 읍면동 행정복지센터 또는 국민건강보험공단 고양일산지사 (방문·우편·팩스)</div></div>
+      <div class="info-row"><div class="info-label">대리 신청</div><div class="info-val">가족·후견인, 본인 동의 시 <b>병원 사회복지사(퇴원연계)</b>도 대리 신청 가능 — 본 센터 실무에 직접 해당</div></div>
+    </div>
+  </div>
+
+  <!-- 고양시 체계 -->
+  <div class="sec-hd"><div class="sec-title">🏙️ 고양시 통합돌봄 체계 · 고양온돌 특화사업</div></div>
+  <div class="ic-goyang-box" style="margin-bottom:24px;">
+    <div class="ic-goyang-body" style="padding:18px;">
+      <div class="info-row"><div class="info-label">고양시 체계</div><div class="info-val">시 전담부서 · 통합지원협의체 구성(2026.2) · 일산병원·고양시의사회 등 7개 기관 업무협약 · 경기도사회서비스원 통합돌봄 지원사업 수행지역(2026.8 협약)</div></div>
+      <div class="info-row"><div class="info-label">고양온돌 특화사업</div><div class="info-val">생활이음(일상생활 지원) · 공간이음(주거환경 개선) · 약속이음(다제약물 관리, 2026.5 시행) · 돌봄프렌즈(가족돌봄자 지원, 신규)<br><span style="color:var(--gold);font-weight:700;">※ 각 사업의 세부 대상·신청처는 시 담당부서 확인 전까지 "확인 필요"로 표시합니다.</span></div></div>
+    </div>
+  </div>
+
+  <!-- 병원 퇴원 연계 체크리스트 -->
+  <div class="sec-hd"><div class="sec-title">🏥 퇴원환자 지역사회 연계 체크리스트</div></div>
   <div class="discharge-flow" style="margin-bottom:24px;">
-    <p style="font-size:12px;color:var(--gray-400);margin-bottom:18px;">입원 중 또는 퇴원 시 사회복지사가 지역사회 자원과 연계하는 절차입니다</p>
+    <p style="font-size:12px;color:var(--gray-400);margin-bottom:18px;">일산병원 퇴원환자를 고양시 통합지원 체계로 넘기는 표준 경로입니다</p>
     <div class="discharge-steps">
       <div class="ds-step">
         <div class="ds-circle bg-ts" style="border-color:var(--teal)">🏥</div>
-        <div class="ds-title">입원·퇴원 계획</div>
-        <div class="ds-desc">담당 의사·간호사<br>사회복지사 의뢰</div>
+        <div class="ds-title">퇴원 전</div>
+        <div class="ds-desc">통합돌봄 신청 여부 결정<br>퇴원증명서·의사소견서 준비</div>
       </div>
       <div class="ds-step">
-        <div class="ds-circle bg-ps" style="border-color:var(--purple)">📋</div>
-        <div class="ds-title">욕구 사정</div>
-        <div class="ds-desc">ADL·인지·사회적<br>지지 체계 확인</div>
+        <div class="ds-circle bg-ps" style="border-color:var(--purple)">📝</div>
+        <div class="ds-title">퇴원 전</div>
+        <div class="ds-desc">신청서 작성<br>(본인 동의 필요)</div>
       </div>
       <div class="ds-step">
-        <div class="ds-circle bg-gds" style="border-color:var(--gold)">🔗</div>
-        <div class="ds-title">자원 매칭</div>
-        <div class="ds-desc">장기요양·돌봄SOS<br>민간 자원 연결</div>
+        <div class="ds-circle bg-gds" style="border-color:var(--gold)">📨</div>
+        <div class="ds-title">퇴원 시</div>
+        <div class="ds-desc">읍면동 / 공단 접수<br>전담부서 통보</div>
       </div>
       <div class="ds-step">
-        <div class="ds-circle bg-gs" style="border-color:var(--green)">📨</div>
-        <div class="ds-title">의뢰서 발송</div>
-        <div class="ds-desc">해당 기관에<br>공문·의뢰서 전달</div>
+        <div class="ds-circle bg-gs" style="border-color:var(--green)">✅</div>
+        <div class="ds-title">퇴원 후</div>
+        <div class="ds-desc">통합지원회의 결과 확인<br>개인별지원계획 수령</div>
       </div>
       <div class="ds-step">
-        <div class="ds-circle" style="background:rgba(212,112,30,.1);border-color:var(--orange)">🏠</div>
-        <div class="ds-title">귀가 후 서비스</div>
-        <div class="ds-desc">방문요양·보건소<br>서비스 시작</div>
+        <div class="ds-circle" style="background:rgba(212,112,30,.1);border-color:var(--orange)">🔗</div>
+        <div class="ds-title">퇴원 후</div>
+        <div class="ds-desc">재택의료센터·방문간호·<br>시범사업 의원 연계</div>
       </div>
       <div class="ds-step">
         <div class="ds-circle bg-ts" style="border-color:var(--teal)">🔄</div>
-        <div class="ds-title">사후 모니터링</div>
-        <div class="ds-desc">정기 전화·방문<br>서비스 조정</div>
+        <div class="ds-title">퇴원 후</div>
+        <div class="ds-desc">모니터링 일정 기록<br>(최초 1개월 내, 이후 3개월)</div>
       </div>
     </div>
   </div>
@@ -1257,19 +1321,19 @@ footer strong{color:rgba(255,255,255,.75);}
           <div class="ic-prov-type">🏛️ 총괄 / 일산동구</div>
           <div class="ic-prov-name">고양시 복지정책과</div>
           <div class="ic-prov-service">통합돌봄 총괄, 사례관리 총괄 조정, 자원 연계 허브</div>
-          <a class="ic-prov-tel" href="tel:031-8075-3000">☎ 031-8075-3000</a>
+          <span class="ic-prov-pending">☎ 담당부서 확인 중</span>
         </div>
         <div class="ic-provider">
           <div class="ic-prov-type">🏛️ 일산서구</div>
           <div class="ic-prov-name">일산서구청 복지과</div>
           <div class="ic-prov-service">일산서구 지역 통합돌봄 사례관리, 돌봄SOS 신청 접수</div>
-          <a class="ic-prov-tel" href="tel:031-8075-4000">☎ 031-8075-4000</a>
+          <span class="ic-prov-pending">☎ 담당부서 확인 중</span>
         </div>
         <div class="ic-provider">
           <div class="ic-prov-type">🏛️ 덕양구</div>
           <div class="ic-prov-name">덕양구청 복지과</div>
           <div class="ic-prov-service">덕양구 지역 통합돌봄 사례관리, 긴급복지 연계</div>
-          <a class="ic-prov-tel" href="tel:031-8075-2000">☎ 031-8075-2000</a>
+          <span class="ic-prov-pending">☎ 담당부서 확인 중</span>
         </div>
         <div class="ic-provider">
           <div class="ic-prov-type">🏥 의료 연계 허브</div>
@@ -1913,11 +1977,11 @@ footer strong{color:rgba(255,255,255,.75);}
   <div class="hc-banner">
     <div class="hc-banner-icon">🏠</div>
     <div class="hc-banner-body">
-      <div class="hc-banner-title">고양시 재택의료·방문진료 의원 (15개소)</div>
-      <div class="hc-banner-desc">거동 불편 환자를 위한 가정 방문 진료 기관입니다. 시범사업 등록 기준 전체 목록을 노출하며, <b>🚫 현재 미운영</b> 상태인 6곳도 정책 추적용으로 포함되어 있습니다. 각 카드의 <b>📞 전화걸기</b>로 즉시 연결하고, <b>🔍 심평원 확인</b>으로 최신 운영 여부를 공식 사이트에서 검증하세요.</div>
+      <div class="hc-banner-title">고양시 재택의료·방문진료 의원 (8개소)</div>
+      <div class="hc-banner-desc">거동 불편 환자를 위한 가정 방문 진료 기관입니다. 운영 확인된 기관만 게시하며, 미운영·확인필요 기관은 화면에서 제외하고 별도 보관(정책 추적용)합니다. 각 카드의 <b>📞 전화걸기</b>로 즉시 연결하고, <b>🔍 심평원 확인</b>으로 최신 운영 여부를 공식 사이트에서 검증하세요.</div>
       <div class="hc-banner-meta">
-        <div class="hc-bm-item">📅 기준일 <b>2026-04-03</b></div>
-        <div class="hc-bm-item">🔄 다음 갱신 예정 <b>2026-07-01 (분기 갱신)</b></div>
+        <div class="hc-bm-item">📅 기준일 <b>2026-10-12</b></div>
+        <div class="hc-bm-item">🔄 다음 갱신 예정 <b>2027-01-12 (분기 갱신)</b></div>
         <div class="hc-bm-item">📚 출처 <b>보건복지부 · 건강보험심사평가원</b></div>
       </div>
     </div>
@@ -1927,11 +1991,11 @@ footer strong{color:rgba(255,255,255,.75);}
   <div class="hc-statbar">
     <div class="hc-stat-row">
       <div class="hc-stat-group">
-        <div class="hc-stat"><div class="hc-stat-num t" id="hc-st-ltc">4</div><div class="hc-stat-lbl">🏥 장기요양 재택의료</div></div>
-        <div class="hc-stat"><div class="hc-stat-num g" id="hc-st-active">5</div><div class="hc-stat-lbl">⭕ 방문진료 운영중</div></div>
-        <div class="hc-stat"><div class="hc-stat-num w" id="hc-st-warn">1</div><div class="hc-stat-lbl">⚠ 확인 필요</div></div>
-        <div class="hc-stat"><div class="hc-stat-num r" id="hc-st-inactive">6</div><div class="hc-stat-lbl">🚫 현재 미운영</div></div>
-        <div class="hc-stat"><div class="hc-stat-num" id="hc-st-total">15</div><div class="hc-stat-lbl">총 등록 기관</div></div>
+        <div class="hc-stat"><div class="hc-stat-num t" id="hc-st-ltc">5</div><div class="hc-stat-lbl">🏥 장기요양 재택의료</div></div>
+        <div class="hc-stat"><div class="hc-stat-num g" id="hc-st-active">3</div><div class="hc-stat-lbl">⭕ 방문진료 운영중</div></div>
+        <div class="hc-stat"><div class="hc-stat-num w" id="hc-st-warn">0</div><div class="hc-stat-lbl">⚠ 확인 필요</div></div>
+        <div class="hc-stat"><div class="hc-stat-num r" id="hc-st-inactive">0</div><div class="hc-stat-lbl">🚫 현재 미운영</div></div>
+        <div class="hc-stat"><div class="hc-stat-num" id="hc-st-total">8</div><div class="hc-stat-lbl">총 등록 기관</div></div>
       </div>
       <button class="btn-o" style="color:var(--navy);border-color:var(--gray-200);font-size:11px;padding:7px 13px;" onclick="hcShowGuide()">📖 사용 가이드</button>
     </div>
@@ -1947,8 +2011,6 @@ footer strong{color:rgba(255,255,255,.75);}
       <div class="hc-fbtn-sep"></div>
       <button class="hc-fbtn" data-filter="weekend" data-val="yes" onclick="hcFilter('weekend','yes',this)">📅 주말 가능만</button>
       <button class="hc-fbtn" data-filter="night" data-val="yes" onclick="hcFilter('night','yes',this)">🌙 야간 가능만</button>
-      <div class="hc-fbtn-sep"></div>
-      <button class="hc-fbtn active" data-filter="showInactive" data-val="on" onclick="hcFilter('showInactive','toggle',this)">🚫 미운영 표시</button>
     </div>
   </div>
 
@@ -2060,7 +2122,7 @@ const modals = {
   dementia:{title:'치매관리 서비스',sub:'고양시 치매안심센터',body:`<div class="info-row"><div class="info-label">일산동</div><div class="info-val">☎ <a href="tel:031-8075-4870">031-8075-4870</a></div></div><div class="info-row"><div class="info-label">일산서</div><div class="info-val">☎ <a href="tel:031-8075-4670">031-8075-4670</a></div></div><div class="info-row"><div class="info-label">덕양</div><div class="info-val">☎ <a href="tel:031-8075-4090">031-8075-4090</a></div></div><div class="info-row"><div class="info-label">전국 콜센터</div><div class="info-val">☎ <a href="tel:1899-9988">1899-9988</a></div></div><div class="info-row"><div class="info-label">고양시 안내</div><div class="info-val"><a href="https://www.goyang.go.kr/health/health02/health02_9/health02_9_1.jsp" target="_blank">🌐 고양시 치매안심센터 →</a></div></div><div class="info-row"><div class="info-label">전국 정보</div><div class="info-val"><a href="https://www.dementia.or.kr" target="_blank">🌐 중앙치매센터 →</a></div></div>`},
   hospice:{title:'호스피스·완화의료',sub:'말기 환자 및 가족 지원',body:`<div class="info-row"><div class="info-label">일산병원</div><div class="info-val">☎ <a href="tel:031-900-0114">031-900-0114</a> (완화의료센터)</div></div><div class="info-row"><div class="info-label">중앙센터</div><div class="info-val">☎ <a href="tel:1833-4673">1833-4673</a> | <a href="https://hospice.go.kr" target="_blank">hospice.go.kr →</a></div></div>`},
   ic_homecare:{title:'재가 의료급여 서비스',sub:'통합 돌봄 — 의료 영역',body:`<div class="info-row"><div class="info-label">내용</div><div class="info-val">의사·간호사·약사가 가정을 방문하여 진료·투약·상담 제공</div></div><div class="info-row"><div class="info-label">대상</div><div class="info-val">의료기관 방문이 어려운 중증 재택 환자 (장기요양 수급자 포함)</div></div><div class="info-row"><div class="info-label">신청</div><div class="info-val">일산병원 사회복지팀 ☎ <a href="tel:031-900-0114">031-900-0114</a> 또는 담당 보건소</div></div>`},
-  ic_caregiver:{title:'통합 돌봄 (돌봄SOS)',sub:'지자체 긴급·단기 돌봄',body:`<div class="info-row"><div class="info-label">내용</div><div class="info-val">가사·간병·식사·이동·안전확인을 통합적으로 단기 지원</div></div><div class="info-row"><div class="info-label">신청</div><div class="info-val">읍면동 주민센터 또는 ☎ <a href="tel:129">129</a></div></div><div class="info-row"><div class="info-label">고양시 담당</div><div class="info-val">고양시 복지정책과 ☎ <a href="tel:031-8075-3000">031-8075-3000</a></div></div>`},
+  ic_caregiver:{title:'통합 돌봄 (돌봄SOS)',sub:'지자체 긴급·단기 돌봄',body:`<div class="info-row"><div class="info-label">내용</div><div class="info-val">가사·간병·식사·이동·안전확인을 통합적으로 단기 지원</div></div><div class="info-row"><div class="info-label">신청</div><div class="info-val">읍면동 주민센터 또는 ☎ <a href="tel:129">129</a></div></div><div class="info-row"><div class="info-label">고양시 담당</div><div class="info-val">고양시 복지정책과 ☎ 담당부서 확인 중</div></div>`},
   ic_housing:{title:'주거 편의 지원',sub:'통합 돌봄 — 주거 영역',body:`<div class="info-row"><div class="info-label">내용</div><div class="info-val">낙상 예방 시설 설치, 이동 편의 개선, 노후 주택 수선 지원</div></div><div class="info-row"><div class="info-label">신청</div><div class="info-val">LH 콜센터 ☎ 1600-1004 | <a href="https://www.lh.or.kr" target="_blank">LH 마이홈 →</a></div></div>`},
   ic_casemanage:{title:'통합 사례관리',sub:'복합 욕구 대상자 조정',body:`<div class="info-row"><div class="info-label">대상</div><div class="info-val">의료·돌봄·경제·주거 중 2개 이상 복합 욕구를 가진 대상자</div></div><div class="info-row"><div class="info-label">담당</div><div class="info-val">읍면동 주민센터 통합사례관리사 또는 고양시 복지정책과</div></div><div class="info-row"><div class="info-label">연계</div><div class="info-val">의뢰서 발송 후 담당 사례관리사 배정</div></div>`},
   ic_mental:{title:'정신건강 연계',sub:'통합 돌봄 — 정신건강',body:`<div class="info-row"><div class="info-label">고양 센터</div><div class="info-val">☎ <a href="tel:031-968-2333">031-968-2333</a></div></div><div class="info-row"><div class="info-label">스크리닝</div><div class="info-val">PHQ-9 우울 / GAD-7 불안 / 사회적 고립 위험 평가 후 연계</div></div>`},
@@ -2917,12 +2979,13 @@ function camSel(el, idx, s){
 /* ════════════════════ HOMECARE MODULE v1 ════════════════════ */
 const HC_DATA = {
   meta:{
-    sourceDate:'2026-04-03',
-    nextReview:'2026-07-01',
-    sources:['보건복지부 장기요양 재택의료센터 시범사업','건강보험심사평가원 일차의료 방문진료 수가 시범사업']
+    sourceDate:'2026-10-12',
+    nextReview:'2027-01-12',
+    sources:['보건복지부 장기요양 재택의료센터 시범사업','건강보험심사평가원 일차의료 방문진료 수가 시범사업'],
+    note:'2026-10-12: 미운영 6곳·확인필요 1곳을 data/archive/로 이동, 심욱섭소아과의원을 재택의료센터로 재분류. 기준일은 이 정리 작업을 반영한 날짜이며, 8개 기관의 전화 재확인은 별도로 필요함.'
   },
   clinics:[
-    // 장기요양 재택의료센터 (4개소)
+    // 장기요양 재택의료센터 (5개소) — 고양시 2026-07-09 발표 기준
     {id:'ltc-yonsei365',program:'ltc',district:'일산동구',name:'연세365매일의원',
       type:'의원',specialty:'가정의학과(추정)',address:'경기도 고양시 일산동구 중산동 12-2',
       phone:'031-977-3657',visit:'verified',
@@ -2939,11 +3002,11 @@ const HC_DATA = {
       type:'한의원',specialty:'한의',address:'경기도 고양시 덕양구 행신동 999',
       phone:'031-970-7900',visit:'verified',
       note:'한의사 주도 재택의료센터. 침·뜸 등 한방 처치 연계 가능.'},
-    // 일차의료 방문진료 수가 시범사업 — 실제 운영중 (4개소)
-    {id:'pv-simwook',program:'visit-fee',district:'덕양구',name:'심욱섭소아과의원',
+    {id:'ltc-simwook',program:'ltc',district:'덕양구',name:'심욱섭소아과의원',
       type:'의원',specialty:'소아청소년과',address:'경기도 고양시 덕양구 성사동 696-2',
       phone:'031-963-1823',visit:'verified',
-      note:'소아청소년과 전문의 방문진료.'},
+      note:'⚠ 2026-10 정리 작업에서 방문진료 시범사업 → 장기요양 재택의료센터로 재분류. 재택의료센터 지정 여부·팀 구성(의사·간호사·사회복지사) 재확인 필요.'},
+    // 일차의료 방문진료 수가 시범사업 — 실제 운영중 (3개소)
     {id:'pv-seran-g',program:'visit-fee',district:'덕양구',name:'세란가정의원',
       type:'의원',specialty:'가정의학과',address:'경기도 고양시 덕양구 행신동 785-1',
       phone:'031-972-0543',visit:'verified',
@@ -2955,37 +3018,7 @@ const HC_DATA = {
     {id:'pv-singrok',program:'visit-fee',district:'일산동구',name:'신록내과의원',
       type:'의원',specialty:'내과',address:'경기도 고양시 일산동구 마두동',
       phone:'031-904-7575',visit:'verified',
-      note:'내과 전문의 왕진. 만성질환 관리 적합.'},
-    // 방문진료 — 확인 필요 (1개소)
-    {id:'pv-seran-i',program:'visit-fee',district:'일산동구',name:'세란의원',
-      type:'의원',specialty:'일반의(추정)',address:'경기도 고양시 일산동구 장항동',
-      phone:'031-904-3263',visit:'unverified',
-      note:'⚠ 원자료에 방문 가능 여부 표시 누락. 첫 연계 전 운영 확인 권장.'},
-    // ──────────────── 방문진료 — 현재 미운영 (6개소, 시범사업 등록 기준) ────────────────
-    {id:'pv-haengsin',program:'visit-fee',district:'덕양구',name:'행신연세가정의학과의원',
-      type:'의원',specialty:'가정의학과',address:'경기도 고양시 덕양구 무원로54번길 62',
-      phone:'031-979-7200',visit:'inactive',inactiveReason:'신청만',
-      note:'방문진료 수가 시범사업 등록은 되어 있으나 실제 방문진료 미개시 상태. 운영 재개 여부는 직접 문의 필요.'},
-    {id:'pv-goyangmed',program:'visit-fee',district:'일산동구',name:'고양메디컬의원',
-      type:'의원',specialty:'일반의(추정)',address:'경기도 고양시 일산동구 설문동 703 2층',
-      phone:'031-819-7500',visit:'inactive',inactiveReason:'신청만',
-      note:'방문진료 수가 시범사업 등록은 되어 있으나 실제 방문진료 미개시 상태.'},
-    {id:'pv-es',program:'visit-fee',district:'일산동구',name:'에스의원',
-      type:'의원',specialty:'일반의(추정)',address:'경기도 고양시 일산동구 풍동 (상세 주소 미확보)',
-      phone:'031-924-6177',visit:'inactive',inactiveReason:'주소 미확보',
-      note:'풍동 소재 추정. 정확한 주소 및 운영 여부 추가 확인 필요.'},
-    {id:'pv-mirae',program:'visit-fee',district:'일산서구',name:'미래이비인후과의원',
-      type:'의원',specialty:'이비인후과',address:'경기도 고양시 일산서구 대화동 2205-1',
-      phone:'031-911-6105',visit:'inactive',inactiveReason:'시스템 미비',
-      note:'방문진료 차트 시스템 미설치로 운영 보류. 시스템 도입 후 재개 가능성 있음.'},
-    {id:'pv-seoulw',program:'visit-fee',district:'일산서구',name:'서울W내과의원 일산점',
-      type:'의원',specialty:'내과',address:'경기도 고양시 일산서구 중앙로 1576',
-      phone:'031-926-3166',visit:'inactive',inactiveReason:'운영 중단',
-      note:'2025년 중 방문진료 중단. 재개 여부 정기 확인 필요.'},
-    {id:'pv-nuga',program:'visit-fee',district:'일산서구',name:'누가가정의학과의원',
-      type:'의원',specialty:'가정의학과',address:'경기도 고양시 일산서구 일산동',
-      phone:'031-918-8121',visit:'inactive',inactiveReason:'미시행',
-      note:'방문진료 수가 시범사업 등록은 되어 있으나 현재 방문진료 미시행.'}
+      note:'내과 전문의 왕진. 만성질환 관리 적합.'}
   ]
 };
 
@@ -3240,14 +3273,56 @@ function hcShowGuide(){
     <div class="info-row"><div class="info-label">🗺️ 지도</div><div class="info-val">카카오맵에서 의원 위치 검색. 환자 주소와 거리 확인 후 연계 결정.</div></div>
     <div class="info-row"><div class="info-label">🔍 심평원</div><div class="info-val">의원명이 클립보드에 자동 복사되며 심평원 병원 검색 페이지가 열립니다. 검색창에 붙여넣어 <b>최신 운영 여부·휴진일</b>을 공식 확인하세요.</div></div>
     <div class="info-row"><div class="info-label">✏️ 운영 확인</div><div class="info-val">전화 확인 후 야간·주말 가능 여부, 메모, 확인일·확인자를 저장합니다. <b>이 브라우저에만 저장</b>되며 다른 PC에서는 보이지 않습니다.</div></div>
-    <div class="info-row"><div class="info-label">분기 갱신</div><div class="info-val">매 분기 첫 주에 ①센터 담당자가 9개소에 전화 ②결과를 카드에서 갱신 ③상단 '다음 갱신 예정일'을 다음 분기로 업데이트하는 흐름을 권장합니다.</div></div>
-    <div class="info-row"><div class="info-label">데이터 출처</div><div class="info-val">2026-04-03 기준 보건복지부 장기요양 재택의료센터 시범사업 + 건강보험심사평가원 일차의료 방문진료 수가 시범사업 자료.</div></div>
+    <div class="info-row"><div class="info-label">분기 갱신</div><div class="info-val">매 분기 첫 주에 ①센터 담당자가 8개소에 전화 ②결과를 카드에서 갱신 ③상단 '다음 갱신 예정일'을 다음 분기로 업데이트하는 흐름을 권장합니다.</div></div>
+    <div class="info-row"><div class="info-label">데이터 출처</div><div class="info-val">2026-10-12 기준 보건복지부 장기요양 재택의료센터 시범사업 + 건강보험심사평가원 일차의료 방문진료 수가 시범사업 자료. 미운영·확인필요 기관은 제외.</div></div>
   `;
   document.getElementById('modalOverlay').classList.add('show');
 }
 
+/* ════════════════════ PILOT CLINICS MODULE (§4-1, data/pilot_clinics.json) ════════════════════ */
+function pcCardHTML(c){
+  const payBadge = `<span class="hc-b" style="background:${c.paymentModel==='통합수가제'?'rgba(42,127,127,.12)':'rgba(58,122,90,.14)'};color:${c.paymentModel==='통합수가제'?'var(--teal)':'var(--green)'};">${c.paymentModel}</span>`;
+  const needCk = (v)=> v==='확인 필요' ? `<span class="hc-ex-v v-ck">❓ 확인 필요</span>` : v;
+  return `<div class="hc-card">
+    <div class="hc-card-top">
+      <div class="hc-card-l">
+        <div class="hc-badges">${payBadge}</div>
+        <div class="hc-card-name">${c.name}</div>
+        <div class="hc-card-spec">원장 · <b>${c.director}</b></div>
+      </div>
+    </div>
+    <div class="hc-card-info">
+      <div><span class="ic">📍</span>${needCk(c.district)} · ${needCk(c.address)}</div>
+      <div><span class="ic">🩺</span>진료과 ${needCk(c.specialty)}</div>
+    </div>
+    <div class="hc-card-note" style="font-size:10.5px;color:var(--gold);margin-bottom:8px;">☎ 원장 개인번호 (대표번호 확인 전)</div>
+    <div class="hc-actions">
+      <a class="hc-act tel" href="tel:${c.phone}">📞 ${c.phone}</a>
+    </div>
+  </div>`;
+}
+
+function pcRender(){
+  const container = document.getElementById('pc-render');
+  if(!container) return;
+  fetch('data/pilot_clinics.json')
+    .then(r=>{ if(!r.ok) throw new Error('fetch failed'); return r.json(); })
+    .then(data=>{
+      document.getElementById('pc-asof').textContent = data.asOf || '-';
+      document.getElementById('pc-st-total').textContent = data.clinics.length;
+      document.getElementById('pc-st-bundled').textContent = data.clinics.filter(c=>c.paymentModel==='통합수가제').length;
+      document.getElementById('pc-st-fee').textContent = data.clinics.filter(c=>c.paymentModel==='행위별수가제').length;
+      container.innerHTML = `<div class="hc-cards">${data.clinics.map(pcCardHTML).join('')}</div>`;
+    })
+    .catch(err=>{
+      container.innerHTML = '<div class="hc-empty">⚠ 의원 명단을 불러오지 못했습니다. data/pilot_clinics.json 파일을 확인해 주세요.</div>';
+      console.error('pilot clinics load error', err);
+    });
+}
+
 /* 초기 렌더 */
 hcRender();
+pcRender();
 </script>
 </body>
 </html>

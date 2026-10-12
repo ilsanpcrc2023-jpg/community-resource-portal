@@ -1,0 +1,97 @@
+{
+  "archivedAt": "2026-10-12",
+  "archivedBy": "Claude Code (사회복지팀 요청)",
+  "reason": "미운영·확인필요 상태로 화면(index.html 재택의료 탭)에서 제외. 정책 추적용으로만 보관하며 화면에는 노출하지 않음.",
+  "clinics": [
+    {
+      "id": "pv-seran-i",
+      "program": "visit-fee",
+      "district": "일산동구",
+      "name": "세란의원",
+      "type": "의원",
+      "specialty": "일반의(추정)",
+      "address": "경기도 고양시 일산동구 장항동",
+      "phone": "031-904-3263",
+      "visit": "unverified",
+      "note": "원자료에 방문 가능 여부 표시 누락. 재게시 전 운영 확인 필요."
+    },
+    {
+      "id": "pv-haengsin",
+      "program": "visit-fee",
+      "district": "덕양구",
+      "name": "행신연세가정의학과의원",
+      "type": "의원",
+      "specialty": "가정의학과",
+      "address": "경기도 고양시 덕양구 무원로54번길 62",
+      "phone": "031-979-7200",
+      "visit": "inactive",
+      "inactiveReason": "신청만",
+      "note": "방문진료 수가 시범사업 등록은 되어 있으나 실제 방문진료 미개시 상태."
+    },
+    {
+      "id": "pv-goyangmed",
+      "program": "visit-fee",
+      "district": "일산동구",
+      "name": "고양메디컬의원",
+      "type": "의원",
+      "specialty": "일반의(추정)",
+      "address": "경기도 고양시 일산동구 설문동 703 2층",
+      "phone": "031-819-7500",
+      "visit": "inactive",
+      "inactiveReason": "신청만",
+      "note": "방문진료 수가 시범사업 등록은 되어 있으나 실제 방문진료 미개시 상태."
+    },
+    {
+      "id": "pv-es",
+      "program": "visit-fee",
+      "district": "일산동구",
+      "name": "에스의원",
+      "type": "의원",
+      "specialty": "일반의(추정)",
+      "address": "경기도 고양시 일산동구 풍동 (상세 주소 미확보)",
+      "phone": "031-924-6177",
+      "visit": "inactive",
+      "inactiveReason": "주소 미확보",
+      "note": "풍동 소재 추정. 정확한 주소 및 운영 여부 추가 확인 필요."
+    },
+    {
+      "id": "pv-mirae",
+      "program": "visit-fee",
+      "district": "일산서구",
+      "name": "미래이비인후과의원",
+      "type": "의원",
+      "specialty": "이비인후과",
+      "address": "경기도 고양시 일산서구 대화동 2205-1",
+      "phone": "031-911-6105",
+      "visit": "inactive",
+      "inactiveReason": "시스템 미비",
+      "note": "방문진료 차트 시스템 미설치로 운영 보류. 시스템 도입 후 재개 가능성 있음."
+    },
+    {
+      "id": "pv-seoulw",
+      "program": "visit-fee",
+      "district": "일산서구",
+      "name": "서울W내과의원 일산점",
+      "type": "의원",
+      "specialty": "내과",
+      "address": "경기도 고양시 일산서구 중앙로 1576",
+      "phone": "031-926-3166",
+      "visit": "inactive",
+      "inactiveReason": "운영 중단",
+      "note": "2025년 중 방문진료 중단. 재개 여부 정기 확인 필요."
+    },
+    {
+      "id": "pv-nuga",
+      "program": "visit-fee",
+      "district": "일산서구",
+      "name": "누가가정의학과의원",
+      "type": "의원",
+      "specialty": "가정의학과",
+      "address": "경기도 고양시 일산서구 일산동",
+      "phone": "031-918-8121",
+      "visit": "inactive",
+      "inactiveReason": "미시행",
+      "note": "방문진료 수가 시범사업 등록은 되어 있으나 현재 방문진료 미시행."
+    }
+  ]
+}
