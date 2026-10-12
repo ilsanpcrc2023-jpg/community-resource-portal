@@ -1020,6 +1020,7 @@ footer strong{color:rgba(255,255,255,.85);}
     <button class="tab-btn" data-tab="apply" onclick="switchTab('apply', this)">🖱️ 서비스 신청 <span class="tab-count">6</span></button>
     <button class="tab-btn" data-tab="pilot" onclick="switchTab('pilot', this)">🩺 시범사업 의원 <span class="tab-count">12</span></button>
     <button class="tab-btn" data-tab="homecare" onclick="switchTab('homecare', this)">🏠 재택의료 <span class="tab-count">8</span></button>
+    <button class="tab-btn" data-tab="visiting-nursing" onclick="switchTab('visiting-nursing', this)">💉 방문간호 <span class="tab-count">22</span></button>
     <button class="tab-btn" data-tab="assess" onclick="switchTab('assess', this)">📋 사정 도구 <span class="tab-count" id="assess-count-badge">13종</span></button>
   </div>
 </div>
@@ -2092,6 +2093,55 @@ footer strong{color:rgba(255,255,255,.85);}
   </div>
 
 </div><!-- /tab-homecare -->
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━ 방문간호센터 TAB (§4-3) ━━━━━━━━━━━━━━━━━━━━━ -->
+<div class="tab-panel" id="tab-visiting-nursing">
+
+  <!-- 안내 배너 -->
+  <div class="hc-banner">
+    <div class="hc-banner-icon">💉</div>
+    <div class="hc-banner-body">
+      <div class="hc-banner-title">고양시 방문간호센터 (22개소)</div>
+      <div class="hc-banner-desc">국민건강보험공단 노인장기요양보험 시설·기관찾기 자료 중 고양시(덕양·일산동·일산서) <b>방문간호</b> 급여종류 기관입니다. 평가결과가 "신설기관"·"평가비대상"인 곳은 아직 등급이 없는 상태입니다.</div>
+      <div class="hc-banner-meta">
+        <div class="hc-bm-item">📅 기준일 <b id="vn-asof">-</b></div>
+        <div class="hc-bm-item">📚 출처 <b>국민건강보험공단 노인장기요양보험</b></div>
+        <a class="hc-bm-item" id="vn-official-link" href="#" target="_blank" style="text-decoration:none;">🔗 <b style="color:var(--teal);">공단 사이트에서 최신 정보 확인 →</b></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 통계 + 필터 바 -->
+  <div class="hc-statbar">
+    <div class="hc-stat-row">
+      <div class="hc-stat-group">
+        <div class="hc-stat"><div class="hc-stat-num" id="vn-st-total">22</div><div class="hc-stat-lbl">💉 방문간호 기관</div></div>
+        <div class="hc-stat"><div class="hc-stat-num t" id="vn-st-graded">-</div><div class="hc-stat-lbl">⭐ 평가등급 보유</div></div>
+      </div>
+    </div>
+    <div class="hc-filter-row">
+      <button class="hc-fbtn active" data-filter="dist" data-val="all" onclick="vnFilter('dist','all',this)">전체 구</button>
+      <button class="hc-fbtn" data-filter="dist" data-val="덕양구" onclick="vnFilter('dist','덕양구',this)">덕양구</button>
+      <button class="hc-fbtn" data-filter="dist" data-val="일산동구" onclick="vnFilter('dist','일산동구',this)">일산동구</button>
+      <button class="hc-fbtn" data-filter="dist" data-val="일산서구" onclick="vnFilter('dist','일산서구',this)">일산서구</button>
+      <div class="hc-fbtn-sep"></div>
+      <button class="hc-fbtn active" data-filter="grade" data-val="all" onclick="vnFilter('grade','all',this)">전체</button>
+      <button class="hc-fbtn" data-filter="grade" data-val="graded" onclick="vnFilter('grade','graded',this)">⭐ 등급 보유만</button>
+    </div>
+  </div>
+
+  <!-- 센터 카드 그리드 (JS 렌더링) -->
+  <div id="vn-render" style="padding:30px;text-align:center;color:var(--gray-400);font-size:12px;">불러오는 중…</div>
+
+  <!-- 하단 안내 -->
+  <div style="background:rgba(200,146,26,.07);border:1px solid rgba(200,146,26,.25);border-radius:11px;padding:14px 18px;margin-top:18px;font-size:11.5px;color:var(--text);line-height:1.7;">
+    <b style="color:var(--gold);">💡 활용 안내</b><br>
+    ① 평가등급은 공단 정기평가(3년 주기) 결과로, <b>현재 서비스 품질을 보증하지 않습니다.</b> 신설기관·평가비대상 기관은 등급이 없을 뿐 운영에 문제가 있다는 의미가 아닙니다.<br>
+    ② 신규 접수 가능 여부·담당 동(洞) 등은 원자료에 없어 전화로 직접 확인이 필요합니다.<br>
+    ③ 더 최신 정보가 필요하면 상단 "공단 사이트에서 최신 정보 확인" 링크로 공식 검색 화면을 바로 열 수 있습니다.
+  </div>
+
+</div><!-- /tab-visiting-nursing -->
 
 </div><!-- /main -->
 
@@ -3424,9 +3474,79 @@ function pcRender(){
     });
 }
 
+/* ════════════════════ VISITING NURSING MODULE (§4-3, data/visiting_nursing.json) ════════════════════ */
+let VN_DATA = null;
+const VN_FILTERS = {dist:'all', grade:'all'};
+
+function vnFilter(key, val, btn){
+  VN_FILTERS[key] = val;
+  document.querySelectorAll(`#tab-visiting-nursing .hc-filter-row .hc-fbtn[data-filter="${key}"]`).forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  vnRenderList();
+}
+
+const VN_GRADE_COLOR = {A:'#1e4a7a', B:'#2a7f7f', C:'#6a7a8a', D:'#9aa3b0', E:'#9aa3b0'};
+
+function vnCardHTML(c){
+  const hasGrade = !!c.grade;
+  const gradeBadge = hasGrade
+    ? `<span class="hc-b" style="background:${VN_GRADE_COLOR[c.grade]}22;color:${VN_GRADE_COLOR[c.grade]};">${c.grade}등급 (${c.gradeLabel})</span>`
+    : `<span class="hc-b" style="background:var(--gray-200);color:var(--gray-400);border:1px dashed var(--gray-400);">${c.status}</span>`;
+  const evalInfo = hasGrade ? `<div style="margin-top:3px;opacity:.75;">※ ${c.evalYear}년 ${c.evalType}</div>` : '';
+  return `<div class="hc-card">
+    <div class="hc-card-top">
+      <div class="hc-card-l">
+        <div class="hc-badges">${gradeBadge}</div>
+        <div class="hc-card-name">${c.name}</div>
+      </div>
+    </div>
+    <div class="hc-card-info">
+      <div><span class="ic">📍</span>${c.district} · ${c.address}</div>
+      ${evalInfo}
+    </div>
+    <div class="hc-actions">
+      <a class="hc-act tel" href="tel:${c.phone}">📞 ${c.phone}</a>
+      <a class="hc-act map" href="https://map.kakao.com/?q=${encodeURIComponent(c.name+' '+c.district)}" target="_blank">🗺️ 지도</a>
+    </div>
+  </div>`;
+}
+
+function vnRenderList(){
+  const container = document.getElementById('vn-render');
+  if(!container || !VN_DATA) return;
+  const list = VN_DATA.centers.filter(c=>{
+    if(VN_FILTERS.dist!=='all' && c.district!==VN_FILTERS.dist) return false;
+    if(VN_FILTERS.grade==='graded' && !c.grade) return false;
+    return true;
+  });
+  container.innerHTML = list.length
+    ? `<div class="hc-cards">${list.map(vnCardHTML).join('')}</div>`
+    : '<div class="hc-empty">선택한 조건에 해당하는 센터가 없습니다.</div>';
+}
+
+function vnRender(){
+  const container = document.getElementById('vn-render');
+  if(!container) return;
+  fetch('data/visiting_nursing.json')
+    .then(r=>{ if(!r.ok) throw new Error('fetch failed'); return r.json(); })
+    .then(data=>{
+      VN_DATA = data;
+      document.getElementById('vn-asof').textContent = data.facilityAsOf || '-';
+      document.getElementById('vn-official-link').href = data.officialSearchUrl || '#';
+      document.getElementById('vn-st-total').textContent = data.centers.length;
+      document.getElementById('vn-st-graded').textContent = data.centers.filter(c=>c.grade).length;
+      vnRenderList();
+    })
+    .catch(err=>{
+      container.innerHTML = '<div class="hc-empty">⚠ 방문간호센터 명단을 불러오지 못했습니다. data/visiting_nursing.json 파일을 확인해 주세요.</div>';
+      console.error('visiting nursing load error', err);
+    });
+}
+
 /* 초기 렌더 */
 hcRender();
 pcRender();
+vnRender();
 </script>
 </body>
 </html>
