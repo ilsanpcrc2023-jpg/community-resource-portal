@@ -637,6 +637,22 @@ footer strong{color:rgba(255,255,255,.85);}
 .pc-table .hc-act.tel{padding:6px 12px;font-size:10.5px;white-space:nowrap;}
 .pc-row-inactive .pc-td-name{color:#5a5a5a;}
 
+/* 방문간호 — 검색 가능한 표 + 엑셀 다운로드 */
+.vn-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.vn-search{flex:1;min-width:200px;max-width:360px;padding:8px 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:12px;font-family:'Noto Sans KR',sans-serif;color:var(--text);}
+.vn-search:focus{outline:none;border-color:var(--navy-light);}
+.vn-table-wrap{border:1.5px solid var(--gray-200);border-radius:11px;background:white;overflow:hidden;overflow-x:auto;}
+.vn-table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap;}
+.vn-table thead th{background:var(--gray-100);color:var(--text);font-weight:700;font-size:11px;padding:9px 12px;text-align:left;border-bottom:1.5px solid var(--gray-200);}
+.vn-tr{border-bottom:1px solid var(--gray-200);}
+.vn-tr:last-child{border-bottom:none;}
+.vn-tr:hover{background:var(--gray-100);}
+.vn-table td{padding:9px 12px;vertical-align:middle;color:var(--text);}
+.vn-td-num{color:var(--gray-400);width:1%;}
+.vn-td-name{font-weight:800;color:var(--navy);cursor:pointer;}
+.vn-td-name:hover{text-decoration:underline;}
+.vn-td-addr{white-space:normal;min-width:220px;}
+
 /* 지역사회 자원 연계 서식 — 상세 펼침형 (시범사업 탭) */
 .ref-item2{display:flex;align-items:center;gap:10px;padding:0;border-radius:8px;transition:.15s;border:1.5px solid transparent;margin-bottom:2px;}
 .ref-item2:hover{background:var(--gray-100);}
@@ -2229,7 +2245,12 @@ footer strong{color:rgba(255,255,255,.85);}
     </div>
   </div>
 
-  <!-- 센터 카드 그리드 (JS 렌더링) -->
+  <div class="vn-toolbar">
+    <input type="text" class="vn-search" id="vn-search-input" placeholder="🔍 기관명, 지역, 주소 검색" oninput="vnSearch(this.value)">
+    <button class="pc-download-btn" onclick="vnDownloadCSV()">📥 다운로드</button>
+  </div>
+
+  <!-- 센터 목록 (JS 렌더링) -->
   <div id="vn-render" style="padding:30px;text-align:center;color:var(--gray-400);font-size:12px;">불러오는 중…</div>
 
   <!-- 하단 안내 -->
@@ -3618,7 +3639,7 @@ function pcRender(){
 
 /* ════════════════════ VISITING NURSING MODULE (§4-3, data/visiting_nursing.json) ════════════════════ */
 let VN_DATA = null;
-const VN_FILTERS = {dist:'all', grade:'all'};
+const VN_FILTERS = {dist:'all', grade:'all', q:''};
 
 function vnFilter(key, val, btn){
   VN_FILTERS[key] = val;
@@ -3627,43 +3648,91 @@ function vnFilter(key, val, btn){
   vnRenderList();
 }
 
+function vnSearch(q){
+  VN_FILTERS.q = (q||'').trim().toLowerCase();
+  vnRenderList();
+}
+
 const VN_GRADE_COLOR = {A:'#1e4a7a', B:'#2a7f7f', C:'#6a7a8a', D:'#9aa3b0', E:'#9aa3b0'};
 
-function vnCardHTML(c){
-  const hasGrade = !!c.grade;
-  const gradeBadge = hasGrade
-    ? `<span class="hc-b" style="background:${VN_GRADE_COLOR[c.grade]}22;color:${VN_GRADE_COLOR[c.grade]};">${c.grade}등급 (${c.gradeLabel})</span>`
-    : `<span class="hc-b" style="background:var(--gray-200);color:var(--gray-400);border:1px dashed var(--gray-400);">${c.status}</span>`;
-  const evalInfo = hasGrade ? `<div style="margin-top:3px;opacity:.75;">※ ${c.evalYear}년 ${c.evalType}</div>` : '';
-  return `<div class="hc-card">
-    <div class="hc-card-top">
-      <div class="hc-card-l">
-        <div class="hc-badges">${gradeBadge}</div>
-        <div class="hc-card-name">${c.name}</div>
-      </div>
-    </div>
-    <div class="hc-card-info">
-      <div><span class="ic">📍</span>${c.district} · ${c.address}</div>
-      ${evalInfo}
-    </div>
-    <div class="hc-actions">
-      <a class="hc-act tel" href="tel:${c.phone}">📞 ${c.phone}</a>
-      <a class="hc-act map" href="https://map.kakao.com/link/search/${encodeURIComponent(c.address || (c.name+' '+c.district))}" target="_blank" rel="noopener">🗺️ 지도</a>
-    </div>
-  </div>`;
+function vnEvalText(c){
+  return c.grade ? `${c.grade}등급 (${c.gradeLabel})` : (c.status || '-');
+}
+
+function vnRowHTML(c, idx){
+  return `<tr class="vn-tr">
+    <td class="vn-td-num">${idx+1}</td>
+    <td class="vn-td-name" onclick="vnOpenDetail('${c.id}')">${c.name}</td>
+    <td>${c.district}</td>
+    <td><a class="hc-act tel" href="tel:${c.phone}" onclick="event.stopPropagation()">📞 ${c.phone}</a></td>
+    <td class="vn-td-addr">${c.address}</td>
+    <td>방문간호</td>
+    <td>${vnEvalText(c)}</td>
+    <td>${c.evalYear || '-'}</td>
+    <td>${c.note || '-'}</td>
+  </tr>`;
+}
+
+function vnFilteredList(){
+  if(!VN_DATA) return [];
+  return VN_DATA.centers.filter(c=>{
+    if(VN_FILTERS.dist!=='all' && c.district!==VN_FILTERS.dist) return false;
+    if(VN_FILTERS.grade==='graded' && !c.grade) return false;
+    if(VN_FILTERS.q){
+      const hay = `${c.name} ${c.district} ${c.address}`.toLowerCase();
+      if(!hay.includes(VN_FILTERS.q)) return false;
+    }
+    return true;
+  });
 }
 
 function vnRenderList(){
   const container = document.getElementById('vn-render');
   if(!container || !VN_DATA) return;
-  const list = VN_DATA.centers.filter(c=>{
-    if(VN_FILTERS.dist!=='all' && c.district!==VN_FILTERS.dist) return false;
-    if(VN_FILTERS.grade==='graded' && !c.grade) return false;
-    return true;
-  });
+  container.removeAttribute('style');
+  const list = vnFilteredList();
   container.innerHTML = list.length
-    ? `<div class="hc-cards">${list.map(vnCardHTML).join('')}</div>`
+    ? `<div class="vn-table-wrap">
+        <table class="vn-table">
+          <thead><tr><th>순번</th><th>기관명</th><th>지역</th><th>전화번호</th><th>주소</th><th>급여종류</th><th>평가결과</th><th>평가연도</th><th>비고</th></tr></thead>
+          <tbody>${list.map(vnRowHTML).join('')}</tbody>
+        </table>
+      </div>`
     : '<div class="hc-empty">선택한 조건에 해당하는 센터가 없습니다.</div>';
+}
+
+function vnOpenDetail(id){
+  const c = VN_DATA && VN_DATA.centers.find(x=>x.id===id);
+  if(!c) return;
+  document.getElementById('mTitle').textContent = c.name;
+  document.getElementById('mSub').textContent = `${c.district} · 방문간호`;
+  document.getElementById('mBody').innerHTML = `
+    <div class="info-row"><div class="info-label">주소</div><div class="info-val">${c.address}</div></div>
+    <div class="info-row"><div class="info-label">전화</div><div class="info-val">☎ <a href="tel:${c.phone}">${c.phone}</a></div></div>
+    <div class="info-row"><div class="info-label">평가결과</div><div class="info-val">${vnEvalText(c)}${c.evalYear?` (${c.evalYear}년 ${c.evalType||''})`:''}</div></div>
+    ${c.coverageDongs && c.coverageDongs.length ? `<div class="info-row"><div class="info-label">서비스 지역</div><div class="info-val">${c.coverageDongs.join(', ')}</div></div>` : ''}
+    ${c.note ? `<div class="info-row"><div class="info-label">비고</div><div class="info-val">${c.note}</div></div>` : ''}
+    <div class="info-row"><div class="info-label">지도</div><div class="info-val"><a href="https://map.kakao.com/link/search/${encodeURIComponent(c.address || (c.name+' '+c.district))}" target="_blank" rel="noopener">🗺️ 카카오맵에서 보기 →</a></div></div>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function vnDownloadCSV(){
+  const list = vnFilteredList();
+  if(!list.length) return;
+  const header = ['순번','기관명','지역','전화번호','주소','급여종류','평가결과','평가연도','비고'];
+  const rows = list.map((c,i) => [i+1, c.name, c.district, c.phone, c.address, '방문간호', vnEvalText(c), c.evalYear || '', c.note || '']);
+  const csv = [header, ...rows].map(r => r.map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\r\n');
+  const blob = new Blob(['﻿' + csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `고양시_방문간호센터_${(VN_DATA && VN_DATA.facilityAsOf) || ''}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 function vnRender(){
