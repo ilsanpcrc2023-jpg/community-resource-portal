@@ -3354,7 +3354,7 @@ function hcRender(){
         </div>
         <div class="hc-group-cnt">${ltc.length}개소</div>
       </div>
-      <div class="hc-cards ${ltc.length===1?'cols-1':''}">${ltc.map(hcCardHTML).join('')}</div>
+      ${hcTableHTML(ltc)}
     </div>`;
   }
   if(pvActive.length){
@@ -3366,7 +3366,7 @@ function hcRender(){
         </div>
         <div class="hc-group-cnt">${pvActive.length}개소</div>
       </div>
-      <div class="hc-cards ${pvActive.length===1?'cols-1':''}">${pvActive.map(hcCardHTML).join('')}</div>
+      ${hcTableHTML(pvActive)}
     </div>`;
   }
   if(pvInactive.length){
@@ -3378,7 +3378,7 @@ function hcRender(){
         </div>
         <div class="hc-group-cnt">${pvInactive.length}개소</div>
       </div>
-      <div class="hc-cards ${pvInactive.length===1?'cols-1':''}">${pvInactive.map(hcCardHTML).join('')}</div>
+      ${hcTableHTML(pvInactive)}
     </div>`;
   }
   if(!html) html = '<div class="hc-empty">선택한 조건에 해당하는 의원이 없습니다.</div>';
@@ -3389,68 +3389,24 @@ function hcRender(){
   document.getElementById('hc-st-total').textContent = HC_DATA.clinics.length;
 }
 
-function hcCardHTML(c){
-  const s = hcGetStatus(c.id);
-  const guClass = c.district.replace('구','');
-  const guBadge = `<span class="hc-b gu-${guClass}">${c.district}</span>`;
-  const typeBadge = `<span class="hc-b hc-b-type ${c.type==='한의원'?'tt-h':''}">${c.type}</span>`;
+function hcRowHTML(c, idx){
+  const isInactive = c.visit==='inactive';
+  const typeBadge = `<span class="hc-b" style="background:rgba(42,127,127,.12);color:var(--teal);margin-left:6px;">${c.type}</span>`;
+  const inactiveBadge = isInactive ? `<span class="hc-b hc-b-inactive" style="margin-left:6px;">미운영</span>` : '';
+  return `<tr class="pc-tr${isInactive?' pc-row-inactive':''}" onclick="hcOpenEdit('${c.id}')">
+    <td class="vn-td-num">${idx+1}</td>
+    <td class="pc-td-name">${c.name}${typeBadge}${inactiveBadge}<div class="pc-row-director">${c.specialty}</div></td>
+    <td class="pc-td-addr">${c.address}</td>
+    <td class="pc-td-tel"><a class="hc-act tel" href="tel:${c.phone}" onclick="event.stopPropagation()">📞 ${c.phone}</a></td>
+  </tr>`;
+}
 
-  let statusDot, inactiveBanner = '', cardClass = '';
-  if(c.visit==='verified'){
-    statusDot = `<div class="hc-status-dot ok" title="원자료 운영 확인">✓</div>`;
-  } else if(c.visit==='unverified'){
-    statusDot = `<div class="hc-status-dot warn" title="운영 여부 확인 필요">!</div>`;
-  } else if(c.visit==='inactive'){
-    statusDot = `<div class="hc-status-dot inactive" title="현재 미운영">✕</div>`;
-    cardClass = ' inactive';
-    inactiveBanner = `<div class="hc-inactive-banner">🚫 현재 미운영 <span class="reason">사유: ${c.inactiveReason||'미확인'} · 연계 전 운영 재개 여부 직접 확인</span></div>`;
-  }
-
-  const inactiveBadge = c.visit==='inactive' ? `<span class="hc-b hc-b-inactive">현재 미운영</span>` : '';
-
-  const fmtToggle = (v)=>{
-    if(v==='yes') return `<span class="hc-ex-v v-yes">⭕ 가능</span>`;
-    if(v==='no') return `<span class="hc-ex-v v-no">❌ 불가</span>`;
-    return `<span class="hc-ex-v v-ck">❓ 확인필요</span>`;
-  };
-
-  const verifiedInfo = s.verifiedDate
-    ? `<span>최근 확인 <b>${s.verifiedDate}</b>${s.verifier?` · ${s.verifier}`:''}</span>`
-    : (c.visit==='inactive'
-        ? `<span style="color:#b83232;">미운영 상태</span>`
-        : `<span style="color:var(--gold);">아직 확인 기록 없음</span>`);
-
-  const programLabel = c.program==='ltc' ? '복지부 지정'
-                     : (c.visit==='inactive' ? '심평원 등록 (미운영)' : '심평원 시범사업');
-
-  return `<div class="hc-card${cardClass}" id="hc-card-${c.id}">
-    <div class="hc-card-top">
-      <div class="hc-card-l">
-        <div class="hc-badges">${guBadge}${typeBadge}${inactiveBadge}</div>
-        <div class="hc-card-name">${c.name}</div>
-        <div class="hc-card-spec">진료과목 · <b>${c.specialty}</b></div>
-      </div>
-      ${statusDot}
-    </div>
-    ${inactiveBanner}
-    <div class="hc-card-info">
-      <div><span class="ic">📍</span>${c.address}</div>
-    </div>
-    <div class="hc-extras">
-      <div class="hc-ex"><span class="hc-ex-l">🌙 야간</span>${fmtToggle(s.night)}</div>
-      <div class="hc-ex"><span class="hc-ex-l">📅 주말</span>${fmtToggle(s.weekend)}</div>
-    </div>
-    <div class="hc-card-note">${c.note}${s.memo?`<br><b style="color:var(--teal)">메모:</b> ${s.memo}`:''}</div>
-    <div class="hc-actions">
-      <a class="hc-act tel" href="tel:${c.phone}">📞 ${c.phone}</a>
-      <a class="hc-act map" href="https://map.kakao.com/link/search/${encodeURIComponent(c.address || (c.name+' '+c.district))}" target="_blank" rel="noopener">🗺️ 지도</a>
-      <button class="hc-act hira" onclick="hcOpenHira('${c.name.replace(/'/g,"&apos;")}')">🔍 심평원</button>
-      <button class="hc-act edit" onclick="hcOpenEdit('${c.id}')" title="운영 확인 / 정보 갱신">✏️</button>
-    </div>
-    <div class="hc-card-foot">
-      ${verifiedInfo}
-      <span style="opacity:.7;">${programLabel}</span>
-    </div>
+function hcTableHTML(list){
+  return `<div class="pc-table-wrap">
+    <table class="pc-table">
+      <thead><tr><th>순번</th><th>병원명</th><th>소재지</th><th>전화</th></tr></thead>
+      <tbody>${list.map((c,i)=>hcRowHTML(c,i)).join('')}</tbody>
+    </table>
   </div>`;
 }
 
@@ -3506,10 +3462,29 @@ function hcOpenEdit(id){
   if(!c) return;
   const s = hcGetStatus(id);
   const today = new Date().toISOString().slice(0,10);
+  const programLabel = c.program==='ltc' ? '장기요양 재택의료센터' : (c.visit==='inactive' ? '방문진료 시범사업 (미운영)' : '방문진료 시범사업');
+  const inactiveInfo = c.visit==='inactive' ? `<div class="info-row"><div class="info-label">미운영 사유</div><div class="info-val" style="color:#b83232;">${c.inactiveReason||'미확인'}</div></div>` : '';
+  const fmtToggle = (v)=>{
+    if(v==='yes') return `<span class="hc-ex-v v-yes">⭕ 가능</span>`;
+    if(v==='no') return `<span class="hc-ex-v v-no">❌ 불가</span>`;
+    return `<span class="hc-ex-v v-ck">❓ 확인필요</span>`;
+  };
+  const verifiedInfo = s.verifiedDate
+    ? `최근 확인 <b>${s.verifiedDate}</b>${s.verifier?` · ${s.verifier}`:''}`
+    : (c.visit==='inactive' ? `<span style="color:#b83232;">미운영 상태</span>` : `<span style="color:var(--gold);">아직 확인 기록 없음</span>`);
 
   document.getElementById('mTitle').textContent = c.name;
-  document.getElementById('mSub').textContent = '운영 확인 / 정보 갱신';
+  document.getElementById('mSub').textContent = `${c.district} · ${programLabel}`;
   document.getElementById('mBody').innerHTML = `
+    <div class="info-row"><div class="info-label">진료과목</div><div class="info-val">${c.specialty}</div></div>
+    <div class="info-row"><div class="info-label">주소</div><div class="info-val">${c.address}</div></div>
+    <div class="info-row"><div class="info-label">전화</div><div class="info-val">☎ <a href="tel:${c.phone}">${c.phone}</a></div></div>
+    <div class="info-row"><div class="info-label">야간/주말</div><div class="info-val">🌙 야간 ${fmtToggle(s.night)} 　 📅 주말 ${fmtToggle(s.weekend)}</div></div>
+    <div class="info-row"><div class="info-label">최근 확인</div><div class="info-val">${verifiedInfo}</div></div>
+    ${inactiveInfo}
+    ${c.note || s.memo ? `<div class="info-row"><div class="info-label">비고</div><div class="info-val">${c.note||''}${s.memo?`<br><b style="color:var(--teal)">메모:</b> ${s.memo}`:''}</div></div>` : ''}
+    <div class="info-row"><div class="info-label">바로가기</div><div class="info-val"><a href="https://map.kakao.com/link/search/${encodeURIComponent(c.address || (c.name+' '+c.district))}" target="_blank" rel="noopener">🗺️ 카카오맵</a> ・ <a href="javascript:void(0)" onclick="hcOpenHira('${c.name.replace(/'/g,"&apos;")}')">🔍 심평원 확인</a></div></div>
+    <hr style="border:none;border-top:1px dashed var(--gray-200);margin:16px 0;">
     <div style="background:rgba(42,127,127,.07);border-radius:9px;padding:11px 14px;margin-bottom:16px;font-size:11.5px;color:var(--teal);line-height:1.6;">
       ☎ <b><a href="tel:${c.phone}" style="color:var(--teal);">${c.phone}</a></b>로 전화 확인 후 아래 정보를 갱신하세요. 입력 내용은 이 브라우저에만 저장됩니다.
     </div>
