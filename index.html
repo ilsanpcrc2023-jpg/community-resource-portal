@@ -291,13 +291,6 @@ a[href^="tel:"]:active { opacity: .75; }
 .ic-svc-table ul{list-style:none;margin:0;padding:0;}
 .ic-svc-table li{padding:4px 0;line-height:1.4;}
 .ic-svc-table li.special{color:var(--gold);font-weight:700;}
-.ic-flow-box{background:white;border:1.5px solid var(--gray-200);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 16px 14px;}
-.ic-flow-row{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2px;}
-.ic-flow-item{display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;padding:10px 8px;border-radius:10px;transition:.15s;width:88px;}
-.ic-flow-item:hover{background:var(--gray-100);}
-.ic-flow-ico{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;}
-.ic-flow-label{font-size:11.5px;font-weight:700;color:var(--text);text-align:center;line-height:1.35;}
-.ic-flow-arrow{color:var(--gray-200);font-size:18px;font-weight:700;flex-shrink:0;padding:0 2px;}
 .ic-diagram-note{font-size:11px;color:var(--gray-400);text-align:center;margin-top:8px;line-height:1.6;}
 .hc-banner-docs{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(0,0,0,.08);font-size:11px;color:var(--gray-400);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .doc-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(45,122,79,.08);color:#2d7a4f;border:1px solid rgba(45,122,79,.25);border-radius:14px;padding:4px 11px;font-size:11px;font-weight:700;text-decoration:none;}
@@ -1422,25 +1415,6 @@ footer strong{color:rgba(255,255,255,.85);}
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- 통합돌봄 서비스 6종 한눈에 보기 (클릭 시 아래 카드와 동일한 상세정보) -->
-  <div class="sec-hd"><div class="sec-title">🧩 통합돌봄 서비스 한눈에 보기</div></div>
-  <div class="ic-flow-box" style="margin-bottom:24px;">
-    <div class="ic-flow-row">
-      <div class="ic-flow-item" onclick="openModal('ic_homecare')"><div class="ic-flow-ico" style="background:rgba(42,127,127,.12);">🏠</div><div class="ic-flow-label">재가<br>의료급여</div></div>
-      <div class="ic-flow-arrow">→</div>
-      <div class="ic-flow-item" onclick="openModal('ic_caregiver')"><div class="ic-flow-ico" style="background:rgba(106,74,138,.12);">👐</div><div class="ic-flow-label">돌봄SOS</div></div>
-      <div class="ic-flow-arrow">→</div>
-      <div class="ic-flow-item" onclick="openModal('ic_housing')"><div class="ic-flow-ico" style="background:rgba(58,122,90,.12);">🔧</div><div class="ic-flow-label">주거 편의<br>지원</div></div>
-      <div class="ic-flow-arrow">→</div>
-      <div class="ic-flow-item" onclick="openModal('ic_casemanage')"><div class="ic-flow-ico" style="background:rgba(47,102,144,.12);">📊</div><div class="ic-flow-label">통합<br>사례관리</div></div>
-      <div class="ic-flow-arrow">→</div>
-      <div class="ic-flow-item" onclick="openModal('ic_mental')"><div class="ic-flow-ico" style="background:rgba(192,90,58,.12);">💚</div><div class="ic-flow-label">정신건강<br>연계</div></div>
-      <div class="ic-flow-arrow">→</div>
-      <div class="ic-flow-item" onclick="openModal('ic_nutrition')"><div class="ic-flow-ico" style="background:rgba(200,151,42,.12);">🍱</div><div class="ic-flow-label">영양·식사<br>지원</div></div>
-    </div>
-    <div class="ic-diagram-note">💡 클릭하면 아래 "통합 돌봄 주요 서비스" 카드와 동일한 상세 정보가 바로 뜹니다</div>
   </div>
 
   <!-- 신청 자격·창구 -->
