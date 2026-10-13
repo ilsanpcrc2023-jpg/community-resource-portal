@@ -282,6 +282,17 @@ a[href^="tel:"]:active { opacity: .75; }
 .chk-item.checked .chk-box{background:#3a7a5a;border-color:#3a7a5a;color:white;}
 .chk-label{font-size:12px;color:var(--text);font-weight:500;}
 .chk-item.checked .chk-label{text-decoration:line-through;color:var(--gray-400);}
+.ic-diagram-box{background:white;border:1.5px solid var(--gray-200);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 16px 14px;}
+.ic-diagram-svg{width:100%;max-width:560px;display:block;margin:0 auto;height:auto;}
+.ic-dg-line{stroke:var(--gray-200);stroke-width:2;}
+.ic-dg-node{cursor:pointer;}
+.ic-dg-node circle{transition:.15s;}
+.ic-dg-node:hover circle{filter:brightness(0.97);}
+.ic-dg-ico{font-size:26px;}
+.ic-dg-center-ico{font-size:28px;}
+.ic-dg-center-txt{font-size:14px;font-weight:800;fill:white;font-family:'Noto Sans KR',sans-serif;}
+.ic-dg-label{font-size:13px;font-weight:700;fill:var(--text);font-family:'Noto Sans KR',sans-serif;}
+.ic-diagram-note{font-size:11px;color:var(--gray-400);text-align:center;margin-top:8px;line-height:1.6;}
 .hc-banner-docs{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(0,0,0,.08);font-size:11px;color:var(--gray-400);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .doc-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(45,122,79,.08);color:#2d7a4f;border:1px solid rgba(45,122,79,.25);border-radius:14px;padding:4px 11px;font-size:11px;font-weight:700;text-decoration:none;}
 .doc-pill:hover{background:rgba(45,122,79,.15);}
@@ -1405,6 +1416,55 @@ footer strong{color:rgba(255,255,255,.85);}
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- 통합돌봄 서비스 6종 다이어그램 (클릭 시 아래 카드와 동일한 상세정보) -->
+  <div class="sec-hd"><div class="sec-title">🧩 통합돌봄 서비스 한눈에 보기</div></div>
+  <div class="ic-diagram-box" style="margin-bottom:24px;">
+    <svg viewBox="0 0 600 430" class="ic-diagram-svg" role="img" aria-label="통합돌봄 서비스 6종 다이어그램">
+      <line x1="300" y1="210" x2="300" y2="90" class="ic-dg-line"/>
+      <line x1="300" y1="210" x2="439" y2="130" class="ic-dg-line"/>
+      <line x1="300" y1="210" x2="439" y2="290" class="ic-dg-line"/>
+      <line x1="300" y1="210" x2="300" y2="370" class="ic-dg-line"/>
+      <line x1="300" y1="210" x2="161" y2="290" class="ic-dg-line"/>
+      <line x1="300" y1="210" x2="161" y2="130" class="ic-dg-line"/>
+
+      <circle cx="300" cy="210" r="56" style="fill:var(--navy);"/>
+      <text x="300" y="203" text-anchor="middle" class="ic-dg-center-ico">🏡</text>
+      <text x="300" y="227" text-anchor="middle" class="ic-dg-center-txt">재택 환자</text>
+
+      <g class="ic-dg-node" onclick="openModal('ic_homecare')">
+        <circle cx="300" cy="90" r="36" style="fill:rgba(42,127,127,.12);stroke:var(--teal);stroke-width:2;"/>
+        <text x="300" y="84" text-anchor="middle" class="ic-dg-ico">🏠</text>
+        <text x="300" y="138" text-anchor="middle" class="ic-dg-label">재가 의료급여</text>
+      </g>
+      <g class="ic-dg-node" onclick="openModal('ic_caregiver')">
+        <circle cx="439" cy="130" r="36" style="fill:rgba(106,74,138,.12);stroke:var(--purple);stroke-width:2;"/>
+        <text x="439" y="124" text-anchor="middle" class="ic-dg-ico">👐</text>
+        <text x="439" y="178" text-anchor="middle" class="ic-dg-label">돌봄SOS</text>
+      </g>
+      <g class="ic-dg-node" onclick="openModal('ic_mental')">
+        <circle cx="439" cy="290" r="36" style="fill:rgba(192,90,58,.12);stroke:var(--coral);stroke-width:2;"/>
+        <text x="439" y="296" text-anchor="middle" class="ic-dg-ico">💚</text>
+        <text x="439" y="344" text-anchor="middle" class="ic-dg-label">정신건강 연계</text>
+      </g>
+      <g class="ic-dg-node" onclick="openModal('ic_nutrition')">
+        <circle cx="300" cy="370" r="36" style="fill:rgba(200,151,42,.12);stroke:var(--gold);stroke-width:2;"/>
+        <text x="300" y="376" text-anchor="middle" class="ic-dg-ico">🍱</text>
+        <text x="300" y="424" text-anchor="middle" class="ic-dg-label">영양·식사 지원</text>
+      </g>
+      <g class="ic-dg-node" onclick="openModal('ic_casemanage')">
+        <circle cx="161" cy="290" r="36" style="fill:rgba(47,102,144,.12);stroke:var(--navy-light);stroke-width:2;"/>
+        <text x="161" y="296" text-anchor="middle" class="ic-dg-ico">📊</text>
+        <text x="161" y="344" text-anchor="middle" class="ic-dg-label">통합 사례관리</text>
+      </g>
+      <g class="ic-dg-node" onclick="openModal('ic_housing')">
+        <circle cx="161" cy="130" r="36" style="fill:rgba(58,122,90,.12);stroke:var(--green);stroke-width:2;"/>
+        <text x="161" y="124" text-anchor="middle" class="ic-dg-ico">🔧</text>
+        <text x="161" y="178" text-anchor="middle" class="ic-dg-label">주거 편의 지원</text>
+      </g>
+    </svg>
+    <div class="ic-diagram-note">💡 원을 클릭하면 아래 "통합 돌봄 주요 서비스" 카드와 동일한 상세 정보가 바로 뜹니다</div>
   </div>
 
   <!-- 신청 자격·창구 -->
