@@ -1131,8 +1131,12 @@ footer strong{color:rgba(255,255,255,.85);}
         <button class="hc-fbtn" data-filter="dist" data-val="일산동구" onclick="pcFilter('dist','일산동구',this)">일산동구</button>
         <button class="hc-fbtn" data-filter="dist" data-val="일산서구" onclick="pcFilter('dist','일산서구',this)">일산서구</button>
       </div>
-      <button class="pc-download-btn" onclick="pcDownloadCSV()">📥 다운로드</button>
     </div>
+  </div>
+
+  <div class="vn-toolbar">
+    <input type="text" class="vn-search" id="pc-search-input" placeholder="🔍 병원명, 지역, 주소 검색" oninput="pcSearch(this.value)">
+    <button class="pc-download-btn" onclick="pcDownloadCSV()">📥 다운로드</button>
   </div>
 
   <!-- 의원 리스트 (JS 렌더링) -->
@@ -3537,7 +3541,7 @@ function hcShowGuide(){
 
 /* ════════════════════ PILOT CLINICS MODULE (§4-1, data/pilot_clinics.json) ════════════════════ */
 let PC_DATA = null;
-const PC_FILTERS = {dist:'all'};
+const PC_FILTERS = {dist:'all', q:''};
 
 function pcFilter(key, val, btn){
   PC_FILTERS[key] = val;
@@ -3546,7 +3550,12 @@ function pcFilter(key, val, btn){
   pcRenderList();
 }
 
-function pcRowHTML(c){
+function pcSearch(q){
+  PC_FILTERS.q = (q||'').trim().toLowerCase();
+  pcRenderList();
+}
+
+function pcRowHTML(c, idx){
   const isInactive = c.status === '미개시';
   const isSolo = c.model === '단독';
   const modelBadge = c.model
@@ -3554,6 +3563,7 @@ function pcRowHTML(c){
     : '';
   const inactiveBadge = isInactive ? `<span class="hc-b hc-b-inactive" style="margin-left:6px;">미개시</span>` : '';
   return `<tr class="pc-tr${isInactive?' pc-row-inactive':''}" onclick="pcOpenDetail('${c.id}')">
+    <td class="vn-td-num">${idx+1}</td>
     <td class="pc-td-name">${c.name}${modelBadge}${inactiveBadge}<div class="pc-row-director">원장 ${c.director}</div></td>
     <td class="pc-td-addr">${c.address}</td>
     <td class="pc-td-tel"><a class="hc-act tel" href="tel:${c.phone}" onclick="event.stopPropagation()">📞 ${c.phone}</a></td>
@@ -3584,6 +3594,10 @@ function pcFilteredList(){
   if(!PC_DATA) return [];
   return PC_DATA.clinics.filter(c=>{
     if(PC_FILTERS.dist!=='all' && c.district!==PC_FILTERS.dist) return false;
+    if(PC_FILTERS.q){
+      const hay = `${c.name} ${c.district} ${c.address}`.toLowerCase();
+      if(!hay.includes(PC_FILTERS.q)) return false;
+    }
     return true;
   });
 }
@@ -3596,7 +3610,7 @@ function pcRenderList(){
   container.innerHTML = list.length
     ? `<div class="pc-table-wrap">
         <table class="pc-table">
-          <thead><tr><th>병원명</th><th>소재지</th><th>전화</th></tr></thead>
+          <thead><tr><th>순번</th><th>병원명</th><th>소재지</th><th>전화</th></tr></thead>
           <tbody>${list.map(pcRowHTML).join('')}</tbody>
         </table>
       </div>`
@@ -3606,8 +3620,8 @@ function pcRenderList(){
 function pcDownloadCSV(){
   const list = pcFilteredList();
   if(!list.length) return;
-  const header = ['병원명','원장','구','소재지','진료과','보상방식','전화번호','모형','상태'];
-  const rows = list.map(c => [c.name, c.director, c.district, c.address, c.specialty, c.paymentModel, c.phone, c.model ? c.model+'모형' : '', c.status==='미개시' ? '미개시' : '운영']);
+  const header = ['순번','병원명','원장','구','소재지','진료과','보상방식','전화번호','모형','상태'];
+  const rows = list.map((c,i) => [i+1, c.name, c.director, c.district, c.address, c.specialty, c.paymentModel, c.phone, c.model ? c.model+'모형' : '', c.status==='미개시' ? '미개시' : '운영']);
   const csv = [header, ...rows].map(r => r.map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\r\n');
   const blob = new Blob(['﻿' + csv], {type:'text/csv;charset=utf-8;'});
   const url = URL.createObjectURL(blob);
