@@ -282,6 +282,15 @@ a[href^="tel:"]:active { opacity: .75; }
 .chk-item.checked .chk-box{background:#3a7a5a;border-color:#3a7a5a;color:white;}
 .chk-label{font-size:12px;color:var(--text);font-weight:500;}
 .chk-item.checked .chk-label{text-decoration:line-through;color:var(--gray-400);}
+.ic-svc-table-wrap{background:white;border:1.5px solid var(--gray-200);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;overflow-x:auto;}
+.ic-svc-table{width:100%;border-collapse:collapse;min-width:640px;}
+.ic-svc-table th{background:var(--gray-100);color:var(--navy);font-size:12.5px;font-weight:800;padding:10px 12px;text-align:left;border-bottom:1.5px solid var(--gray-200);border-right:1px solid var(--gray-200);}
+.ic-svc-table th:last-child{border-right:none;}
+.ic-svc-table td{vertical-align:top;padding:12px;border-right:1px solid var(--gray-200);font-size:11.5px;color:var(--text);}
+.ic-svc-table td:last-child{border-right:none;}
+.ic-svc-table ul{list-style:none;margin:0;padding:0;}
+.ic-svc-table li{padding:4px 0;line-height:1.4;}
+.ic-svc-table li.special{color:var(--gold);font-weight:700;}
 .ic-flow-box{background:white;border:1.5px solid var(--gray-200);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 16px 14px;}
 .ic-flow-row{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2px;}
 .ic-flow-item{display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;padding:10px 8px;border-radius:10px;transition:.15s;width:88px;}
@@ -1455,6 +1464,57 @@ footer strong{color:rgba(255,255,255,.85);}
       <div class="info-row"><div class="info-label">서비스 규모</div><div class="info-val">기존 서비스 57개 + 고양온돌 특화서비스 5개 = <b style="color:var(--navy);">총 62개 서비스 연계</b></div></div>
       <div class="info-row"><div class="info-label">민관협력</div><div class="info-val">복지관 사례관리 담당자 참여 · 대상자 발굴·의뢰 체계 논의 · 공공·민간 협력으로 신속한 자원 연계 추진</div></div>
     </div>
+  </div>
+
+  <!-- 통합돌봄 서비스 목록 (5가지 분류, 57개 기존+5개 특화 = 62개) -->
+  <div class="sec-hd"><div class="sec-title">📑 통합돌봄 서비스 목록 — 5가지 분류, 총 62개</div></div>
+  <div class="ic-svc-table-wrap" style="margin-bottom:24px;">
+    <table class="ic-svc-table">
+      <thead>
+        <tr><th>보건의료</th><th>건강관리</th><th>장기요양</th><th>일상돌봄</th><th>주거복지·기타</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><ul>
+            <li>일차의료 방문진료</li>
+            <li>장기요양 재택의료</li>
+            <li>움직이는 한의원</li>
+            <li>퇴원환자 연계</li>
+            <li>가정간호</li>
+          </ul></td>
+          <td><ul>
+            <li>방문구강관리</li>
+            <li class="special">고양온돌-약속이음</li>
+            <li class="special">방문 노쇠예방 및 관리</li>
+            <li class="special">내건강살림</li>
+            <li>방문건강관리</li>
+            <li>찾아가는 홈스피탈</li>
+            <li>치매안심센터</li>
+            <li>지역사회중심재활사업</li>
+          </ul></td>
+          <td><ul>
+            <li>장기요양 재가급여</li>
+            <li>장기요양 주야간보호</li>
+            <li>장기요양 가족휴가제</li>
+          </ul></td>
+          <td><ul>
+            <li class="special">고양온돌-생활이음</li>
+            <li>노인맞춤돌봄서비스</li>
+            <li>누구나돌봄</li>
+            <li>장애인활동지원서비스</li>
+            <li>가사간병 방문서비스</li>
+          </ul></td>
+          <td><ul>
+            <li class="special">고양온돌-공간이음</li>
+            <li>어르신 안전하우징</li>
+            <li>생활복지 119</li>
+            <li>고독사 예방 및 관리</li>
+            <li>통합사례관리</li>
+          </ul></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="ic-diagram-note">💛 고양온돌 특화서비스(5개) — 그 외는 기존 57개 서비스 중 대표 예시</div>
   </div>
 
   <!-- 병원 퇴원 연계 체크리스트 -->
