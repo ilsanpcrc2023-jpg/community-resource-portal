@@ -3806,14 +3806,14 @@ function pcRenderList(){
   }
   if(solo.length){
     html += `<div class="hc-group g-pv">
-      <div class="hc-group-hd">
+      <div class="hc-group-hd" style="cursor:pointer;" onclick="pcToggleGroup(this)">
         <div class="hc-group-l"><span class="hc-group-ico">🩺</span>
           <div><div class="hc-group-ti">단독모형 — 연세365매일의원</div>
-          <div class="hc-group-sub">자체 다학제 팀을 구성하여 단독으로 시범사업 참여</div></div>
+          <div class="hc-group-sub">자체 다학제 팀을 구성하여 단독으로 시범사업 참여 (눌러서 펼치기)</div></div>
         </div>
-        <div class="hc-group-cnt">${solo.length}개소</div>
+        <div class="hc-group-cnt">${solo.length}개소 <span class="pc-group-caret">▸</span></div>
       </div>
-      ${pcTableHTML(solo)}
+      <div style="display:none;">${pcTableHTML(solo)}</div>
     </div>`;
   }
   if(etc.length){
@@ -3826,6 +3826,14 @@ function pcRenderList(){
     </div>`;
   }
   container.innerHTML = html || '<div class="hc-empty">선택한 조건에 해당하는 의원이 없습니다.</div>';
+}
+
+function pcToggleGroup(hdEl){
+  const body = hdEl.nextElementSibling;
+  const caret = hdEl.querySelector('.pc-group-caret');
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : '';
+  if(caret) caret.textContent = open ? '▸' : '▾';
 }
 
 function pcDownloadCSV(){
