@@ -1140,7 +1140,15 @@ footer strong{color:rgba(255,255,255,.85);}
     </div>
   </div>
 
+  <!-- 탭 내 빠른 이동 -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;">
+    <button class="hc-fbtn" onclick="document.getElementById('pc-sec-org').scrollIntoView({behavior:'smooth'})">🏥 기관안내</button>
+    <button class="hc-fbtn" onclick="document.getElementById('pc-sec-biz').scrollIntoView({behavior:'smooth'})">📋 사업안내</button>
+    <button class="hc-fbtn" onclick="document.getElementById('pc-sec-form').scrollIntoView({behavior:'smooth'})">📝 연계서식</button>
+  </div>
+
   <!-- 사업안내 — 환자 중심 일차의료 서비스 제공 흐름도 -->
+  <div id="pc-sec-biz"></div>
   <div class="sec-hd"><div class="sec-title">🗺️ 환자 중심 일차의료 서비스 제공 흐름도</div></div>
   <div class="discharge-flow" style="margin-bottom:24px;">
     <p style="font-size:12px;color:var(--gray-400);margin-bottom:18px;">운영지침 기준 시범사업 참여 의원의 표준 진료 흐름입니다</p>
@@ -1168,7 +1176,50 @@ footer strong{color:rgba(255,255,255,.85);}
     </div>
   </div>
 
+  <!-- 사업안내 — 일차의료 제공 서비스 6종 (운영지침 기준) -->
+  <div class="sec-hd"><div class="sec-title">🩺 일차의료 제공 서비스 (운영지침 기준 6종)</div></div>
+  <div class="ic-service-grid" style="margin-bottom:24px;">
+    <div class="ic-svc-card">
+      <div class="ic-svc-ico">🏃</div>
+      <div class="ic-svc-title">① 건강·예방관리</div>
+      <div class="ic-svc-desc">건강검진 수검 독려·결과 상담, 연령·상태별 예방접종 안내, 적정 의료이용 기관 안내</div>
+      <div class="ic-svc-tags"><span class="ic-tag bg-ts tc">예방</span><span class="ic-tag bg-ps pc">상담</span></div>
+    </div>
+    <div class="ic-svc-card">
+      <div class="ic-svc-ico">💊</div>
+      <div class="ic-svc-title">② 질환·약물 관리</div>
+      <div class="ic-svc-desc">중복 처방·약물 상호작용 점검(DUR 활용), 복약 방법 교육 등 종합 약물 관리</div>
+      <div class="ic-svc-tags"><span class="ic-tag bg-gds gdc">약물</span><span class="ic-tag bg-ts tc">관리</span></div>
+    </div>
+    <div class="ic-svc-card">
+      <div class="ic-svc-ico">👥</div>
+      <div class="ic-svc-title">③ 다학제 팀 교육·상담</div>
+      <div class="ic-svc-desc">질환·운동·영양 등 생활습관 자가관리 1:1·1:N 교육, 가정 내 혈압·혈당 측정법 교육</div>
+      <div class="ic-svc-tags"><span class="ic-tag bg-ps pc">교육</span><span class="ic-tag bg-cs cc">다학제</span></div>
+    </div>
+    <div class="ic-svc-card">
+      <div class="ic-svc-ico">📞</div>
+      <div class="ic-svc-title">④ 비대면 환자 관리</div>
+      <div class="ic-svc-desc">전화·문자 등 쌍방향 비대면 상담, 생활습관 실천 모니터링, 야간·휴일 응급상황 1차 대응</div>
+      <div class="ic-svc-tags"><span class="ic-tag bg-gs gc">비대면</span><span class="ic-tag bg-ps pc">모니터링</span></div>
+    </div>
+    <div class="ic-svc-card">
+      <div class="ic-svc-ico">🔁</div>
+      <div class="ic-svc-title">⑤ 적정기관 연계·조정</div>
+      <div class="ic-svc-desc">거점지원기관과 직통 연락망 구축, 신속진료체계(Fast-track) 연계, 상위병원 퇴원 후 후속관리</div>
+      <div class="ic-svc-tags"><span class="ic-tag bg-cs cc">연계</span><span class="ic-tag bg-ts tc">거점</span></div>
+    </div>
+    <div class="ic-svc-card">
+      <div class="ic-svc-ico">🏠</div>
+      <div class="ic-svc-title">⑥ 방문진료·간호</div>
+      <div class="ic-svc-desc">거동불편·와상환자, 퇴원 후 집중관리 필요 환자 등에 방문진료·간호 제공</div>
+      <div class="ic-svc-tags"><span class="ic-tag bg-gds gdc">방문</span><span class="ic-tag bg-gs gc">재택</span></div>
+    </div>
+  </div>
+  <div class="ic-diagram-note" style="margin-bottom:24px;">📚 출처: 지역사회 일차의료 혁신 시범사업 운영지침(2026.9) — 자세한 내용은 위 첨부파일 참고</div>
+
   <!-- 통계 + 필터 바 -->
+  <div id="pc-sec-org"></div>
   <div class="hc-statbar">
     <div class="hc-stat-row">
       <div class="hc-stat-group">
@@ -1194,6 +1245,7 @@ footer strong{color:rgba(255,255,255,.85);}
   <div id="pc-render" style="padding:30px;text-align:center;color:var(--gray-400);font-size:12px;">불러오는 중…</div>
 
   <!-- 지역사회 자원 연계 서식 ([별지 제12호 서식] 연동) -->
+  <div id="pc-sec-form"></div>
   <div class="chk-card" style="margin-top:18px;">
     <div class="chk-hd ref-hd"><h3>📋 지역사회 자원 연계 서식</h3><p>[별지 제12호 서식] 연계 기관·사업 — 항목을 클릭하면 서식 상세 내용을 펼쳐 볼 수 있고, 화살표를 누르면 관련 정보로 바로 이동합니다</p></div>
     <div class="chk-body">
