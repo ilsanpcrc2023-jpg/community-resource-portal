@@ -579,6 +579,9 @@ footer strong{color:rgba(255,255,255,.85);}
 .hc-fbtn:hover{border-color:var(--teal);color:var(--teal);}
 .hc-fbtn.active{background:var(--teal);border-color:var(--teal);color:white;}
 .hc-fbtn-sep{width:1px;background:var(--gray-200);margin:2px 6px;}
+.pc-model-btn{font-size:11px;padding:5px 11px;}
+.pc-dist-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;flex-basis:100%;margin-top:8px;padding-top:8px;margin-left:10px;padding-left:10px;border-left:2px solid var(--gray-200);}
+.pc-dist-btn{font-size:10px;padding:3px 9px;}
 
 .hc-group{margin-bottom:22px;}
 .hc-group-hd{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-radius:11px 11px 0 0;color:white;}
@@ -1126,7 +1129,7 @@ footer strong{color:rgba(255,255,255,.85);}
         <div class="hc-banner-title">일차의료 혁신 시범사업 참여 의원 (13개소)</div>
         <a href="https://claude.ai/artifact/7wLqjM6KPkxQRDrUVHmjJm" target="_blank" class="perf-btn">📊 성과관리 기록</a>
       </div>
-      <div class="hc-banner-desc">국민건강보험 일산병원 일차의료개발센터가 거점지원기관인 일차의료 혁신 시범사업 참여 의원 명단입니다. 선정 13개소 모두 시범사업에 참여 중이며(12개소 협력모형, 연세365매일의원 단독모형), <b style="color:var(--teal);">기관 대표번호</b>를 확인했습니다. 구·주소·진료과가 "확인 필요"인 곳은 아직 확인되지 않은 항목입니다.</div>
+      <div class="hc-banner-desc">국민건강보험 일산병원 일차의료개발센터가 거점지원기관인 일차의료 혁신 시범사업 참여 의원 명단입니다. <b style="color:var(--teal);">기관 대표번호</b>를 확인했습니다 — 구·주소·진료과가 "확인 필요"인 곳은 아직 확인되지 않은 항목입니다.</div>
       <div class="hc-banner-meta">
         <div class="hc-bm-item">📅 기준일 <b id="pc-asof">-</b></div>
         <div class="hc-bm-item">🏥 거점 <b>국민건강보험 일산병원 일차의료개발센터</b></div>
@@ -1227,17 +1230,15 @@ footer strong{color:rgba(255,255,255,.85);}
       </div>
     </div>
     <div class="hc-filter-row">
-      <div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <button class="hc-fbtn active" data-filter="model" data-val="협력" onclick="pcFilter('model','협력',this)">🏥 협력모형 (12)</button>
-        <button class="hc-fbtn" data-filter="model" data-val="단독" onclick="pcFilter('model','단독',this)">🩺 단독모형 (1)</button>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;">
+        <button class="hc-fbtn pc-model-btn active" data-filter="model" data-val="협력" onclick="pcFilter('model','협력',this)">🏥 협력모형 (12)</button>
+        <button class="hc-fbtn pc-model-btn" data-filter="model" data-val="단독" onclick="pcFilter('model','단독',this)">🩺 단독모형 (1)</button>
       </div>
-    </div>
-    <div class="hc-filter-row" style="justify-content:space-between;">
-      <div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <button class="hc-fbtn active" data-filter="dist" data-val="all" onclick="pcFilter('dist','all',this)">전체 구</button>
-        <button class="hc-fbtn" data-filter="dist" data-val="덕양구" onclick="pcFilter('dist','덕양구',this)">덕양구</button>
-        <button class="hc-fbtn" data-filter="dist" data-val="일산동구" onclick="pcFilter('dist','일산동구',this)">일산동구</button>
-        <button class="hc-fbtn" data-filter="dist" data-val="일산서구" onclick="pcFilter('dist','일산서구',this)">일산서구</button>
+      <div class="pc-dist-row">
+        <button class="hc-fbtn pc-dist-btn active" data-filter="dist" data-val="all" onclick="pcFilter('dist','all',this)">전체 구</button>
+        <button class="hc-fbtn pc-dist-btn" data-filter="dist" data-val="덕양구" onclick="pcFilter('dist','덕양구',this)">덕양구</button>
+        <button class="hc-fbtn pc-dist-btn" data-filter="dist" data-val="일산동구" onclick="pcFilter('dist','일산동구',this)">일산동구</button>
+        <button class="hc-fbtn pc-dist-btn" data-filter="dist" data-val="일산서구" onclick="pcFilter('dist','일산서구',this)">일산서구</button>
       </div>
     </div>
   </div>
