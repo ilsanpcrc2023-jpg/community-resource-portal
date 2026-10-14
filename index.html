@@ -3732,17 +3732,22 @@ function pcSearch(q){
 
 function pcRowHTML(c, idx){
   const isInactive = c.status === '미개시';
-  const isSolo = c.model === '단독';
-  const modelBadge = c.model
-    ? `<span class="hc-b" style="background:${isSolo?'rgba(200,146,26,.16)':'rgba(42,127,127,.12)'};color:${isSolo?'var(--gold)':'var(--teal)'};margin-left:6px;">${c.model}모형</span>`
-    : '';
   const inactiveBadge = isInactive ? `<span class="hc-b hc-b-inactive" style="margin-left:6px;">미개시</span>` : '';
   return `<tr class="pc-tr${isInactive?' pc-row-inactive':''}" onclick="pcOpenDetail('${c.id}')">
     <td class="vn-td-num">${idx+1}</td>
-    <td class="pc-td-name">${c.name}${modelBadge}${inactiveBadge}<div class="pc-row-director">원장 ${c.director}</div></td>
+    <td class="pc-td-name">${c.name}${inactiveBadge}<div class="pc-row-director">원장 ${c.director}</div></td>
     <td class="pc-td-addr">${c.address}</td>
     <td class="pc-td-tel"><a class="hc-act tel" href="tel:${c.phone}" onclick="event.stopPropagation()">📞 ${c.phone}</a></td>
   </tr>`;
+}
+
+function pcTableHTML(list){
+  return `<div class="pc-table-wrap">
+    <table class="pc-table">
+      <thead><tr><th>순번</th><th>병원명</th><th>소재지</th><th>전화</th></tr></thead>
+      <tbody>${list.map((c,i)=>pcRowHTML(c,i)).join('')}</tbody>
+    </table>
+  </div>`;
 }
 
 function pcOpenDetail(id){
@@ -3782,14 +3787,45 @@ function pcRenderList(){
   if(!container || !PC_DATA) return;
   container.removeAttribute('style');
   const list = pcFilteredList();
-  container.innerHTML = list.length
-    ? `<div class="pc-table-wrap">
-        <table class="pc-table">
-          <thead><tr><th>순번</th><th>병원명</th><th>소재지</th><th>전화</th></tr></thead>
-          <tbody>${list.map(pcRowHTML).join('')}</tbody>
-        </table>
-      </div>`
-    : '<div class="hc-empty">선택한 조건에 해당하는 의원이 없습니다.</div>';
+  const coop = list.filter(c=>c.model==='협력');
+  const solo = list.filter(c=>c.model==='단독');
+  const etc = list.filter(c=>c.model!=='협력' && c.model!=='단독');
+
+  let html = '';
+  if(coop.length){
+    html += `<div class="hc-group g-ltc">
+      <div class="hc-group-hd">
+        <div class="hc-group-l"><span class="hc-group-ico">🏥</span>
+          <div><div class="hc-group-ti">협력모형 — 국민건강보험 일산병원 일차의료개발센터 거점</div>
+          <div class="hc-group-sub">거점지원기관(일산병원)과 다학제 팀 기반으로 협력 운영</div></div>
+        </div>
+        <div class="hc-group-cnt">${coop.length}개소</div>
+      </div>
+      ${pcTableHTML(coop)}
+    </div>`;
+  }
+  if(solo.length){
+    html += `<div class="hc-group g-pv">
+      <div class="hc-group-hd">
+        <div class="hc-group-l"><span class="hc-group-ico">🩺</span>
+          <div><div class="hc-group-ti">단독모형 — 연세365매일의원</div>
+          <div class="hc-group-sub">자체 다학제 팀을 구성하여 단독으로 시범사업 참여</div></div>
+        </div>
+        <div class="hc-group-cnt">${solo.length}개소</div>
+      </div>
+      ${pcTableHTML(solo)}
+    </div>`;
+  }
+  if(etc.length){
+    html += `<div class="hc-group">
+      <div class="hc-group-hd"><div class="hc-group-l"><span class="hc-group-ico">❓</span>
+        <div><div class="hc-group-ti">모형 확인 필요</div></div></div>
+        <div class="hc-group-cnt">${etc.length}개소</div>
+      </div>
+      ${pcTableHTML(etc)}
+    </div>`;
+  }
+  container.innerHTML = html || '<div class="hc-empty">선택한 조건에 해당하는 의원이 없습니다.</div>';
 }
 
 function pcDownloadCSV(){
