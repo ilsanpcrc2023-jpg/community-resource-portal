@@ -68,6 +68,10 @@ header{background:white;color:var(--text);padding:0 28px;display:flex;align-item
 .qa-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
 .qa-card{background:white;border-radius:14px;border:1px solid var(--gray-200);box-shadow:0 10px 28px rgba(26,46,74,.16);padding:18px 16px;text-align:center;cursor:pointer;transition:.22s;text-decoration:none;display:block;}
 .qa-card:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(26,46,74,.22);border-color:var(--teal);}
+.crisis-banner{max-width:1100px;margin:14px auto 0;display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(176,107,86,.07),rgba(176,107,86,.015));border:1px solid rgba(176,107,86,.16);border-radius:12px;padding:10px 16px;box-shadow:0 4px 14px rgba(26,46,74,.06);}
+.crisis-banner-qr{width:44px;height:44px;border-radius:5px;flex-shrink:0;}
+.crisis-banner-title{font-size:12.5px;font-weight:700;color:var(--coral);opacity:.9;}
+.crisis-banner-sub{font-size:11px;color:var(--gray-400);margin-top:2px;}
 .qa-ico{font-size:25px;margin-bottom:7px;}
 .qa-label{font-weight:800;color:var(--navy);font-size:13px;}
 .qa-sub{font-size:10.5px;color:var(--gray-400);margin-top:3px;font-weight:600;}
@@ -260,6 +264,7 @@ a[href^="tel:"]:active { opacity: .75; }
 .ac-ti{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px;}
 .ac-desc{font-size:11px;color:var(--gray-400);line-height:1.5;}
 .ac-badge{display:inline-block;margin-top:8px;font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;}
+.apply-card-noarrow::after{content:none;}
 
 /* 체크리스트 */
 .bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
@@ -1115,6 +1120,13 @@ footer strong{color:rgba(255,255,255,.85);}
       <div class="qa-sub">고양시 + 전국 공공기관</div>
     </a>
   </div>
+  <div class="crisis-banner">
+    <img src="data/images/welfare_crisis_alert_qr.png" alt="복지위기알림 앱 QR코드" class="crisis-banner-qr">
+    <div class="crisis-banner-text">
+      <div class="crisis-banner-title">🚨 나와 이웃의 위기상황, 쉽고 빠르게 신고하세요</div>
+      <div class="crisis-banner-sub">복지위기알림 앱 — QR 스캔 또는 앱스토어·플레이스토어에서 "복지위기알림" 검색</div>
+    </div>
+  </div>
 </div>
 
 <!-- ──────── TABS ──────── -->
@@ -1969,6 +1981,14 @@ footer strong{color:rgba(255,255,255,.85);}
         <div class="ac-desc">입원형·가정형·자문형 호스피스 전문기관 찾기</div>
         <div class="ac-badge bg-gs gc">hospice.go.kr</div>
       </a>
+      <div class="apply-card apply-card-noarrow" style="border-color:rgba(184,50,50,.18);display:flex;gap:12px;align-items:flex-start;">
+        <img src="data/images/welfare_crisis_alert_qr.png" alt="복지위기알림 앱 QR코드" style="width:60px;height:60px;border-radius:6px;flex-shrink:0;border:1px solid var(--gray-200);">
+        <div style="min-width:0;">
+          <div class="ac-ti">🚨 복지위기알림 앱</div>
+          <div class="ac-desc">나와 이웃의 위기상황을 QR 스캔으로 빠르게 신고 — 행정복지센터로 즉시 연계</div>
+          <div class="ac-badge bg-cs cc">앱스토어·플레이스토어 "복지위기알림" 검색</div>
+        </div>
+      </div>
     </div>
   </div>
 
