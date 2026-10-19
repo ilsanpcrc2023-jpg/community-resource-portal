@@ -97,11 +97,11 @@ header{background:white;color:var(--text);padding:0 28px;display:flex;align-item
 .sec-link{font-size:12px;color:var(--teal);font-weight:500;cursor:pointer;text-decoration:none;}
 
 /* 긴급 배너 */
-.emg-banner{background:linear-gradient(135deg,#b05f5f,#cf8669);border-radius:var(--radius);padding:16px 22px;display:flex;align-items:center;gap:16px;margin-bottom:24px;box-shadow:0 4px 18px rgba(192,58,26,.12);}
+.emg-banner{background:linear-gradient(135deg,#9c4848,#b56b52);border-radius:var(--radius);padding:16px 22px;display:flex;align-items:center;gap:16px;margin-bottom:24px;box-shadow:0 4px 18px rgba(192,58,26,.15);}
 .emg-icon{width:42px;height:42px;border-radius:11px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
 .emg-text{flex:1;color:white;}
-.emg-text h3{font-size:14px;font-weight:700;margin-bottom:2px;}
-.emg-text p{font-size:11px;color:rgba(255,255,255,.72);}
+.emg-text h3{font-size:14px;font-weight:700;margin-bottom:2px;text-shadow:0 1px 2px rgba(0,0,0,.2);}
+.emg-text p{font-size:11px;color:rgba(255,255,255,.88);text-shadow:0 1px 2px rgba(0,0,0,.15);}
 .emg-tels{display:flex;gap:7px;flex-wrap:wrap;}
 .emg-tel{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);color:white;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:5px;transition:.2s;white-space:nowrap;}
 .emg-tel:hover{background:rgba(255,255,255,.25);}
@@ -261,7 +261,6 @@ a[href^="tel:"]:active { opacity: .75; }
 .ac-ti{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px;}
 .ac-desc{font-size:11px;color:var(--gray-400);line-height:1.5;}
 .ac-badge{display:inline-block;margin-top:8px;font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;}
-.apply-card-noarrow::after{content:none;}
 
 /* 체크리스트 */
 .bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
@@ -1972,14 +1971,14 @@ footer strong{color:rgba(255,255,255,.85);}
         <div class="ac-desc">입원형·가정형·자문형 호스피스 전문기관 찾기</div>
         <div class="ac-badge bg-gs gc">hospice.go.kr</div>
       </a>
-      <div class="apply-card apply-card-noarrow" style="border-color:rgba(184,50,50,.18);display:flex;gap:12px;align-items:flex-start;">
-        <a href="https://onelink.to/6re9h2" target="_blank"><img src="data/images/welfare_crisis_alert_qr.png" alt="복지위기알림 앱 QR코드 — 눌러서 설치" style="width:88px;height:88px;border-radius:6px;flex-shrink:0;background:white;padding:4px;border:1px solid var(--gray-200);"></a>
+      <a class="apply-card" href="https://onelink.to/6re9h2" target="_blank" style="border-color:rgba(184,50,50,.18);display:flex;gap:12px;align-items:flex-start;">
+        <img src="data/images/welfare_crisis_alert_qr.png" alt="복지위기알림 앱 QR코드" style="width:88px;height:88px;border-radius:6px;flex-shrink:0;background:white;padding:4px;border:1px solid var(--gray-200);">
         <div style="min-width:0;">
           <div class="ac-ti">🚨 복지위기알림 앱</div>
           <div class="ac-desc">나와 이웃의 위기상황을 QR 스캔으로 빠르게 신고 — 행정복지센터로 즉시 연계</div>
           <div class="ac-badge bg-cs cc">QR 스캔 또는 눌러서 바로 설치</div>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 
