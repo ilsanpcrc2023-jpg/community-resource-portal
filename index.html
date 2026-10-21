@@ -2437,6 +2437,9 @@ footer strong{color:rgba(255,255,255,.85);}
         <div class="hcs-group-panel" id="hcs-group-2" style="display:none"></div>
         <div class="hcs-group-panel" id="hcs-group-3" style="display:none"></div>
         <div class="hcs-group-panel" id="hcs-group-4" style="display:none"></div>
+
+        <button class="at-complete-btn" id="cbtn-hcs" style="display:flex;" onclick="hcsShowResult()"><span class="ico">📊</span>평가 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-hcs" style="display:none"></div>
       </div>
 
     </div><!-- /assess-content -->
@@ -3669,13 +3672,71 @@ function hcsFuncClick(groupHint){
   const note = document.getElementById('hcs-classify-note');
   if(note) note.textContent = '➡ 환자군 분류 안내: ' + groupHint + ' — 아래 탭에서 해당 군을 선택해 문항을 작성하세요.';
 }
+let HCS_ACTIVE_GROUP = '1';
 function hcsShowGroup(g, btn){
+  HCS_ACTIVE_GROUP = g;
   ['1','2','3','4'].forEach(gg=>{
     const p = document.getElementById('hcs-group-'+gg);
     if(p) p.style.display = (gg === g) ? 'block' : 'none';
   });
   document.querySelectorAll('#hcs-group-tabs .hcs-gbtn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
+  const rb = document.getElementById('ar-hcs');
+  if(rb){ rb.style.display = 'none'; rb.innerHTML = ''; }
+}
+function hcsShowResult(){
+  const g = HCS_ACTIVE_GROUP;
+  const panel = document.getElementById('hcs-group-'+g);
+  if(!panel) return;
+
+  const clinics = (document.getElementById('hcs-clinics')||{}).value || '미기재';
+  const diseases = Array.from(document.querySelectorAll('.hcs-dis:checked')).map(b=>b.value);
+  const ltc = (document.getElementById('hcs-ltc')||{}).value || '미기재';
+  const funcIdx = HCS_FUNC.findIndex((f,i)=>{ const el = document.getElementById('hcs-func-'+i); return el && el.checked; });
+  const funcTxt = funcIdx >= 0 ? HCS_FUNC[funcIdx].l : '미기재';
+  const writerEl = panel.querySelector('.hcs-writer-row .hcs-dis-opt.sel span');
+  const writerTxt = writerEl ? writerEl.textContent : null;
+
+  const qa = [];
+  panel.querySelectorAll(':scope > .aq-card').forEach(card=>{
+    const q = card.querySelector('.aq-txt'); if(!q) return;
+    const sels = Array.from(card.querySelectorAll('.aq-opt.sel label')).map(l=>l.textContent.trim());
+    qa.push({q: q.textContent.trim(), a: sels.length ? sels.join(', ') : '(응답 없음)'});
+  });
+  const qaHTML = qa.map(it => `<div class="info-row"><div class="info-val"><b>${it.q}</b><br>${it.a}</div></div>`).join('');
+
+  let frailHTML = '';
+  if(g === '1' || g === '2'){
+    const box = document.getElementById('hcs-frail-result-'+g);
+    if(box && box.innerHTML) frailHTML = box.outerHTML;
+  }
+
+  const groupName = {1:'1군 건강증진군',2:'2군 만성질환군',3:'3군 거동불편군',4:'4군 와상군'}[g];
+
+  const html = `
+    <div class="ari-head lvl-n">
+      <div class="ari-head-row">
+        <div class="ari-head-l">
+          <div class="ari-head-tool">건강장수 스크리닝 — ${groupName}</div>
+          <div class="ari-head-grade">✅ 작성 완료</div>
+        </div>
+      </div>
+    </div>
+    <div class="ari-body">
+      <div style="font-size:11.5px;color:var(--gray-400);line-height:1.9;margin-bottom:12px;">
+        정기 이용 의원: ${clinics} · 진단 질병: ${diseases.length ? diseases.join(', ') : '미기재'}<br>
+        장기요양등급: ${ltc} · 신체기능상태: ${funcTxt}${writerTxt ? ` · 작성자: ${writerTxt}` : ''}
+      </div>
+      ${frailHTML}
+      ${qaHTML}
+      <button class="ari-reset-btn" onclick="window.print()" style="margin-top:12px;">🖨️ 이 결과 인쇄</button>
+    </div>`;
+
+  const rb = document.getElementById('ar-hcs');
+  rb.className = 'at-result-integrated show lvl-n';
+  rb.style.display = 'block';
+  rb.innerHTML = html;
+  rb.scrollIntoView({behavior:'smooth', block:'start'});
 }
 function hcsBuildGroupWithFrail(containerId, g, preItems, postItems){
   const c = document.getElementById(containerId); if(!c) return;
