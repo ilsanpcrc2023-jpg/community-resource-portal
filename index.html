@@ -420,6 +420,41 @@ footer strong{color:rgba(255,255,255,.85);}
 .aq-opt label{cursor:pointer;font-size:12px;color:var(--text);flex:1;}
 .aq-opt-sc{font-size:10px;color:var(--gray-400);font-weight:600;white-space:nowrap;}
 
+/* 건강장수 스크리닝 (HCS) */
+.hcs-common{background:white;border-radius:var(--radius);border:1.5px solid var(--gray-200);padding:16px 18px;margin-bottom:14px;box-shadow:var(--shadow);}
+.hcs-sec-title{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;}
+.hcs-sub-title{font-size:11px;font-weight:700;color:var(--gray-400);margin:12px 0 6px;}
+.hcs-dis-grid{display:flex;flex-wrap:wrap;gap:6px;}
+.hcs-dis-opt{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;border:1.5px solid var(--gray-200);cursor:pointer;font-size:11.5px;color:var(--text);transition:.15s;}
+.hcs-dis-opt:hover{border-color:var(--teal);}
+.hcs-dis-opt.sel{border-color:var(--teal);background:rgba(42,127,127,.07);color:var(--navy);font-weight:600;}
+.hcs-dis-opt input{accent-color:var(--teal);width:14px;height:14px;cursor:pointer;}
+.hcs-count-note{font-size:11px;color:var(--gray-400);margin-top:8px;}
+.hcs-field-row{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap;}
+.hcs-field-lbl{font-size:12px;font-weight:600;color:var(--navy);min-width:150px;}
+.hcs-select{font-size:12px;padding:6px 10px;border-radius:8px;border:1.5px solid var(--gray-200);font-family:'Noto Sans KR',sans-serif;color:var(--text);}
+.hcs-classify-note{font-size:11px;color:var(--teal);font-weight:700;margin-top:4px;}
+.hcs-group-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.hcs-gbtn{flex:1;min-width:110px;padding:10px 8px;border-radius:10px;border:1.5px solid var(--gray-200);background:white;font-size:12px;font-weight:700;color:var(--navy);cursor:pointer;transition:.15s;font-family:'Noto Sans KR',sans-serif;}
+.hcs-gbtn:hover{border-color:var(--teal);}
+.hcs-gbtn.active{border-color:var(--teal);background:var(--teal);color:white;}
+.hcs-group-panel{}
+.hcs-writer-row{display:flex;gap:8px;margin-bottom:12px;}
+.hcs-frail-box{border-radius:11px;padding:13px 16px;margin:10px 0 14px;background:rgba(0,0,0,.03);border:1.5px solid var(--gray-200);}
+.hcs-frail-box.lvl-n{background:rgba(45,122,79,.07);border-color:rgba(45,122,79,.3);}
+.hcs-frail-box.lvl-w{background:rgba(200,146,26,.08);border-color:rgba(200,146,26,.3);}
+.hcs-frail-box.lvl-d{background:rgba(184,50,50,.08);border-color:rgba(184,50,50,.3);}
+.hcs-frail-score{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.hcs-frail-interp{font-size:11.5px;color:var(--text);line-height:1.6;margin-bottom:8px;}
+.hcs-frail-rec-it{font-size:11.5px;color:var(--navy);margin-bottom:3px;}
+.hcs-frail-rec-it a{color:var(--teal);font-weight:700;}
+.hcs-frail-ev{font-size:10px;color:var(--gray-400);margin-top:6px;}
+.hcs-weight-row{display:flex;align-items:center;gap:8px;padding:0 18px 12px 52px;flex-wrap:wrap;}
+.hcs-weight-row input{width:72px;font-size:12px;padding:6px 8px;border-radius:7px;border:1.5px solid var(--gray-200);font-family:'Noto Sans KR',sans-serif;}
+.hcs-weight-row span{font-size:11.5px;color:var(--gray-400);}
+.hcs-frail-card{background:white;border-radius:12px;border:1.5px solid var(--gray-200);margin-bottom:9px;overflow:hidden;}
+.aq-opts-nonum{padding:10px 18px 12px 18px;}
+
 /* NRS slider */
 .nrs-panel{padding:12px 18px 16px 52px;}
 .nrs-sl{width:100%;accent-color:var(--teal);}
@@ -1130,7 +1165,7 @@ footer strong{color:rgba(255,255,255,.85);}
     <button class="tab-btn" data-tab="pilot" onclick="switchTab('pilot', this)">🩺 일차의료 혁신시범사업 <span class="tab-count">13</span></button>
     <button class="tab-btn" data-tab="homecare" onclick="switchTab('homecare', this)">🏠 재택의료 <span class="tab-count">8</span></button>
     <button class="tab-btn" data-tab="visiting-nursing" onclick="switchTab('visiting-nursing', this)">💉 방문간호 <span class="tab-count">22</span></button>
-    <button class="tab-btn" data-tab="assess" onclick="switchTab('assess', this)">📋 사정 도구 <span class="tab-count" id="assess-count-badge">13종</span></button>
+    <button class="tab-btn" data-tab="assess" onclick="switchTab('assess', this)">📋 사정 도구 <span class="tab-count" id="assess-count-badge">14종</span></button>
   </div>
 </div>
 
@@ -2057,6 +2092,7 @@ footer strong{color:rgba(255,255,255,.85);}
       <button class="assess-nav-btn" onclick="showAssess('frail')" id="anb-frail">🌿 K-FRAIL<span class="anb-score" id="ans-frail">—</span></button>
       <button class="assess-nav-btn" onclick="showAssess('cam')" id="anb-cam">🌀 CAM<span class="anb-score" id="ans-cam">—</span></button>
       <button class="assess-nav-btn" onclick="showAssess('tug')" id="anb-tug">⏱️ TUG<span class="anb-score" id="ans-tug">—</span></button>
+      <button class="assess-nav-btn" onclick="showAssess('hcs')" id="anb-hcs">🏥 건강장수 스크리닝<span class="anb-score" id="ans-hcs">—</span></button>
       <button class="assess-print-btn" onclick="window.print()">🖨️ 결과 인쇄</button>
     </div>
 
@@ -2366,6 +2402,42 @@ footer strong{color:rgba(255,255,255,.85);}
         <div class="at-result-integrated" id="ar-tug" style="display:none"></div>
       </div>
 
+      <!-- ── 건강장수 스크리닝 (공통 기본정보 + 1~4군) ── -->
+      <div class="assess-tool" id="at-hcs" style="display:none">
+        <div class="at-hdr">
+          <div><div class="at-title">건강장수 스크리닝</div><div class="at-en">공통 기본정보 + 1~4군 자가평가</div>
+          <div class="at-desc">환자군(1~4군)별 맞춤 문항. 1·2군은 K-FRAIL 노쇠 선별 점수표 포함, 3·4군은 본인·보호자가 작성하는 점검표입니다. 대상자 성명·연락처 등 개인정보 항목은 포함하지 않습니다.</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">군별 맞춤형</span><span class="at-tag bg-ns nc">본인/보호자 작성</span></div></div>
+        </div>
+
+        <div class="hcs-common">
+          <div class="hcs-sec-title">① 공통 기본정보</div>
+          <div class="hcs-field-row"><div class="hcs-field-lbl">만성질환 관리 정기 이용 의원 수</div>
+            <select class="hcs-select" id="hcs-clinics"><option value="">선택</option><option>없음</option><option>1곳</option><option>2곳</option><option>3곳 이상</option></select>
+          </div>
+          <div class="hcs-sub-title">현재 진단받은 질병 (모두 선택)</div>
+          <div class="hcs-dis-grid" id="hcs-dis-grid"></div>
+          <div class="hcs-count-note" id="hcs-disease-note">진단 질병 개수: <b>0</b>개 (5개 이상이면 아래 K-FRAIL "동반질환" 항목이 1·2군에서 자동 체크됩니다)</div>
+          <div class="hcs-field-row"><div class="hcs-field-lbl">장기요양판정 등급 (있을 경우)</div>
+            <select class="hcs-select" id="hcs-ltc"><option value="">선택</option><option>없음</option><option>1급</option><option>2급</option><option>3급</option><option>4급</option><option>5급</option><option>인지지원등급</option></select>
+          </div>
+          <div class="hcs-sub-title">신체기능 상태 (환자군 분류 근거)</div>
+          <div class="hcs-dis-grid" id="hcs-func-grid"></div>
+          <div class="hcs-classify-note" id="hcs-classify-note"></div>
+        </div>
+
+        <div class="hcs-group-tabs" id="hcs-group-tabs">
+          <button class="hcs-gbtn active" onclick="hcsShowGroup('1',this)">1군 건강증진군</button>
+          <button class="hcs-gbtn" onclick="hcsShowGroup('2',this)">2군 만성질환군</button>
+          <button class="hcs-gbtn" onclick="hcsShowGroup('3',this)">3군 거동불편군</button>
+          <button class="hcs-gbtn" onclick="hcsShowGroup('4',this)">4군 와상군</button>
+        </div>
+
+        <div class="hcs-group-panel" id="hcs-group-1"></div>
+        <div class="hcs-group-panel" id="hcs-group-2" style="display:none"></div>
+        <div class="hcs-group-panel" id="hcs-group-3" style="display:none"></div>
+        <div class="hcs-group-panel" id="hcs-group-4" style="display:none"></div>
+      </div>
 
     </div><!-- /assess-content -->
   </div><!-- /assess-wrap -->
@@ -2555,6 +2627,10 @@ const modals = {
     <div class="info-row"><div class="info-label">장기요양 신청</div><div class="info-val">longtermcare.or.kr → 민원상담실. 공동인증서 필요. ☎ <a href="tel:1577-1000">1577-1000</a></div></div>
     <div class="info-row"><div class="info-label">퇴원 연계</div><div class="info-val">통합돌봄 탭 → '퇴원 후 지역 연계 절차' 흐름도 참고</div></div>
     <div class="info-row"><div class="info-label">기관 추가</div><div class="info-val">우측 상단 '+ 기관 추가' 클릭 → 정보 입력 → 세션 내 저장</div></div>
+    <div class="info-row"><div class="info-label">📱 포털 공유하기</div><div class="info-val" style="display:flex;align-items:center;gap:14px;">
+      <img src="data/images/portal_share_qr.png" alt="고양 지역사회 자원 포털 QR코드" style="width:110px;height:auto;flex-shrink:0;border:1px solid var(--gray-200);border-radius:8px;">
+      <span>동료·보호자에게 이 포털을 바로 공유하고 싶을 때, QR코드를 스캔하면 즉시 접속됩니다. 인쇄물·게시물에도 그대로 사용 가능합니다.</span>
+    </div></div>
   `},
   addResource: { title:'기관 직접 추가', sub:'우리 지역 자원을 포털에 등록합니다', body:`
     <div style="background:rgba(42,127,127,.07);border-radius:9px;padding:12px 14px;margin-bottom:18px;font-size:12px;color:var(--teal);">ℹ️ 입력한 정보는 현재 세션에서만 표시됩니다.</div>
@@ -3467,6 +3543,221 @@ function initAssessBanners(){
   // 초기 배너·게이지 렌더
   initAssessBanners();
 })();
+
+/* ════════════════════════════════════════════
+   건강장수 스크리닝 (HCS) — 공통 기본정보 + 1~4군 자가평가
+   출처: 지역사회 노인의료·돌봄 통합지원 모델 개발 및 실행가능성 평가
+         - 연구 증례기록지 ver2.0 (사전 설문)
+   ※ 대상자번호·성명·생년월일·전화번호 등 개인정보 항목은 제외
+═══════════════════════════════════════════ */
+const HCS_DISEASES = ['없음(꾸준히 먹는 약 없음)','고혈압','당뇨','고지혈증','골다공증','심혈관질환','뇌혈관질환','만성호흡기질환','만성신장질환','치매','우울증','기타'];
+const HCS_FUNC = [
+  {l:'독립적으로 일상생활·외출 가능',g:'1군(건강증진) 또는 2군(만성질환) — 만성질환 유무로 구분'},
+  {l:'일상생활에 일부 도움 필요, 거동 불편',g:'3군(거동불편군)'},
+  {l:'일상생활 대부분/완전 의존, 와상',g:'4군(와상군)'}
+];
+
+function hcsBuildCards(container, items){
+  const c = (typeof container === 'string') ? document.getElementById(container) : container;
+  if(!c) return;
+  items.forEach(item=>{
+    const d = document.createElement('div'); d.className = 'aq-card';
+    const type = item.multi ? 'checkbox' : 'radio';
+    const toggleFn = item.multi ? 'hcsToggleMulti(this)' : 'hcsToggle(this)';
+    const rnd = 'hcsq-' + Math.random().toString(36).slice(2,9);
+    const oh = item.opts.map(o => `<div class="aq-opt" onclick="${toggleFn}"><input type="${type}" name="${rnd}"><label>${o}</label></div>`).join('');
+    d.innerHTML = `<div class="aq-hdr"><div><div class="aq-txt">${item.q}</div>${item.sub?`<div class="aq-sub">${item.sub}</div>`:''}</div></div><div class="aq-opts aq-opts-nonum">${oh}</div>`;
+    c.appendChild(d);
+  });
+}
+function hcsToggle(el){
+  el.closest('.aq-opts').querySelectorAll('.aq-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  const inp = el.querySelector('input'); if(inp) inp.checked = true;
+}
+function hcsToggleMulti(el){
+  el.classList.toggle('sel');
+  const inp = el.querySelector('input'); if(inp) inp.checked = el.classList.contains('sel');
+}
+function hcsToggleWriter(el){
+  el.closest('.hcs-writer-row').querySelectorAll('.hcs-dis-opt').forEach(o=>o.classList.remove('sel'));
+  el.closest('.hcs-dis-opt').classList.add('sel');
+  const inp = el.querySelector('input'); if(inp) inp.checked = true;
+}
+
+function hcsFrailCardHTML(g){
+  const items = [
+    {id:1,q:'피로',sub:'지난 4주간 모든 일에 힘이 든다고 느낀 적이 대부분이었다'},
+    {id:2,q:'근력(저항)',sub:'도움 없이 쉬지 않고 계단 10칸 오르기가 힘들다'},
+    {id:3,q:'보행(이동)',sub:'도움 없이 약 300m(한 블록) 걷기가 힘들다'},
+    {id:4,q:'동반질환',sub:'공통 기본정보의 진단 질병이 5개 이상이면 자동 체크됩니다 (직접 체크도 가능)'}
+  ];
+  let html = `<div class="hcs-sub-title">⑥ 노쇠 선별 (K-FRAIL) — 해당하면 체크 (각 1점)</div>`;
+  items.forEach(it=>{
+    html += `<div class="aq-card"><div class="aq-opts aq-opts-nonum">
+      <div class="aq-opt" onclick="hcsFrailToggle(this,'${g}')"><input type="checkbox" id="hcs-k${g}-${it.id}"><label><b>${it.q}:</b> ${it.sub}</label></div>
+    </div></div>`;
+  });
+  html += `<div class="aq-card"><div class="aq-opts aq-opts-nonum">
+    <div style="font-size:12px;color:var(--text);margin-bottom:8px;"><b>체중감소:</b> 지난 1년간 의도치 않게 체중이 5% 이상 줄었다</div>
+    <div class="hcs-weight-row">
+      <span>1년 전 체중</span><input type="number" min="0" step="0.1" id="hcs-wprev-${g}" oninput="hcsWeightCalc('${g}')"><span>kg</span>
+      <span>현재 체중</span><input type="number" min="0" step="0.1" id="hcs-wcur-${g}" oninput="hcsWeightCalc('${g}')"><span>kg</span>
+    </div>
+    <div class="aq-opt" style="margin-top:8px;" onclick="hcsFrailToggle(this,'${g}')"><input type="checkbox" id="hcs-k${g}-5"><label>5% 이상 체중 감소 — 직접 체크 가능 (위 체중 입력 시 자동 반영)</label></div>
+  </div></div>`;
+  html += `<div class="hcs-frail-box" id="hcs-frail-result-${g}"></div>`;
+  return html;
+}
+function hcsFrailToggle(el, g){
+  const inp = el.querySelector('input');
+  el.classList.toggle('sel', inp.checked);
+  hcsCalcFrail(g);
+}
+function hcsWeightCalc(g){
+  const prev = parseFloat(document.getElementById('hcs-wprev-'+g).value);
+  const cur = parseFloat(document.getElementById('hcs-wcur-'+g).value);
+  const cb = document.getElementById('hcs-k'+g+'-5');
+  if(cb && !isNaN(prev) && prev > 0 && !isNaN(cur)){
+    cb.checked = ((prev - cur) / prev * 100) >= 5;
+    const opt = cb.closest('.aq-opt'); if(opt) opt.classList.toggle('sel', cb.checked);
+  }
+  hcsCalcFrail(g);
+}
+function hcsCalcFrail(g){
+  const ids = [1,2,3,4,5].map(i => 'hcs-k'+g+'-'+i);
+  let score = 0;
+  ids.forEach(id => { const el = document.getElementById(id); if(el && el.checked) score++; });
+  const lvl = score === 0 ? 'n' : (score <= 2 ? 'w' : 'd');
+  const lbl = score === 0 ? '정상' : (score <= 2 ? '노쇠 전단계' : '노쇠');
+  const box = document.getElementById('hcs-frail-result-'+g); if(!box) return;
+  const interp = AT_INTERP.frail[lvl];
+  const reslist = lvl !== 'n' ? (AT_RES['frail_'+lvl] || []) : [];
+  box.className = 'hcs-frail-box lvl-' + lvl;
+  box.innerHTML = `
+    <div class="hcs-frail-score">노쇠 선별(K-FRAIL) 합계: <b>${score} / 5점</b> — ${lvl==='n'?'✅':lvl==='w'?'⚠️':'🚨'} ${lbl}</div>
+    <div class="hcs-frail-interp">${interp.clinical}</div>
+    ${reslist.length ? `<div>${reslist.map(r=>`<div class="hcs-frail-rec-it">${r.i} ${r.n}${r.t?` — <a href="tel:${r.t.replace(/-/g,'')}">☎ ${r.t}</a>`:''}</div>`).join('')}</div>` : ''}
+    <div class="hcs-frail-ev">출처: ${interp.evidence}</div>`;
+  const ans = document.getElementById('ans-hcs'); if(ans) ans.textContent = score;
+  const ab = document.getElementById('anb-hcs');
+  if(ab) ab.className = 'assess-nav-btn a-active ' + (lvl==='n'?'a-normal':lvl==='w'?'a-warn':'a-danger');
+}
+
+function hcsDiseaseClick(el){
+  if(el.id === 'hcs-dis-0' && el.checked){
+    document.querySelectorAll('.hcs-dis').forEach(b=>{ if(b.id !== 'hcs-dis-0'){ b.checked = false; b.closest('.hcs-dis-opt').classList.remove('sel'); } });
+  } else if(el.checked){
+    const none = document.getElementById('hcs-dis-0');
+    if(none){ none.checked = false; none.closest('.hcs-dis-opt').classList.remove('sel'); }
+  }
+  el.closest('.hcs-dis-opt').classList.toggle('sel', el.checked);
+  hcsSyncDiseaseCount();
+}
+function hcsSyncDiseaseCount(){
+  let n = 0;
+  document.querySelectorAll('.hcs-dis:checked').forEach(b => { if(b.id !== 'hcs-dis-0') n++; });
+  const note = document.getElementById('hcs-disease-note');
+  if(note) note.innerHTML = `진단 질병 개수: <b>${n}</b>개 (5개 이상이면 아래 K-FRAIL "동반질환" 항목이 1·2군에서 자동 체크됩니다)`;
+  const flag = n >= 5;
+  ['1','2'].forEach(g=>{
+    const cb = document.getElementById('hcs-k'+g+'-4');
+    if(cb){ cb.checked = flag; const opt = cb.closest('.aq-opt'); if(opt) opt.classList.toggle('sel', flag); hcsCalcFrail(g); }
+  });
+}
+function hcsFuncClick(groupHint){
+  const note = document.getElementById('hcs-classify-note');
+  if(note) note.textContent = '➡ 환자군 분류 안내: ' + groupHint + ' — 아래 탭에서 해당 군을 선택해 문항을 작성하세요.';
+}
+function hcsShowGroup(g, btn){
+  ['1','2','3','4'].forEach(gg=>{
+    const p = document.getElementById('hcs-group-'+gg);
+    if(p) p.style.display = (gg === g) ? 'block' : 'none';
+  });
+  document.querySelectorAll('#hcs-group-tabs .hcs-gbtn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+function hcsBuildGroupWithFrail(containerId, g, preItems, postItems){
+  const c = document.getElementById(containerId); if(!c) return;
+  hcsBuildCards(c, preItems);
+  const frailWrap = document.createElement('div');
+  frailWrap.innerHTML = hcsFrailCardHTML(g);
+  c.appendChild(frailWrap);
+  hcsBuildCards(c, postItems);
+  hcsCalcFrail(g);
+}
+function hcsBuildWriterPanel(containerId, g, items){
+  const c = document.getElementById(containerId); if(!c) return;
+  const writerDiv = document.createElement('div');
+  writerDiv.className = 'hcs-writer-row';
+  writerDiv.innerHTML = `
+    <div class="hcs-field-lbl" style="min-width:70px;">작성자</div>
+    <label class="hcs-dis-opt"><input type="radio" name="hcs-writer-${g}" onclick="hcsToggleWriter(this)"><span>본인</span></label>
+    <label class="hcs-dis-opt"><input type="radio" name="hcs-writer-${g}" onclick="hcsToggleWriter(this)"><span>보호자</span></label>`;
+  c.appendChild(writerDiv);
+  hcsBuildCards(c, items);
+}
+
+function hcsInit(){
+  const dg = document.getElementById('hcs-dis-grid');
+  if(dg){
+    HCS_DISEASES.forEach((d,i)=>{
+      const lbl = document.createElement('label'); lbl.className = 'hcs-dis-opt';
+      lbl.innerHTML = `<input type="checkbox" class="hcs-dis" value="${d}" id="hcs-dis-${i}" onclick="hcsDiseaseClick(this)"><span>${d}</span>`;
+      dg.appendChild(lbl);
+    });
+  }
+  const fg = document.getElementById('hcs-func-grid');
+  if(fg){
+    HCS_FUNC.forEach((f,i)=>{
+      const lbl = document.createElement('label'); lbl.className = 'hcs-dis-opt';
+      lbl.innerHTML = `<input type="radio" name="hcs-func" id="hcs-func-${i}" onclick="hcsFuncClick('${f.g}')"><span>${f.l}</span>`;
+      fg.appendChild(lbl);
+    });
+  }
+
+  hcsBuildGroupWithFrail('hcs-group-1', '1', [
+    {q:'1. 작년 또는 올해 국가건강검진을 받으셨습니까?',opts:['받았고, 이상소견이 있었다','받았고, 특이소견 없었다','받지 않았다']},
+    {q:'2. 지난 2주 동안, 우울하거나 평소 즐겁던 일에 흥미·즐거움을 느끼지 못한 적이 있습니까?',opts:['예','아니오']},
+    {q:'3. 스스로 실천하기 어렵거나 겪고 있는 어려움이 있습니까? (모두 선택)',multi:true,opts:['골고루 식사·영양','체중증가','씹기·삼킴(사레)','규칙적 운동·신체활동','하루 한 번 이상 외출·바깥활동','사람들과의 교류(가족·이웃·모임)','근감소증·기력저하','통증(무릎·허리 등)','기억력·집중력','흡연','음주','수면·불면']},
+    {q:'4. 최근 1년 내 넘어지거나 균형을 잃은 적이 있습니까?',opts:['예','아니오']},
+    {q:'5. 집에 미끄럼방지 매트·손잡이 등 낙상예방 장치가 갖춰져 있습니까?',opts:['예','아니오']}
+  ], [
+    {q:'7. 사전연명의료의향서를 작성하셨습니까?',sub:'향후 의사표현이 어려울 때 연명의료 여부를 미리 기록하는 문서 · 수정·철회 가능 · 19세 이상 누구나 작성 가능',opts:['작성했다','작성하지 않았다','작성하지 않았으나 안내 희망']}
+  ]);
+
+  hcsBuildGroupWithFrail('hcs-group-2', '2', [
+    {q:'1. 최근 한 달간, 약을 깜빡하거나 일부러 거른 적이 있습니까?',opts:['거의 없다','가끔(주1~2회)','자주(주3회 이상)']},
+    {q:'2. 현재 복용 중인 약이 몇 개입니까?',opts:['5개 미만','5개 이상','10개 이상']},
+    {q:'3. 최근 6개월간, 일부러 줄인 게 아닌데 체중이 3kg 이상 줄었습니까?',opts:['예','아니오']},
+    {q:'4. 지난 2주 동안, 우울하거나 흥미·즐거움을 느끼지 못한 적이 있습니까?',opts:['예','아니오']},
+    {q:'5. 스스로 실천하기 어렵거나 겪고 있는 어려움이 있습니까? (모두 선택)',multi:true,opts:['골고루 식사·영양','체중증가','씹기·삼킴(사레)','규칙적 운동·신체활동','하루 한 번 이상 외출·바깥활동','사람들과의 교류','근감소증·기력저하','통증','기억력·집중력','흡연','음주','수면·불면']},
+    {q:'6. 최근 1년 내 넘어지거나 균형을 잃은 적이 있습니까?',opts:['예','아니오']},
+    {q:'7. 집에 미끄럼방지 매트·손잡이 등 낙상예방 장치가 갖춰져 있습니까?',opts:['예','아니오']}
+  ], [
+    {q:'9. 사전연명의료의향서를 작성하셨습니까?',sub:'향후 의사표현이 어려울 때 연명의료 여부를 미리 기록하는 문서 · 수정·철회 가능 · 19세 이상 누구나 작성 가능',opts:['작성했다','작성하지 않았다','작성하지 않았으나 안내 희망']}
+  ]);
+
+  hcsBuildWriterPanel('hcs-group-3', '3', [
+    {q:'1. 최근 1년 내 넘어진(낙상) 적이 있습니까?',opts:['예','아니오']},
+    {q:'2. 집에 미끄럼방지 매트·손잡이 등 낙상예방 장치가 갖춰져 있습니까?',opts:['예','아니오']},
+    {q:'3. 혼자 거주하십니까?',opts:['예','아니오']},
+    {q:'4. 최근 6개월간, 일부러 줄인 게 아닌데 체중이 3kg 이상 줄었습니까?',opts:['예','아니오']},
+    {q:'5. 현재 복용 중인 약이 몇 개입니까?',opts:['5개 미만','5개 이상','10개 이상']},
+    {q:'6. 지난 2주 동안, 우울하거나 흥미·즐거움을 느끼지 못한 적이 있습니까?',opts:['예','아니오','확인이 어려움']},
+    {q:'7. 사전연명의료의향서를 작성하셨습니까?',sub:'향후 의사표현이 어려울 때 연명의료 여부를 미리 기록하는 문서 · 수정·철회 가능 · 19세 이상 누구나 작성 가능',opts:['작성했다','작성하지 않았다','작성하지 않았으나 안내 희망']},
+    {q:'8. 스스로 실천하기 어렵거나 겪고 있는 어려움이 있습니까? (모두 선택)',multi:true,opts:['골고루 식사·영양','체중증가','씹기·삼킴(사레)','규칙적 운동·신체활동','하루 한 번 이상 외출·바깥활동','사람들과의 교류','근감소증·기력저하','통증','기억력·집중력','흡연','음주','수면·불면']}
+  ]);
+
+  hcsBuildWriterPanel('hcs-group-4', '4', [
+    {q:'1. 최근 3개월간, 환자분은 진료를 어떻게 받으셨습니까?',opts:['직접 외래 방문','대리처방(가족이 대신), 3개월 미만','대리처방(가족이 대신), 3개월 이상','방문진료를 받고 있다']},
+    {q:'2. 환자분이 현재 복용 중인 약이 몇 개입니까?',opts:['5개 미만','5개 이상','10개 이상']},
+    {q:'3. 환자분은 혼자 거주하십니까?',opts:['예','아니오']},
+    {q:'4. 최근 6개월간, 환자분에게 다음과 같은 문제가 있었습니까? (모두 선택)',multi:true,opts:['욕창(피부 헐음)','폐렴 또는 사레·흡인','요로감염·방광염','변비·배변 문제','낙상(침대·휠체어에서 떨어짐 포함)','자주 입원하거나 응급실에 감','해당 없음']},
+    {q:'5. 환자분의 상태 악화로 임종이 가까워질 경우, 연명의료(인공호흡기·심폐소생술 등) 결정을 미리 준비하고 계십니까?',sub:'환자 본인이 의사표현이 어려운 경우, 평소 환자분의 뜻을 가족이 알고 일관되게 진술할 수 있으면 임종기에 가족 진술로 연명의료를 결정할 수 있습니다.',opts:['환자 본인이 생전에 사전연명의료의향서를 작성해두었다','환자분의 평소 뜻을 가족이 알고 있고, 가족 간 공유되어 있다','환자분의 평소 뜻을 일부 가족만 알고 있다 / 가족 간 정리가 안 되어 있다','환자분의 뜻을 알 수 없거나, 생각해본 적이 없다']}
+  ]);
+}
+hcsInit();
 
 // CAM 선택 핸들러 (atSel과 분리 — 알고리즘 적용)
 function camSel(el, idx, s){
