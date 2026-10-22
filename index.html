@@ -455,6 +455,40 @@ footer strong{color:rgba(255,255,255,.85);}
 .hcs-frail-card{background:white;border-radius:12px;border:1.5px solid var(--gray-200);margin-bottom:9px;overflow:hidden;}
 .aq-opts-nonum{padding:10px 18px 12px 18px;}
 
+/* 건강장수 스크리닝 결과지 인쇄 전용 */
+.hcs-print-only{display:none;}
+#hcs-print-area{font-family:'Noto Sans KR',sans-serif;color:#111;}
+.hpr-header{text-align:center;border-bottom:2px solid #111;padding-bottom:10px;margin-bottom:16px;}
+.hpr-org{font-size:12px;color:#444;margin-bottom:4px;}
+.hpr-title{font-size:20px;font-weight:800;}
+.hpr-meta{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:12px;}
+.hpr-meta td{border:1px solid #999;padding:6px 10px;}
+.hpr-meta td.hpr-k{background:#f2f2f2;font-weight:700;width:90px;}
+.hpr-sec-title{font-size:13px;font-weight:800;margin:18px 0 6px;border-left:4px solid #0B4DA2;padding-left:8px;}
+.hpr-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px;}
+.hpr-table th,.hpr-table td{border:1px solid #999;padding:6px 10px;text-align:left;}
+.hpr-table th{background:#f2f2f2;}
+.hpr-table td:first-child{width:170px;font-weight:600;background:#fafafa;}
+.hpr-score{font-size:13px;font-weight:700;margin:8px 0;}
+.hpr-note{font-size:11.5px;line-height:1.7;margin-bottom:4px;}
+.hpr-ev{font-size:10px;color:#666;margin-bottom:10px;}
+.hpr-qa{font-size:12px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px dotted #ccc;break-inside:avoid;}
+.hpr-q{font-weight:600;}
+.hpr-a{color:#222;margin-top:2px;}
+.hpr-footer{margin-top:24px;font-size:11px;color:#444;}
+.hpr-sign{margin-top:28px;text-align:right;font-size:12px;}
+@media print{
+  body > *:not(#hcs-print-area){display:none !important;}
+  #hcs-print-area{display:block !important;position:static;margin:0;padding:0;}
+  @page{margin:15mm;}
+}
+.hcs-sms-box{background:#fafbfc;border:1.5px dashed var(--gray-200);border-radius:11px;padding:14px 16px;margin-top:14px;}
+.hcs-sms-title{font-size:12.5px;font-weight:800;color:var(--navy);margin-bottom:8px;}
+.hcs-sms-text{white-space:pre-wrap;font-family:'Noto Sans KR',sans-serif;font-size:12px;line-height:1.7;color:var(--text);background:white;border:1px solid var(--gray-200);border-radius:8px;padding:12px;margin:0;}
+.hcs-sms-meta{font-size:10.5px;color:var(--gray-400);margin-top:6px;}
+.hcs-sms-warn{font-size:10.5px;color:#b8821a;margin-top:6px;line-height:1.6;}
+.hcs-sms-note{font-size:11.5px;color:var(--gray-400);line-height:1.7;}
+
 /* NRS slider */
 .nrs-panel{padding:12px 18px 16px 52px;}
 .nrs-sl{width:100%;accent-color:var(--teal);}
@@ -1072,6 +1106,9 @@ footer strong{color:rgba(255,255,255,.85);}
 </style>
 </head>
 <body>
+
+<!-- 건강장수 스크리닝 결과지 전용 인쇄 영역 (화면에는 숨김, 인쇄 시에만 노출) -->
+<div id="hcs-print-area" class="hcs-print-only"></div>
 
 <!-- ──────── HEADER ──────── -->
 <header>
@@ -3684,52 +3721,76 @@ function hcsShowGroup(g, btn){
   const rb = document.getElementById('ar-hcs');
   if(rb){ rb.style.display = 'none'; rb.innerHTML = ''; }
 }
-function hcsShowResult(){
-  const g = HCS_ACTIVE_GROUP;
-  const panel = document.getElementById('hcs-group-'+g);
-  if(!panel) return;
+const HCS_GROUP_NAME = {1:'1군 건강증진군',2:'2군 만성질환군',3:'3군 거동불편군',4:'4군 와상군'};
+const HCS_FRAIL_LABELS = ['피로','근력(저항)','보행(이동)','동반질환','체중감소'];
 
+/* 현재 화면 상태에서 군별 응답 데이터 수집 (화면 요약·인쇄 공용) */
+function hcsCollectGroupData(g){
+  const panel = document.getElementById('hcs-group-'+g);
   const clinics = (document.getElementById('hcs-clinics')||{}).value || '미기재';
   const diseases = Array.from(document.querySelectorAll('.hcs-dis:checked')).map(b=>b.value);
   const ltc = (document.getElementById('hcs-ltc')||{}).value || '미기재';
   const funcIdx = HCS_FUNC.findIndex((f,i)=>{ const el = document.getElementById('hcs-func-'+i); return el && el.checked; });
   const funcTxt = funcIdx >= 0 ? HCS_FUNC[funcIdx].l : '미기재';
-  const writerEl = panel.querySelector('.hcs-writer-row .hcs-dis-opt.sel span');
+  const writerEl = panel ? panel.querySelector('.hcs-writer-row .hcs-dis-opt.sel span') : null;
   const writerTxt = writerEl ? writerEl.textContent : null;
 
   const qa = [];
-  panel.querySelectorAll(':scope > .aq-card').forEach(card=>{
-    const q = card.querySelector('.aq-txt'); if(!q) return;
-    const sels = Array.from(card.querySelectorAll('.aq-opt.sel label')).map(l=>l.textContent.trim());
-    qa.push({q: q.textContent.trim(), a: sels.length ? sels.join(', ') : '(응답 없음)'});
-  });
-  const qaHTML = qa.map(it => `<div class="info-row"><div class="info-val"><b>${it.q}</b><br>${it.a}</div></div>`).join('');
-
-  let frailHTML = '';
-  if(g === '1' || g === '2'){
-    const box = document.getElementById('hcs-frail-result-'+g);
-    if(box && box.innerHTML) frailHTML = box.outerHTML;
+  if(panel){
+    panel.querySelectorAll(':scope > .aq-card').forEach(card=>{
+      const q = card.querySelector('.aq-txt'); if(!q) return;
+      const sels = Array.from(card.querySelectorAll('.aq-opt.sel label')).map(l=>l.textContent.trim());
+      qa.push({q: q.textContent.trim(), a: sels.length ? sels.join(', ') : '(응답 없음)'});
+    });
   }
 
-  const groupName = {1:'1군 건강증진군',2:'2군 만성질환군',3:'3군 거동불편군',4:'4군 와상군'}[g];
+  let frail = null;
+  if(g === '1' || g === '2'){
+    let score = 0;
+    const items = [1,2,3,4,5].map((n,i)=>{
+      const el = document.getElementById('hcs-k'+g+'-'+n);
+      const checked = !!(el && el.checked);
+      if(checked) score++;
+      return {label: HCS_FRAIL_LABELS[i], checked};
+    });
+    const lvl = score === 0 ? 'n' : (score <= 2 ? 'w' : 'd');
+    const lbl = score === 0 ? '정상(0점)' : (score <= 2 ? '노쇠 전단계(1~2점)' : '노쇠(3점 이상)');
+    const interp = AT_INTERP.frail[lvl];
+    const reslist = lvl !== 'n' ? (AT_RES['frail_'+lvl] || []) : [];
+    frail = {items, score, lvl, lbl, interp, reslist};
+  }
+  return {g, groupName: HCS_GROUP_NAME[g], clinics, diseases, ltc, funcTxt, writerTxt, qa, frail};
+}
+
+function hcsShowResult(){
+  const d = hcsCollectGroupData(HCS_ACTIVE_GROUP);
+
+  const qaHTML = d.qa.map(it => `<div class="info-row"><div class="info-val"><b>${it.q}</b><br>${it.a}</div></div>`).join('');
+
+  let frailHTML = '';
+  if(d.frail){
+    const box = document.getElementById('hcs-frail-result-'+d.g);
+    if(box && box.innerHTML) frailHTML = box.outerHTML;
+  }
 
   const html = `
     <div class="ari-head lvl-n">
       <div class="ari-head-row">
         <div class="ari-head-l">
-          <div class="ari-head-tool">건강장수 스크리닝 — ${groupName}</div>
+          <div class="ari-head-tool">건강장수 스크리닝 — ${d.groupName}</div>
           <div class="ari-head-grade">✅ 작성 완료</div>
         </div>
       </div>
     </div>
     <div class="ari-body">
       <div style="font-size:11.5px;color:var(--gray-400);line-height:1.9;margin-bottom:12px;">
-        정기 이용 의원: ${clinics} · 진단 질병: ${diseases.length ? diseases.join(', ') : '미기재'}<br>
-        장기요양등급: ${ltc} · 신체기능상태: ${funcTxt}${writerTxt ? ` · 작성자: ${writerTxt}` : ''}
+        정기 이용 의원: ${d.clinics} · 진단 질병: ${d.diseases.length ? d.diseases.join(', ') : '미기재'}<br>
+        장기요양등급: ${d.ltc} · 신체기능상태: ${d.funcTxt}${d.writerTxt ? ` · 작성자: ${d.writerTxt}` : ''}
       </div>
       ${frailHTML}
       ${qaHTML}
-      <button class="ari-reset-btn" onclick="window.print()" style="margin-top:12px;">🖨️ 이 결과 인쇄</button>
+      ${hcsSmsBoxHTML(HCS_ACTIVE_GROUP, false)}
+      <button class="ari-reset-btn" onclick="hcsPrintResult()" style="margin-top:12px;">🖨️ 이 결과 인쇄</button>
     </div>`;
 
   const rb = document.getElementById('ar-hcs');
@@ -3738,6 +3799,390 @@ function hcsShowResult(){
   rb.innerHTML = html;
   rb.scrollIntoView({behavior:'smooth', block:'start'});
 }
+
+/* 건강장수 스크리닝 결과지 — 해당 내용만 별도 인쇄 */
+function hcsPrintResult(){
+  const d = hcsCollectGroupData(HCS_ACTIVE_GROUP);
+  const today = new Date().toLocaleDateString('ko-KR');
+
+  let frailHTML = '';
+  if(d.frail){
+    frailHTML = `
+      <div class="hpr-sec-title">노쇠 선별 (K-FRAIL)</div>
+      <table class="hpr-table">
+        <tr><th>항목</th><th>해당 여부</th></tr>
+        ${d.frail.items.map(it => `<tr><td>${it.label}</td><td>${it.checked ? '☑ 해당' : '☐ 해당없음'}</td></tr>`).join('')}
+      </table>
+      <div class="hpr-score">합계 점수: <b>${d.frail.score} / 5점</b> → 판정: <b>${d.frail.lbl}</b></div>
+      <div class="hpr-note"><b>임상적 해석:</b> ${d.frail.interp.clinical}</div>
+      ${d.frail.reslist.length ? `<div class="hpr-note"><b>연계 권고 자원:</b> ${d.frail.reslist.map(r => `${r.n}${r.t ? `(${r.t})` : ''}`).join(', ')}</div>` : ''}
+      <div class="hpr-ev">출처: ${d.frail.interp.evidence}</div>`;
+  }
+
+  const qaHTML = d.qa.map(it => `<div class="hpr-qa"><div class="hpr-q">${it.q}</div><div class="hpr-a">▶ ${it.a}</div></div>`).join('');
+
+  const html = `
+    <div class="hpr-header">
+      <div class="hpr-org">국민건강보험 일산병원 일차의료개발센터 사회복지팀</div>
+      <div class="hpr-title">건강장수 스크리닝 결과지</div>
+    </div>
+    <table class="hpr-meta">
+      <tr><td class="hpr-k">작성일</td><td>${today}</td><td class="hpr-k">대상군</td><td>${d.groupName}</td></tr>
+      ${d.writerTxt ? `<tr><td class="hpr-k">작성자</td><td colspan="3">${d.writerTxt}</td></tr>` : ''}
+    </table>
+    <div class="hpr-sec-title">공통 기본정보</div>
+    <table class="hpr-table">
+      <tr><td>정기 이용 의원 수</td><td>${d.clinics}</td></tr>
+      <tr><td>진단 질병</td><td>${d.diseases.length ? d.diseases.join(', ') : '미기재'}</td></tr>
+      <tr><td>장기요양판정 등급</td><td>${d.ltc}</td></tr>
+      <tr><td>신체기능 상태</td><td>${d.funcTxt}</td></tr>
+    </table>
+    ${frailHTML}
+    <div class="hpr-sec-title">문항별 응답</div>
+    ${qaHTML || '<div class="hpr-note">응답한 문항이 없습니다.</div>'}
+    ${hcsSmsBoxHTML(HCS_ACTIVE_GROUP, true)}
+    <div class="hpr-footer">
+      <div>※ 본 결과지는 자가/보호자 작성 선별 설문이며, 확진·처방을 대체하지 않습니다.</div>
+      <div class="hpr-sign">확인(사회복지사/간호사): ________________________</div>
+    </div>`;
+
+  const area = document.getElementById('hcs-print-area');
+  area.innerHTML = html;
+  window.print();
+}
+
+/* ════════════════════════════════════════════
+   표준 케어플랜 문자 초안 생성
+   출처: 표준 케어플랜 문자 작성 규칙 v1.0
+         (지역사회 노인의료·돌봄 통합지원 모델 개발 및 실행가능성 평가 연구, 일산병원 IRB)
+   ⚠ 규칙 기반 자동 초안입니다. 이름·연령·유입 프로그램은 빈칸으로 남겨 두었고,
+     "앞으로 3개월 목표" 우선순위 산정은 규칙 6.3의 세부 가중치를 단순화했습니다.
+     발송 전 원문 11장 체크리스트에 따라 연구진 검토가 반드시 필요합니다.
+═══════════════════════════════════════════ */
+const HCS_SMS_FRAIL_LABELS = ['피로','계단 오르기','걷기','앓는 병','체중 감소'];
+const HCS_SMS_PHONE = '010-7268-3499';
+
+function hcsSmsFindQA(qa, s){ return qa.find(it => it.q.includes(s)); }
+function hcsSmsHardList(qa){
+  const hard = hcsSmsFindQA(qa, '스스로 실천하기 어렵');
+  if(!hard || hard.a === '(응답 없음)') return [];
+  return hard.a.split(',').map(s => s.trim());
+}
+function hcsSmsHas(hardList, s){ return hardList.some(h => h.includes(s)); }
+function hcsEucKrBytes(str){
+  let n = 0;
+  for(const ch of str){ n += (ch.codePointAt(0) <= 0x7F) ? 1 : 2; }
+  return n;
+}
+
+function hcsSmsPrinciples(g, qa, frailItems, hardList){
+  const find = s => hcsSmsFindQA(qa, s);
+  const dep = find('우울하거나');
+  const moodMet = dep ? (dep.a === '아니오' ? true : (dep.a === '확인이 어려움' ? null : false)) : null;
+
+  let weightMet;
+  if(g === '1'){
+    const w = frailItems && frailItems[4];
+    weightMet = w ? !w.checked : null;
+  } else {
+    const w = find('체중이 3kg 이상');
+    weightMet = w ? (w.a === '아니오') : null;
+  }
+
+  const fall = find('넘어');
+  const fallMet = fall ? (fall.a === '아니오') : null;
+  const device = find('미끄럼방지');
+  const deviceMet = device ? (device.a === '예') : null;
+  const eol = find('사전연명의료의향서');
+  const eolMet = eol ? (eol.a === '작성했다') : null;
+  const eolWantsGuide = !!(eol && eol.a === '작성하지 않았으나 안내 희망');
+  let medsMet = null;
+  if(g === '2'){
+    const m = find('약을 깜빡하거나');
+    medsMet = m ? (m.a === '거의 없다') : null;
+  }
+  const notHard = s => !hcsSmsHas(hardList, s);
+  return {
+    food: notHard('골고루 식사'), chew: notHard('씹기·삼킴'), outdoor: notHard('하루 한 번'),
+    exercise: notHard('규칙적 운동'), social: notHard('사람들과의 교류'), mood: moodMet,
+    weight: weightMet, swallow: notHard('씹기·삼킴'), fall: fallMet, falldevice: deviceMet,
+    meds: medsMet, eol: eolMet, eolWantsGuide
+  };
+}
+
+function hcsSmsLifestyleBlock(g, principles){
+  const order = ['food','chew','outdoor','exercise','social','mood','weight','swallow','fall','falldevice','meds','eol'];
+  const labels = {food:'골고루 먹기',chew:'씹기',outdoor:'하루 한 번 외출',exercise:'규칙적 운동',social:'사람들과 만남',mood:'마음 건강',weight:'체중 유지',swallow:'삼키기',fall:'넘어짐',falldevice:'낙상 예방 장치',meds:'약 챙기기',eol:'가족과 노후 준비·연명의료 이야기 나누기'};
+  let total = 0, met = 0; const needed = [];
+  order.forEach(k => {
+    if(k === 'meds' && g !== '2') return;
+    const v = principles[k];
+    if(v === null || v === undefined) return;
+    total++;
+    if(v) met++; else needed.push(labels[k]);
+  });
+  const countLine = total === 12
+    ? `건강장수 12가지 수칙 중 ${met}가지를 지키고 계십니다.`
+    : `이번에 살펴본 건강장수 수칙 ${total}가지 중 ${met}가지를 지키고 계십니다.`;
+  return { countLine, needed };
+}
+
+function hcsSmsExtras(hardList){
+  const checks = [
+    {s:'체중증가', l:'체중 증가'}, {s:'근감소증', l:'기력 저하'}, {s:'통증', l:'통증'},
+    {s:'기억력', l:'기억력'}, {s:'흡연', l:'담배'}, {s:'음주', l:'술'}, {s:'수면', l:'잠'}
+  ];
+  return checks.filter(c => hcsSmsHas(hardList, c.s)).map(c => c.l);
+}
+
+function hcsSmsFrailSentence(frail, weightConfirmed){
+  const n = frail.score;
+  const selLabels = frail.items.map((it,i) => it.checked ? HCS_SMS_FRAIL_LABELS[i] : null).filter(Boolean);
+  if(frail.lvl === 'n'){
+    return weightConfirmed ? '해당사항이 없어 지금 상태를 유지하시면 됩니다.' : '확인된 항목에 해당사항이 없어 지금 상태를 유지하시면 됩니다.';
+  }
+  const labelsTxt = selLabels.join('·');
+  if(frail.lvl === 'w') return `기력·근력 5가지 중 ${n}가지(${labelsTxt})가 해당되어 노쇠 전단계입니다. 지금 시작하면 되돌릴 수 있는 단계입니다.`;
+  return `기력·근력 5가지 중 ${n}가지(${labelsTxt})가 해당되어 노쇠 단계입니다. 더 나빠지지 않게 돌보는 것이 우선이며, 센터가 함께 챙기겠습니다.`;
+}
+
+function hcsSmsGroup3Sentence(principles, lonely){
+  const clauses = [];
+  if(lonely) clauses.push('혼자 지내시고');
+  if(principles.fall === false) clauses.push('지난 1년 사이 넘어지신 적이 있고');
+  if(principles.weight === false) clauses.push('6개월 사이 체중이 줄었다고');
+  const base = '외출이나 일부 일상생활에 도움이 필요한 단계입니다.';
+  if(!clauses.length) return base;
+  return `${base} ${clauses.join(', ')} 하셔서 센터에서 먼저 전화드려 함께 챙기겠습니다.`;
+}
+
+function hcsSmsExerciseText(g, lvl, resistanceFlag, diseases, extras, fatiguePlusMood){
+  const dz = s => diseases.some(d => d.includes(s));
+  let base;
+  if(g === '3') base = '의자 잡고 앉았다 일어서기 10회를 하루 두 번 해 보세요.';
+  else if(lvl === 'n') base = '하루 30분 약간 숨찰 정도로 빠르게 걷기를 주 5일, 여기에 주 2회 앉았다 일어서기 15회씩 두 번과 한 발로 30초 서기를 더해 보세요.';
+  else if(lvl === 'w') base = '의자 잡고 앉았다 일어서기 10회씩 두 번을 주 2~3회, 걷기는 하루 20분부터 30분까지 늘려 보세요.';
+  else base = '집 근처 10분 걷기를 하루 두 번, 의자 잡고 앉았다 일어서기 10회를 하루 두 번 해 보세요.';
+
+  if(dz('골다공증')) base += ' 체중이 실리는 운동과 균형 운동이 뼈를 지키는 데 도움이 됩니다.';
+  if(dz('심혈관질환') || dz('뇌혈관질환')) base = base.replace('약간 숨찰 정도로', '말하면서 걸을 수 있을 정도로');
+  const painFlag = extras.includes('통증');
+  if(painFlag) base += ' 아프면 아프지 않은 범위에서만 하세요.';
+  if(fatiguePlusMood) base += ' 쉽게 피곤하다고 하셨는데, 몸을 움직이면 오히려 기운과 마음 건강에 도움이 됩니다.';
+
+  if(g !== '3'){
+    if(lvl === 'n' && !resistanceFlag && !painFlag){
+      base += ' 일주일에 한 번, 보건소나 가까운 복지관, 행정복지센터 프로그램에 나가 보세요.';
+    } else if(resistanceFlag && !painFlag){
+      base += ' 나가시면 외출과 만남도 함께 챙길 수 있고, 힘든 동작은 쉬셔도 됩니다.';
+    } else if(painFlag){
+      base += ' 복지관 등 운동 프로그램에 나가시면 만남도 함께 챙길 수 있고, 아픈 동작은 쉬시고 첫날 선생님께 한마디 해 두세요.';
+    }
+  }
+  return base;
+}
+
+function hcsSmsMedsText(standardCond, skipCond, clinicsVal, drugCountVal, rememberFlag){
+  let text = '';
+  if(skipCond === '가끔(주1~2회)' || skipCond === '자주(주3회 이상)'){
+    const freq = skipCond === '가끔(주1~2회)' ? '한두 번' : '세 번 이상';
+    text = `약을 일주일에 ${freq} 거르신다고 하셨습니다. 약 달력이나 휴대폰 알림을 써 보시고, 거르는 이유가 있으면 진료 때 말씀하세요.`;
+  } else if(standardCond){
+    const manyDrugs = drugCountVal === '5개 이상' || drugCountVal === '10개 이상';
+    const manyClinics = clinicsVal === '2곳' || clinicsVal === '3곳 이상';
+    if(manyClinics){
+      const n = clinicsVal === '2곳' ? '두' : '세';
+      text = `다니시는 의원이 ${n} 곳${manyDrugs ? '이고 약이 5개 이상입니다.' : '입니다.'} 어느 의원에 가시든 다른 곳에서 받은 약봉투나 처방전, 드시는 영양제를 함께 가져가 보여 주세요. 겹치거나 함께 드시면 안 되는 약이 있는지 의사가 확인할 수 있습니다. 드시던 약은 상의 없이 줄이거나 끊지 마세요.`;
+    } else {
+      text = '진료 때 드시는 약봉투나 처방전, 영양제를 가져가 보여 주세요.';
+    }
+  }
+  if(text && rememberFlag) text += ' 깜빡하는 일이 늘었다는 것도 말씀하세요.';
+  return text;
+}
+
+function hcsSmsNutritionText(hardList, extras, weightUnmet, diseases){
+  const dz = s => diseases.some(d => d.includes(s));
+  const chewIssue = hcsSmsHas(hardList, '씹기·삼킴');
+  if(weightUnmet && chewIssue){
+    return '음식은 작게 썰어 천천히 드시고, 매끼 단백질 반찬(달걀·두부·생선)을 하나씩 드세요. 사레가 잦거나 체중이 계속 줄면 진료 때 꼭 말씀하세요.';
+  }
+  if(extras.includes('기력 저하')){
+    return `기력이 떨어진다고 하셨으니 매끼 단백질 반찬(달걀·두부·생선·고기)을 하나씩 드세요. 계속 힘드시면 진료 때 말씀하세요.`;
+  }
+  if(hcsSmsHas(hardList, '골고루 식사')){
+    let t = '골고루 드시기 어렵다고 하셨으니 매끼 반찬 세 가지 이상, 그중 단백질(달걀·두부·생선·고기) 하나를 챙기세요.';
+    if(dz('골다공증')) t += ' 칼슘 식품(우유·멸치)도 함께 챙기세요.';
+    return t;
+  }
+  return '';
+}
+
+/* 군별 군상 데이터 수집 + 케어플랜 문자 조립 */
+function hcsSmsBuild(g){
+  if(g === '4'){
+    return { unsupported: true, reason: '4군(와상군)은 규칙 문서(14장)에 "미검증"으로 명시되어 있어, 보호자용 문자 자동 생성은 아직 지원하지 않습니다. 연구팀 확정 후 반영 예정입니다.' };
+  }
+  const d = hcsCollectGroupData(g);
+  const qa = d.qa;
+  const hardList = hcsSmsHardList(qa);
+  const extras = hcsSmsExtras(hardList);
+  const principles = hcsSmsPrinciples(g, qa, d.frail ? d.frail.items : null, hardList);
+  const diseases = d.diseases;
+  const dz = s => diseases.some(x => x.includes(s));
+
+  const lonelyQA = hcsSmsFindQA(qa, '혼자 거주');
+  const lonely = !!(lonelyQA && lonelyQA.a === '예');
+  const drugCountQA = hcsSmsFindQA(qa, '복용 중인 약이 몇 개') || hcsSmsFindQA(qa, '현재 복용 중인 약이 몇 개');
+  const drugCountVal = drugCountQA ? drugCountQA.a : '';
+  const skipQA = hcsSmsFindQA(qa, '약을 깜빡하거나');
+  const skipVal = skipQA ? skipQA.a : '';
+  const checkupQA = hcsSmsFindQA(qa, '국가건강검진');
+  const checkupMissed = !!(checkupQA && checkupQA.a === '받지 않았다');
+  const depQA = hcsSmsFindQA(qa, '우울하거나');
+  const depPositive = !!(depQA && depQA.a === '예');
+  const inTreatment = dz('우울증');
+
+  // ■ 상단 문장
+  let topTitle, topSentence;
+  if(g === '3'){
+    topTitle = '■ 현재 기능 상태';
+    topSentence = hcsSmsGroup3Sentence(principles, lonely);
+  } else {
+    topTitle = '■ 노쇠 선별 평가';
+    const wprevEl = document.getElementById('hcs-wprev-'+g), wcurEl = document.getElementById('hcs-wcur-'+g);
+    const weightConfirmed = !!((wprevEl && wprevEl.value !== '' && wcurEl && wcurEl.value !== '') || (document.getElementById('hcs-k'+g+'-5') && document.getElementById('hcs-k'+g+'-5').checked));
+    topSentence = hcsSmsFrailSentence(d.frail, weightConfirmed);
+  }
+
+  // ■ 생활 점검 (1~3군만)
+  const lifestyle = hcsSmsLifestyleBlock(g, principles);
+  const extrasLine = extras.length ? `그 밖에 어렵다고 하신 것: ${extras.join(', ')}` : '';
+
+  // 목표 후보 구성
+  const goals = [];
+  if(depPositive){
+    let t = inTreatment
+      ? '요즘 마음이 가라앉고 흥미가 줄었다고 하셨습니다. 지금 받고 계신 마음 건강 진료는 거르지 마세요.'
+      : '요즘 마음이 가라앉고 흥미가 줄었다고 하셨습니다. 센터에서 연락드려 요즘 마음 상태를 조금 더 살펴보고, 필요하시면 도움받을 곳을 함께 찾아보겠습니다.';
+    if(hcsSmsHas(hardList, '수면')) t = t.replace('흥미가 줄었다고 하셨습니다.', '흥미가 줄었고, 잠도 조금 어렵다고 하셨습니다.');
+    goals.push(t);
+  }
+  const weightUnmet = principles.weight === false;
+  const nutriText = hcsSmsNutritionText(hardList, extras, weightUnmet, diseases);
+  if(weightUnmet && nutriText) goals.push(nutriText);
+
+  let medsAdded = false;
+  if(g === '2'){
+    const rememberFlag = extras.includes('기억력');
+    const standardCond = (drugCountVal === '5개 이상' || drugCountVal === '10개 이상') || (d.clinics === '2곳' || d.clinics === '3곳 이상');
+    const medsText = hcsSmsMedsText(standardCond, skipVal, d.clinics, drugCountVal, rememberFlag);
+    if(medsText){ goals.push(medsText); medsAdded = true; }
+  }
+  if(g === '1' && checkupMissed){
+    goals.push('(확인 필요 — 연구팀 문구 미확정) 올해 국가건강검진을 받지 않으셨다고 하셨습니다. 건강검진을 챙겨 받으시길 권합니다.');
+  }
+  if(g === '3' && lonely){
+    goals.push('장기요양 등급 신청과 방문 돌봄, 안부 확인 서비스를 센터에서 연결해 드리겠습니다.');
+  }
+
+  // 나머지 후보: 운동 / 복약(2군 외) / 영양(미포함 시)
+  const resistanceFlag = d.frail ? (d.frail.items[1].checked || d.frail.items[2].checked) : false;
+  const exerciseNeeded = hcsSmsHas(hardList, '규칙적 운동') || resistanceFlag || g === '3';
+  if(goals.length < 3 && exerciseNeeded){
+    const fatiguePlusMood = !!(d.frail && d.frail.items[0].checked && depPositive);
+    let exText = hcsSmsExerciseText(g, d.frail ? d.frail.lvl : 'n', resistanceFlag, diseases, extras, fatiguePlusMood);
+    if(g === '3' && principles.fall === false && principles.falldevice === true){
+      exText += ' 집 안 손잡이와 매트는 지금처럼 잘 쓰세요.';
+    }
+    goals.push(exText);
+  }
+  if(goals.length < 3 && g !== '2' && !medsAdded){
+    const standardCond = (drugCountVal === '5개 이상' || drugCountVal === '10개 이상') || (d.clinics === '2곳' || d.clinics === '3곳 이상');
+    if(standardCond){
+      const medsText = hcsSmsMedsText(standardCond, '', d.clinics, drugCountVal, extras.includes('기억력'));
+      if(medsText) goals.push(medsText);
+    }
+  }
+  if(goals.length < 3 && !weightUnmet && nutriText) goals.push(nutriText);
+  if(extras.includes('술') && (dz('심혈관질환') || dz('뇌혈관질환')) && goals.length < 3){
+    goals.push('술을 줄이면 심혈관 질환 관리에 도움이 됩니다. 마시는 날과 양을 조금씩 줄여 보세요.');
+  }
+  const goalList = goals.slice(0, 3);
+  if(!goalList.length) goalList.push('지금 하고 계신 것을 그대로 유지해 주세요.');
+
+  // ※ 줄
+  const noteLines = [];
+  if(principles.falldevice === false){
+    if(dz('골다공증')) noteLines.push('※ 65세 이상 서너 분 중 한 분은 해마다 넘어지고, 뼈가 약하시면 골절로 이어지기 쉽습니다. 집 안에 미끄럼방지 매트를 깔고, 필요하면 손잡이도 미리 갖춰 두세요.');
+    else if(resistanceFlag) noteLines.push('※ 다리 힘이 약해지면 넘어질 위험이 커집니다. 집 안에 미끄럼방지 매트를 깔고, 필요하면 손잡이도 미리 갖춰 두세요.');
+    else noteLines.push('※ 65세 이상 서너 분 중 한 분은 해마다 넘어지고 대부분 집 안에서 일어납니다. 미끄럼방지 매트를 깔고, 필요하면 손잡이도 미리 갖춰 두세요.');
+  }
+  if(principles.eolWantsGuide){
+    noteLines.push('※ 원하신 사전연명의료의향서 안내는 센터에서 연락드려 드리겠습니다.');
+  }
+
+  // 조립
+  const lines = [];
+  lines.push('＿＿＿ 님, ＿월 ＿일 일산병원 일차의료개발센터에서 함께 살펴본 건강 점검 결과입니다.');
+  lines.push('');
+  lines.push(topTitle);
+  lines.push(topSentence);
+  if(g !== '4'){
+    lines.push('');
+    lines.push('■ 생활 점검');
+    lines.push(lifestyle.countLine);
+    if(lifestyle.needed.length) lines.push(`관리가 필요한 것: ${lifestyle.needed.join(', ')}`);
+    if(extrasLine) lines.push(extrasLine);
+  }
+  lines.push('');
+  lines.push('■ 앞으로 3개월 목표');
+  goalList.forEach((t,i) => lines.push(`${i+1}. ${t}`));
+  if(noteLines.length){
+    lines.push('');
+    noteLines.forEach(n => lines.push(n));
+  }
+  lines.push('');
+  lines.push('일산병원 일차의료개발센터의 맞춤형 케어를 원하시면 연락주세요.');
+  lines.push(`문의: 일산병원 일차의료개발센터 ${HCS_SMS_PHONE}`);
+
+  const text = lines.join('\n');
+  return { unsupported: false, text, bytes: hcsEucKrBytes(text), intensive: d.frail && d.frail.lvl === 'd' };
+}
+
+function hcsSmsCopy(btn){
+  const pre = btn.closest('.hcs-sms-box').querySelector('.hcs-sms-text');
+  if(!pre) return;
+  navigator.clipboard.writeText(pre.textContent).then(()=>{
+    const orig = btn.textContent; btn.textContent = '✅ 복사됨';
+    setTimeout(()=>{ btn.textContent = orig; }, 1500);
+  }).catch(()=>{ showAtToast('복사에 실패했습니다. 직접 선택해 복사해 주세요.'); });
+}
+
+function hcsSmsBoxHTML(g, forPrint){
+  const r = hcsSmsBuild(g);
+  if(r.unsupported){
+    return forPrint
+      ? `<div class="hpr-sec-title">케어플랜 문자 초안</div><div class="hpr-note">${r.reason}</div>`
+      : `<div class="hcs-sms-box"><div class="hcs-sms-title">📱 케어플랜 문자 초안</div><div class="hcs-sms-note">${r.reason}</div></div>`;
+  }
+  const byteNote = `${r.bytes.toLocaleString()} byte / 1,400 byte 권장${r.bytes > 1400 ? ' — 초과, 설명 문장부터 줄여주세요' : ''}`;
+  if(forPrint){
+    return `
+      <div class="hpr-sec-title">케어플랜 문자 초안 ${r.intensive ? '(집중관리 대상 참고)' : ''}</div>
+      <div class="hpr-note" style="white-space:pre-wrap;border:1px solid #999;padding:10px;font-size:11.5px;line-height:1.7;">${r.text}</div>
+      <div class="hpr-ev">${byteNote} · 규칙 기반 자동 초안이며 발송 전 연구진 검토가 필요합니다.</div>`;
+  }
+  return `
+    <div class="hcs-sms-box">
+      <div class="hcs-sms-title">📱 케어플랜 문자 초안 ${r.intensive ? '<span style="color:#b83232;font-size:10px;">(집중관리 대상 참고)</span>' : ''}</div>
+      <pre class="hcs-sms-text">${r.text}</pre>
+      <div class="hcs-sms-meta">${byteNote}</div>
+      <div class="hcs-sms-warn">⚠️ 규칙 기반 자동 초안입니다. 이름·연령·유입 프로그램은 빈칸(＿＿＿)으로 남겨 두었으니 채워 넣고, 발송 전 연구진 검토를 거쳐주세요.</div>
+      <button class="ari-reset-btn" onclick="hcsSmsCopy(this)" style="margin-top:8px;">📋 문자 복사</button>
+    </div>`;
+}
+
 function hcsBuildGroupWithFrail(containerId, g, preItems, postItems){
   const c = document.getElementById(containerId); if(!c) return;
   hcsBuildCards(c, preItems);
