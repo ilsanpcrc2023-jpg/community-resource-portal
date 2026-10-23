@@ -488,6 +488,10 @@ footer strong{color:rgba(255,255,255,.85);}
 .hcs-sms-meta{font-size:10.5px;color:var(--gray-400);margin-top:6px;}
 .hcs-sms-warn{font-size:10.5px;color:#b8821a;margin-top:6px;line-height:1.6;}
 .hcs-sms-note{font-size:11.5px;color:var(--gray-400);line-height:1.7;}
+.hcs-sms-locked{background:#fafafa;}
+.hcs-sms-lockrow{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+.hcs-sms-pw{flex:1;min-width:140px;font-size:12px;padding:8px 10px;border-radius:8px;border:1.5px solid var(--gray-200);font-family:'Noto Sans KR',sans-serif;}
+.hcs-sms-lockerr{font-size:11px;color:#b83232;margin-top:6px;min-height:14px;}
 
 /* NRS slider */
 .nrs-panel{padding:12px 18px 16px 52px;}
@@ -3789,7 +3793,7 @@ function hcsShowResult(){
       </div>
       ${frailHTML}
       ${qaHTML}
-      ${hcsSmsBoxHTML(HCS_ACTIVE_GROUP, false)}
+      ${hcsSmsSectionHTML(HCS_ACTIVE_GROUP, false)}
       <button class="ari-reset-btn" onclick="hcsPrintResult()" style="margin-top:12px;">🖨️ 이 결과 인쇄</button>
     </div>`;
 
@@ -3840,7 +3844,7 @@ function hcsPrintResult(){
     ${frailHTML}
     <div class="hpr-sec-title">문항별 응답</div>
     ${qaHTML || '<div class="hpr-note">응답한 문항이 없습니다.</div>'}
-    ${hcsSmsBoxHTML(HCS_ACTIVE_GROUP, true)}
+    ${hcsSmsSectionHTML(HCS_ACTIVE_GROUP, true)}
     <div class="hpr-footer">
       <div>※ 본 결과지는 자가/보호자 작성 선별 설문이며, 확진·처방을 대체하지 않습니다.</div>
       <div class="hpr-sign">확인(사회복지사/간호사): ________________________</div>
@@ -4157,6 +4161,48 @@ function hcsSmsCopy(btn){
     const orig = btn.textContent; btn.textContent = '✅ 복사됨';
     setTimeout(()=>{ btn.textContent = orig; }, 1500);
   }).catch(()=>{ showAtToast('복사에 실패했습니다. 직접 선택해 복사해 주세요.'); });
+}
+
+/* 케어플랜 문자 — 비밀번호로 가림 (완전한 보안이 아닌 단순 열람·인쇄 방지 장치) */
+const HCS_SMS_PASS_HASH = '2ed3bbbdff7beacbdfa9465a15597734f8919d1d19d92ced4dbc44783afd183a';
+const HCS_SMS_UNLOCKED = {};
+async function hcsSha256Hex(str){
+  const buf = new TextEncoder().encode(str);
+  const digest = await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+function hcsSmsLockedHTML(g){
+  return `<div class="hcs-sms-box hcs-sms-locked" id="hcs-sms-lock-${g}">
+    <div class="hcs-sms-title">🔒 케어플랜 문자 초안 — 비밀번호 입력 후 확인</div>
+    <div class="hcs-sms-lockrow">
+      <input type="password" class="hcs-sms-pw" id="hcs-sms-pw-${g}" placeholder="비밀번호" onkeydown="if(event.key==='Enter') hcsSmsUnlock('${g}')">
+      <button class="ari-reset-btn" onclick="hcsSmsUnlock('${g}')">🔓 열기</button>
+    </div>
+    <div class="hcs-sms-lockerr" id="hcs-sms-err-${g}"></div>
+  </div>`;
+}
+async function hcsSmsUnlock(g){
+  const input = document.getElementById('hcs-sms-pw-'+g);
+  const err = document.getElementById('hcs-sms-err-'+g);
+  if(!input) return;
+  const hash = await hcsSha256Hex(input.value);
+  if(hash === HCS_SMS_PASS_HASH){
+    HCS_SMS_UNLOCKED[g] = true;
+    const box = document.getElementById('hcs-sms-lock-'+g);
+    if(box) box.outerHTML = hcsSmsBoxHTML(g, false);
+  } else {
+    if(err) err.textContent = '비밀번호가 올바르지 않습니다.';
+    input.value = '';
+  }
+}
+function hcsSmsSectionHTML(g, forPrint){
+  const r = hcsSmsBuild(g);
+  if(r.unsupported) return hcsSmsBoxHTML(g, forPrint);
+  if(HCS_SMS_UNLOCKED[g]) return hcsSmsBoxHTML(g, forPrint);
+  if(forPrint){
+    return `<div class="hpr-sec-title">케어플랜 문자 초안</div><div class="hpr-note">🔒 잠금 상태입니다. 화면에서 비밀번호를 입력해 연 뒤 다시 인쇄해 주세요.</div>`;
+  }
+  return hcsSmsLockedHTML(g);
 }
 
 function hcsSmsBoxHTML(g, forPrint){
