@@ -4220,13 +4220,21 @@ function hcsSmsBoxHTML(g, forPrint){
       <div class="hpr-ev">${byteNote} · 규칙 기반 자동 초안이며 발송 전 연구진 검토가 필요합니다.</div>`;
   }
   return `
-    <div class="hcs-sms-box">
+    <div class="hcs-sms-box" id="hcs-sms-box-${g}">
       <div class="hcs-sms-title">📱 케어플랜 문자 초안 ${r.intensive ? '<span style="color:#b83232;font-size:10px;">(집중관리 대상 참고)</span>' : ''}</div>
       <pre class="hcs-sms-text">${r.text}</pre>
       <div class="hcs-sms-meta">${byteNote}</div>
       <div class="hcs-sms-warn">⚠️ 규칙 기반 자동 초안입니다. 이름·연령·유입 프로그램은 빈칸(＿＿＿)으로 남겨 두었으니 채워 넣고, 발송 전 연구진 검토를 거쳐주세요.</div>
-      <button class="ari-reset-btn" onclick="hcsSmsCopy(this)" style="margin-top:8px;">📋 문자 복사</button>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button class="ari-reset-btn" onclick="hcsSmsCopy(this)">📋 문자 복사</button>
+        <button class="ari-reset-btn" onclick="hcsSmsClose('${g}')">🔒 닫기</button>
+      </div>
     </div>`;
+}
+function hcsSmsClose(g){
+  HCS_SMS_UNLOCKED[g] = false;
+  const box = document.getElementById('hcs-sms-box-'+g);
+  if(box) box.outerHTML = hcsSmsLockedHTML(g);
 }
 
 function hcsBuildGroupWithFrail(containerId, g, preItems, postItems){
