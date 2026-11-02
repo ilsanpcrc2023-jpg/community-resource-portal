@@ -2112,7 +2112,7 @@ footer strong{color:rgba(255,255,255,.85);}
       <div class="asb-chip" onclick="showAssess('frail')" id="chip-frail"><span>K-FRAIL</span><span class="asb-chip-num" id="chip-num-frail">—</span></div>
       <div class="asb-chip" onclick="showAssess('cam')" id="chip-cam"><span>CAM</span><span class="asb-chip-num" id="chip-num-cam">—</span></div>
       <div class="asb-chip" onclick="showAssess('tug')" id="chip-tug"><span>TUG</span><span class="asb-chip-num" id="chip-num-tug">—</span></div>
-      <button onclick="window.print()" style="margin-left:auto;padding:5px 13px;border:1.5px solid var(--teal);border-radius:8px;background:rgba(42,127,127,.07);color:var(--teal);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">🖨️ 결과 인쇄</button>
+      <button onclick="atPrintReport()" style="margin-left:auto;padding:5px 13px;border:1.5px solid var(--teal);border-radius:8px;background:rgba(42,127,127,.07);color:var(--teal);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">🖨️ 결과 인쇄</button>
     </div>
   </div>
 
@@ -2133,7 +2133,7 @@ footer strong{color:rgba(255,255,255,.85);}
       <button class="assess-nav-btn" onclick="showAssess('cam')" id="anb-cam">🌀 CAM<span class="anb-score" id="ans-cam">—</span></button>
       <button class="assess-nav-btn" onclick="showAssess('tug')" id="anb-tug">⏱️ TUG<span class="anb-score" id="ans-tug">—</span></button>
       <button class="assess-nav-btn" onclick="showAssess('hcs')" id="anb-hcs">🏥 건강장수 스크리닝<span class="anb-score" id="ans-hcs">—</span></button>
-      <button class="assess-print-btn" onclick="window.print()">🖨️ 결과 인쇄</button>
+      <button class="assess-print-btn" onclick="atPrintReport()">🖨️ 결과 인쇄</button>
     </div>
 
     <!-- 콘텐츠 영역 -->
@@ -3813,6 +3813,69 @@ function hcsShowResult(){
   rb.style.display = 'block';
   rb.innerHTML = html;
   rb.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* 사정도구 공통 — 현재 보고 있는 검사의 결과만 보고서 형태로 인쇄 */
+function atPrintReport(){
+  const activeDiv = Array.from(document.querySelectorAll('.assess-tool')).find(d => d.style.display !== 'none');
+  if(!activeDiv) return;
+  const k = activeDiv.id.replace('at-', '');
+  if(k === 'hcs'){ hcsPrintResult(); return; }
+
+  const rb = document.getElementById('ar-' + k);
+  if(!rb || rb.style.display === 'none' || !rb.innerHTML){
+    showAtToast('먼저 "검사 완료" 버튼을 눌러 결과를 확인한 뒤 인쇄해 주세요');
+    return;
+  }
+
+  const lvlMatch = rb.className.match(/lvl-(n|w|d)/);
+  const lvl = lvlMatch ? lvlMatch[1] : 'n';
+  const scoreTxt = (document.getElementById('ans-' + k) || {}).textContent || '';
+  const gradeTxt = (rb.querySelector('.ari-head-grade') || {}).textContent || '';
+  const toolName = TOOL_NAME[k] || k;
+  const sc = SCALE[k];
+  const maxTxt = sc ? `${sc.max}${sc.unit}` : '';
+
+  const qa = [];
+  document.querySelectorAll('#aq-' + k + ' .aq-card').forEach(card => {
+    const q = card.querySelector('.aq-txt'); if(!q) return;
+    const sels = Array.from(card.querySelectorAll('.aq-opt.sel label')).map(l => l.textContent.trim());
+    qa.push({ q: q.textContent.trim(), a: sels.length ? sels.join(', ') : '(응답 없음)' });
+  });
+
+  let extraMeta = '';
+  if(k === 'tug') extraMeta = `측정 시간: ${AT.tug.seconds}초`;
+  else if(k === 'nrs') extraMeta = `현재 통증: ${AT.nrs.now} / 최악 통증(최근): ${AT.nrs.worst}`;
+
+  const interp = AT_INTERP[k] && AT_INTERP[k][lvl];
+  const reslist = lvl !== 'n' ? (AT_RES[k + '_' + lvl] || []) : [];
+  const qaHTML = qa.map(it => `<div class="hpr-qa"><div class="hpr-q">${it.q}</div><div class="hpr-a">▶ ${it.a}</div></div>`).join('');
+  const today = new Date().toLocaleDateString('ko-KR');
+
+  const html = `
+    <div class="hpr-header">
+      <div class="hpr-org">국민건강보험 일산병원 일차의료개발센터 사회복지팀</div>
+      <div class="hpr-title">${toolName} 검사 결과지</div>
+    </div>
+    <table class="hpr-meta">
+      <tr><td class="hpr-k">작성일</td><td>${today}</td><td class="hpr-k">판정</td><td>${gradeTxt}</td></tr>
+      <tr><td class="hpr-k">점수</td><td colspan="3">${scoreTxt}${maxTxt ? ' / ' + maxTxt : ''}${extraMeta ? ' · ' + extraMeta : ''}</td></tr>
+    </table>
+    ${interp ? `<div class="hpr-sec-title">임상적 해석</div><div class="hpr-note">${interp.clinical}</div><div class="hpr-ev">출처: ${interp.evidence}</div>` : ''}
+    ${reslist.length ? `<div class="hpr-sec-title">연계 권고 자원</div><div class="hpr-note">${reslist.map(r => `${r.i} ${r.n}${r.d ? ` — ${r.d}` : ''}${r.t ? ` (${r.t})` : ''}`).join('<br>')}</div>` : ''}
+    ${qaHTML ? `<div class="hpr-sec-title">문항별 응답</div>${qaHTML}` : ''}
+    <div class="hpr-footer">
+      <div>※ 본 결과지는 선별 평가 도구 결과이며, 확진·처방을 대체하지 않습니다.</div>
+      <div class="hpr-sign">확인(사회복지사/간호사): ________________________</div>
+    </div>`;
+
+  const area = document.getElementById('hcs-print-area');
+  area.innerHTML = html;
+  document.body.classList.add('hcs-print-mode');
+  const unmark = () => { document.body.classList.remove('hcs-print-mode'); window.removeEventListener('afterprint', unmark); };
+  window.addEventListener('afterprint', unmark);
+  setTimeout(unmark, 3000);
+  window.print();
 }
 
 /* 건강장수 스크리닝 결과지 — 해당 내용만 별도 인쇄 */
