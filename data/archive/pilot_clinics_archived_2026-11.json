@@ -1,0 +1,8 @@
+{
+  "archivedAt": "2026-11-02",
+  "archivedBy": "Claude Code (사회복지팀 요청)",
+  "reason": "일차의료 혁신시범사업 참여 중단 확인 — 화면(index.html 일차의료 혁신시범사업 탭)에서 제외. 정책 추적용으로만 보관하며 화면에는 노출하지 않음.",
+  "clinics": [
+    {"id":"pc-09","name":"연세가정의원","director":"이기성","phone":"031-969-9226","phoneType":"기관 대표번호 (센터 확인, 2026-10-12)","paymentModel":"통합수가제","model":"협력","district":"덕양구","address":"경기도 고양시 덕양구 은빛로29번길 28 (화정1동)","addressSource":"모두닥(modoodoc.com)","specialty":"가정의학과(추정)","inactiveReason":"일차의료 혁신시범사업 참여 중단 (사회복지팀 확인, 2026-11-02)"}
+  ]
+}
