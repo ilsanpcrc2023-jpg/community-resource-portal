@@ -43,6 +43,19 @@ header{background:white;color:var(--text);padding:0 28px;display:flex;align-item
 .h-badge:hover{background:rgba(13,108,176,.16);}
 .h-btn{background:var(--gray-100);border:1px solid var(--gray-200);color:var(--text);font-size:12px;font-weight:600;padding:6px 14px;border-radius:8px;cursor:pointer;text-decoration:none;transition:.2s;}
 .h-btn:hover{background:var(--gray-200);}
+.region-panel{position:absolute;top:calc(100% + 8px);left:0;width:300px;background:white;border:1.5px solid var(--gray-200);border-radius:14px;box-shadow:0 14px 40px rgba(20,30,45,.18);padding:16px;z-index:200;}
+.region-panel-hd{font-size:12.5px;font-weight:800;color:var(--navy);margin-bottom:2px;}
+.region-panel-sub{font-size:10.5px;color:var(--gray-400);margin-bottom:12px;}
+.region-map{position:relative;width:100%;height:190px;background:linear-gradient(180deg,#eaf2f8,#f6f8fb);border-radius:10px;border:1px solid var(--gray-200);overflow:hidden;}
+.region-pin{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;}
+.region-dot{display:block;width:10px;height:10px;border-radius:50%;background:#c3cad2;border:2px solid white;box-shadow:0 2px 5px rgba(0,0,0,.15);}
+.region-pin.active .region-dot{width:14px;height:14px;background:var(--teal);}
+.region-label{font-size:9px;font-weight:700;color:var(--gray-400);background:rgba(255,255,255,.8);padding:1px 4px;border-radius:4px;white-space:nowrap;}
+.region-pin.active .region-label{color:var(--navy);background:white;}
+.region-toast{margin-top:10px;padding:8px 10px;border-radius:8px;font-size:11px;font-weight:700;line-height:1.5;}
+.region-toast.ok{background:rgba(45,122,79,.08);border:1px solid rgba(45,122,79,.3);color:#2d7a4f;}
+.region-toast.pending{background:rgba(200,146,26,.1);border:1px solid rgba(200,146,26,.35);color:#8a5a12;}
+.region-panel-note{margin-top:10px;font-size:9.5px;color:var(--gray-400);line-height:1.5;}
 
 /* ── HERO ── */
 .hero{position:relative;overflow:hidden;padding:18px 28px 20px;background:linear-gradient(120deg,var(--navy) 0%,var(--navy-light) 55%,#6ab6e8 100%);}
@@ -1134,6 +1147,26 @@ footer strong{color:rgba(255,255,255,.85);}
     </div>
   </div>
   <div class="header-right">
+    <div class="region-sel-wrap" style="position:relative;">
+      <button class="h-btn" id="regionSelBtn" onclick="toggleRegionPanel(event)" style="display:inline-flex;align-items:center;gap:5px;">🗺️ 고양시 <span id="regionCaret" style="font-size:9px;">▾</span></button>
+      <div id="regionPanel" class="region-panel" style="display:none;">
+        <div class="region-panel-hd">지역을 선택하세요</div>
+        <div class="region-panel-sub">현재는 고양특례시 정보만 제공하고 있어요</div>
+        <div class="region-map">
+          <div class="region-pin active" style="left:36%;top:30%;" onclick="pickRegion('고양시', true)"><span class="region-dot"></span><span class="region-label">고양시</span></div>
+          <div class="region-pin" style="left:46%;top:38%;" onclick="pickRegion('서울', false)"><span class="region-dot"></span><span class="region-label">서울</span></div>
+          <div class="region-pin" style="left:24%;top:42%;" onclick="pickRegion('인천', false)"><span class="region-dot"></span><span class="region-label">인천</span></div>
+          <div class="region-pin" style="left:68%;top:24%;" onclick="pickRegion('강원', false)"><span class="region-dot"></span><span class="region-label">강원</span></div>
+          <div class="region-pin" style="left:48%;top:58%;" onclick="pickRegion('대전', false)"><span class="region-dot"></span><span class="region-label">대전</span></div>
+          <div class="region-pin" style="left:68%;top:66%;" onclick="pickRegion('대구', false)"><span class="region-dot"></span><span class="region-label">대구</span></div>
+          <div class="region-pin" style="left:28%;top:78%;" onclick="pickRegion('광주', false)"><span class="region-dot"></span><span class="region-label">광주</span></div>
+          <div class="region-pin" style="left:76%;top:80%;" onclick="pickRegion('부산', false)"><span class="region-dot"></span><span class="region-label">부산</span></div>
+          <div class="region-pin" style="left:26%;top:94%;" onclick="pickRegion('제주', false)"><span class="region-dot"></span><span class="region-label">제주</span></div>
+        </div>
+        <div id="regionToast" class="region-toast" style="display:none;"></div>
+        <div class="region-panel-note">● 활성 지역 &nbsp;&nbsp; ○ 준비 중 지역 — 추가되는 대로 순차 공개 예정입니다</div>
+      </div>
+    </div>
     <div class="h-badge" onclick="openModal('allContacts')" style="cursor:pointer;" title="고양특례시 전체 기관 연락처 보기">📍 고양특례시 기관 연락처</div>
     <a class="h-btn" onclick="openModal('addResource')">+ 기관 추가</a>
     <a class="h-btn" onclick="openModal('guide')">이용 안내</a>
@@ -2790,6 +2823,38 @@ function openModal(key) {
 }
 function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); document.body.style.overflow = ''; }
 function closeModalOnBg(e) { if(e.target===document.getElementById('modalOverlay')) closeModal(); }
+
+/* 지역 선택 지도 (헤더) — 고양시 외 지역은 준비 중 */
+function toggleRegionPanel(e){
+  if(e) e.stopPropagation();
+  const p = document.getElementById('regionPanel');
+  const caret = document.getElementById('regionCaret');
+  if(!p) return;
+  const open = p.style.display !== 'none';
+  p.style.display = open ? 'none' : 'block';
+  if(caret) caret.textContent = open ? '▾' : '▴';
+}
+function pickRegion(name, ready){
+  const t = document.getElementById('regionToast');
+  if(!t) return;
+  if(ready){
+    t.className = 'region-toast ok';
+    t.textContent = '✅ ' + name + ' — 현재 이용 중인 지역입니다';
+  } else {
+    t.className = 'region-toast pending';
+    t.textContent = '🚧 ' + name + ' — 아직 정보가 없습니다. 준비 중입니다.';
+  }
+  t.style.display = 'block';
+}
+document.addEventListener('click', function(e){
+  const wrap = document.querySelector('.region-sel-wrap');
+  const panel = document.getElementById('regionPanel');
+  if(wrap && panel && panel.style.display !== 'none' && !wrap.contains(e.target)){
+    panel.style.display = 'none';
+    const caret = document.getElementById('regionCaret');
+    if(caret) caret.textContent = '▾';
+  }
+});
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 
 function submitResource() {
