@@ -46,7 +46,11 @@ function toggleRegionPanel(e){
   p.style.display = open ? 'none' : 'block';
   if(caret) caret.textContent = open ? '▾' : '▴';
 }
-function pickRegion(name, ready){
+function pickRegion(name, ready, url){
+  if(url){
+    window.location.href = url;
+    return;
+  }
   const t = document.getElementById('regionToast');
   if(!t) return;
   if(ready){
@@ -1117,7 +1121,7 @@ function atPrintReport(){
 
   const html = `
     <div class="hpr-header">
-      <div class="hpr-org">국민건강보험 일산병원 일차의료개발센터 돌봄팀</div>
+      <div class="hpr-org">${REGION_HUB_NAME} 일차의료개발센터 돌봄팀</div>
       <div class="hpr-title">${toolName} 검사 결과지</div>
     </div>
     <table class="hpr-meta">
@@ -1164,7 +1168,7 @@ function hcsPrintResult(){
 
   const html = `
     <div class="hpr-header">
-      <div class="hpr-org">국민건강보험 일산병원 일차의료개발센터 돌봄팀</div>
+      <div class="hpr-org">${REGION_HUB_NAME} 일차의료개발센터 돌봄팀</div>
       <div class="hpr-title">건강장수 스크리닝 결과지</div>
     </div>
     <table class="hpr-meta">
@@ -1469,7 +1473,7 @@ function hcsSmsBuild(g){
 
   // 조립
   const lines = [];
-  lines.push('＿＿＿ 님, ＿월 ＿일 일산병원 일차의료개발센터에서 함께 살펴본 건강 점검 결과입니다.');
+  lines.push(`＿＿＿ 님, ＿월 ＿일 ${REGION_HUB_NAME} 일차의료개발센터에서 함께 살펴본 건강 점검 결과입니다.`);
   lines.push('');
   lines.push(topTitle);
   lines.push(topSentence);
@@ -1488,8 +1492,8 @@ function hcsSmsBuild(g){
     noteLines.forEach(n => lines.push(n));
   }
   lines.push('');
-  lines.push('일산병원 일차의료개발센터의 맞춤형 케어를 원하시면 연락주세요.');
-  lines.push(`문의: 일산병원 일차의료개발센터 ${HCS_SMS_PHONE}`);
+  lines.push(`${REGION_HUB_NAME} 일차의료개발센터의 맞춤형 케어를 원하시면 연락주세요.`);
+  lines.push(`문의: ${REGION_HUB_NAME} 일차의료개발센터 ${HCS_SMS_PHONE}`);
 
   const text = lines.join('\n');
   return { unsupported: false, text, bytes: hcsEucKrBytes(text), intensive: d.frail && d.frail.lvl === 'd' };
@@ -2027,7 +2031,7 @@ function pcRenderList(){
       : '<div class="hc-empty">선택한 조건에 해당하는 의원이 없습니다.</div>';
   } else {
     html = coop.length
-      ? pcGroupHTML('🏥','g-ltc','협력모형 — 일산병원 일차의료 거점지원센터','거점지원기관(일산병원)과 다학제 팀 기반으로 협력 운영', coop)
+      ? pcGroupHTML('🏥','g-ltc',`협력모형 — ${REGION_HUB_NAME} 일차의료 거점지원센터`,`거점지원기관(${REGION_HUB_NAME})과 다학제 팀 기반으로 협력 운영`, coop)
       : '<div class="hc-empty">선택한 조건에 해당하는 의원이 없습니다.</div>';
   }
   if(etc.length){

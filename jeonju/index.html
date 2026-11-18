@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>전주시 지역사회 의료·돌봄 자원 통합검색 (준비 중) | 일차의료개발센터 돌봄팀</title>
+<meta name="description" content="전주시 지역사회 의료·돌봄 자원 통합검색 포털입니다. 현재 구축 준비 중이며, 확인되는 지역 기관 정보부터 순차적으로 반영됩니다.">
+<link rel="canonical" href="https://primarycarelink.kr/jeonju/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="전주시 지역사회 의료·돌봄 자원 통합검색">
+<meta property="og:title" content="전주시 지역사회 의료·돌봄 자원 통합검색 (준비 중) | 일차의료개발센터 돌봄팀">
+<meta property="og:description" content="전주시 지역사회 의료·돌봄 자원 통합검색 포털입니다. 현재 구축 준비 중이며, 확인되는 지역 기관 정보부터 순차적으로 반영됩니다.">
+<meta property="og:url" content="https://primarycarelink.kr/jeonju/">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://primarycarelink.kr/data/images/og_share_card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="전주시 지역사회 의료·돌봄 자원 통합검색 (준비 중) | 일차의료개발센터 돌봄팀">
+<meta name="twitter:description" content="전주시 지역사회 의료·돌봄 자원 통합검색 포털입니다. 현재 구축 준비 중이며, 확인되는 지역 기관 정보부터 순차적으로 반영됩니다.">
+<meta name="twitter:image" content="https://primarycarelink.kr/data/images/og_share_card.png">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css">
+</head>
+<body>
+
+<!-- 건강장수 스크리닝 결과지 전용 인쇄 영역 (화면에는 숨김, 인쇄 시에만 노출) -->
+<div id="hcs-print-area" class="hcs-print-only"></div>
+
+<!-- ──────── HEADER ──────── -->
+<header>
+  <div class="logo">
+    <div style="width:40px;height:40px;border-radius:7px;background:var(--navy);display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:800;text-align:center;line-height:1.1;">전주<br>준비중</div>
+    <div class="logo-text">
+      <div class="t1">지역사회 자원 연계 포털</div>
+      <div class="t2">일차의료개발센터 · 돌봄팀 (전주, 구축 준비 중)</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="region-sel-wrap" style="position:relative;">
+      <button class="h-btn" id="regionSelBtn" onclick="toggleRegionPanel(event)" style="display:inline-flex;align-items:center;gap:5px;">🗺️ 전주시 <span id="regionCaret" style="font-size:9px;">▾</span></button>
+      <div id="regionPanel" class="region-panel" style="display:none;">
+        <div class="region-panel-hd">지역을 선택하세요</div>
+        <div class="region-panel-sub">전주시는 현재 구축 준비 중입니다 — 고양시는 실제 정보를 제공하고 있어요</div>
+        <div class="region-map">
+          <div class="region-pin" style="left:40%;top:17%;" onclick="pickRegion('고양시', true, '/')"><span class="region-dot"></span><span class="region-label">고양시</span></div>
+          <div class="region-pin" style="left:48%;top:23%;" onclick="pickRegion('서울 성북구', false)"><span class="region-dot"></span><span class="region-label">성북구</span></div>
+          <div class="region-pin" style="left:30%;top:25%;" onclick="pickRegion('인천 계양구', false)"><span class="region-dot"></span><span class="region-label">계양구</span></div>
+          <div class="region-pin active" style="left:46%;top:57%;" onclick="pickRegion('전북 전주시', false)"><span class="region-dot"></span><span class="region-label">전주시</span></div>
+          <div class="region-pin" style="left:34%;top:68%;" onclick="pickRegion('광주광역시 북구', false)"><span class="region-dot"></span><span class="region-label">광주 북구</span></div>
+          <div class="region-pin" style="left:16%;top:81%;" onclick="pickRegion('광주광역시 광산구', false)"><span class="region-dot"></span><span class="region-label">광산구</span></div>
+          <div class="region-pin" style="left:66%;top:80%;" onclick="pickRegion('부산 서구', false)"><span class="region-dot"></span><span class="region-label">부산 서구</span></div>
+          <div class="region-pin" style="left:26%;top:96%;" onclick="pickRegion('제주도', false)"><span class="region-dot"></span><span class="region-label">제주도</span></div>
+        </div>
+        <div id="regionToast" class="region-toast" style="display:none;"></div>
+        <div class="region-panel-note">● 활성 지역 &nbsp;&nbsp; ○ 준비 중 지역 — 추가되는 대로 순차 공개 예정입니다</div>
+      </div>
+    </div>
+    <a class="h-btn" onclick="openModal('guide')">이용 안내</a>
+  </div>
+</header>
+
+<!-- ──────── HERO ──────── -->
+<div class="hero">
+  <div class="hero-photo-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-inner">
+    <div class="hero-top">
+      <div class="hero-left">
+        <div class="hero-badge">🔗 전주시 지역 의료·돌봄 자원 통합검색 (준비 중)</div>
+        <h1>일차의료 환자를 위한 <span>지역사회 자원 연계</span> 통합 포털</h1>
+        <p class="hero-desc">전주 지역 의료·돌봄 자원 연계 포털을 준비하고 있습니다. 확인되는 지역 기관 정보부터 순차적으로 반영됩니다.</p>
+        <div class="hero-btns">
+          <a class="btn-p" href="https://www.longtermcare.or.kr/npbs/u/b/101/openLtcRcgtAplyPttnChoice.web" target="_blank">🏛️ 장기요양 등급 신청</a>
+          <a class="btn-o" href="https://www.bokjiro.go.kr" target="_blank">🎁 복지로 신청</a>
+          <a class="btn-o" href="https://www.gov.kr/portal/service/serviceInfo/B55092800030" target="_blank">📋 정부24 인정서 발급</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-contacts">
+        <div class="qc-card">
+          <div class="hc-label">📞 장기요양 신청·문의</div>
+          <div class="hc-name">국민건강보험공단 (전국 대표)</div>
+          <a class="hc-tel" href="tel:1577-1000">☎ 1577-1000</a>
+        </div>
+        <div class="qc-card">
+          <div class="hc-label">🧠 치매상담콜센터</div>
+          <div class="hc-name">중앙치매센터 (전국 공통)</div>
+          <a class="hc-tel" href="tel:1899-9988">☎ 1899-9988</a>
+        </div>
+        <div class="qc-card">
+          <div class="hc-label">💚 정신건강 위기상담</div>
+          <div class="hc-name">정신건강 위기상담 (전국 공통)</div>
+          <a class="hc-tel" href="tel:031-968-2333">☎ 031-968-2333</a>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ──────── 빠른 메뉴 (히어로 하단에 겹치는 카드 행) ──────── -->
+<div class="quick-access">
+  <div class="qa-label-hd">⚡ 바로가기</div>
+  <div class="qa-inner">
+    <a class="qa-card" onclick="switchTab('pilot', document.querySelector('.tab-btn[data-tab=&quot;pilot&quot;]'));document.querySelector('.tabs-wrap').scrollIntoView({behavior:'smooth'})">
+      <div class="qa-ico">🩺</div>
+      <div class="qa-label">일차의료 혁신시범사업</div>
+      <div class="qa-sub">확인 필요</div>
+    </a>
+    <a class="qa-card" onclick="switchTab('homecare', document.querySelector('.tab-btn[data-tab=&quot;homecare&quot;]'));document.querySelector('.tabs-wrap').scrollIntoView({behavior:'smooth'})">
+      <div class="qa-ico">🏠</div>
+      <div class="qa-label">재택의료·방문진료</div>
+      <div class="qa-sub">확인 필요</div>
+    </a>
+    <a class="qa-card" onclick="switchTab('integrated', document.querySelector('.tab-btn[data-tab=&quot;integrated&quot;]'));document.querySelector('.tabs-wrap').scrollIntoView({behavior:'smooth'})">
+      <div class="qa-ico">🔗</div>
+      <div class="qa-label">통합돌봄 신청</div>
+      <div class="qa-sub">법정 절차·신청창구</div>
+    </a>
+    <a class="qa-card" onclick="openModal('allContacts')">
+      <div class="qa-ico">📞</div>
+      <div class="qa-label">전체 기관 연락처</div>
+      <div class="qa-sub">전주시(확인 필요) + 전국 공공기관</div>
+    </a>
+  </div>
+</div>
+
+<!-- ──────── TABS ──────── -->
+<div class="tabs-wrap">
+  <div class="tabs-inner">
+    <button class="tab-btn active" data-tab="public" onclick="switchTab('public', this)">🏛️ 공공 자원 <span class="tab-count">4영역</span></button>
+    <button class="tab-btn" data-tab="integrated" onclick="switchTab('integrated', this)">🔗 통합 돌봄 <span class="tab-count">확인중</span></button>
+    <button class="tab-btn" data-tab="private" onclick="switchTab('private', this)">🏘️ 민간 자원 <span class="tab-count">확인중</span></button>
+    <button class="tab-btn" data-tab="apply" onclick="switchTab('apply', this)">🖱️ 서비스 신청 <span class="tab-count">6</span></button>
+    <button class="tab-btn" data-tab="pilot" onclick="switchTab('pilot', this)">🩺 일차의료 혁신시범사업 <span class="tab-count">확인중</span></button>
+    <button class="tab-btn" data-tab="homecare" onclick="switchTab('homecare', this)">🏠 재택의료 <span class="tab-count">확인중</span></button>
+    <button class="tab-btn" data-tab="visiting-nursing" onclick="switchTab('visiting-nursing', this)">💉 방문간호 <span class="tab-count">확인중</span></button>
+    <button class="tab-btn" data-tab="assess" onclick="switchTab('assess', this)">📋 사정 도구 <span class="tab-count" id="assess-count-badge">14종</span></button>
+  </div>
+</div>
+
+<!-- ──────── MAIN ──────── -->
+<div class="main">
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━ 시범사업 참여 의원 TAB (§4-1 신설) ━━━━━━━━━━━━━━━━━━━━━ -->
+<div class="tab-panel" id="tab-pilot">
+
+  <!-- 안내 배너 -->
+  <div class="hc-banner">
+    <div class="hc-banner-icon">🩺</div>
+    <div class="hc-banner-body">
+      <div class="hc-banner-title">일차의료 혁신 시범사업 참여 의원 (12개소)</div>
+      <div class="hc-banner-desc">전주 지역 일차의료 혁신 시범사업 참여 의원 명단은 아직 확인되지 않았습니다. <span style="color:var(--gold);font-weight:700;">확인 필요</span> — 거점지원기관과 참여 의원이 확인되는 대로 반영됩니다.</div>
+      <div class="hc-banner-meta">
+        <div class="hc-bm-item">📅 기준일 <b id="pc-asof">-</b></div>
+        <div class="hc-bm-item">🏥 거점 <b>확인 필요</b></div>
+        <div class="hc-bm-item">📚 출처 <b>일차의료개발센터 제공 명단</b></div>
+        <div class="hc-bm-item">🔍 <a href="https://www.hira.or.kr/ra/spclMgtAdmInfm/spclMgtAdmInfm.do?pgmid=HIRAA030003000000" target="_blank" style="color:var(--navy-light);font-weight:700;text-decoration:underline;">전국 참여기관 추가 검색 (건강보험심사평가원)</a></div>
+      </div>
+      <div class="hc-banner-docs">
+        📎 첨부파일
+        <a class="doc-pill" href="/data/docs/primary_care_innovation_pilot_guideline_2026-09.pdf" download>📄 일차의료 혁신 시범사업 운영지침 (2026.9)</a>
+      </div>
+      <div style="margin-top:14px;padding-top:14px;border-top:1px dashed var(--gray-200);display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
+        <img src="/data/images/myhealth_record_app_qr.png" alt="나의건강기록 앱 설치 QR코드" style="width:104px;height:auto;border:1px solid var(--gray-200);border-radius:8px;flex-shrink:0;background:white;padding:3px;">
+        <div style="min-width:0;flex:1;">
+          <div style="font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:4px;">📱 참여 환자 필수 설치 — 나의건강기록 앱</div>
+          <div style="font-size:11.5px;color:var(--gray-400);line-height:1.6;margin-bottom:6px;">시범사업 참여 환자는 본인 동의 기반 의료데이터 연계를 위해 '나의건강기록' 앱 설치·가입·동의가 필수입니다 (2G 등 설치 불가 단말기 사용자는 제외). QR 또는 아래 링크로 설치 안내를 확인하세요.</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <a class="doc-pill" href="https://www.myhealthway.go.kr/portal/" target="_blank">🌐 건강정보 고속도로</a>
+            <a class="doc-pill" href="https://play.google.com/store/apps/details?id=or.kr.khis.phr" target="_blank">🤖 안드로이드</a>
+            <a class="doc-pill" href="https://apps.apple.com/kr/app/id1580017428" target="_blank">🍎 아이폰</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 탭 내 빠른 이동 -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;">
+    <button class="hc-fbtn" onclick="document.getElementById('pc-sec-org').scrollIntoView({behavior:'smooth'})">🏥 기관안내</button>
+    <button class="hc-fbtn" onclick="pcShowBizInfo()">📋 사업안내</button>
+    <button class="hc-fbtn" onclick="document.getElementById('pc-sec-form').scrollIntoView({behavior:'smooth'})">📝 연계서식</button>
+  </div>
+
+  <!-- 사업안내 — 환자 중심 일차의료 서비스 제공 흐름도 (기본 접힘) -->
+  <div id="pc-sec-biz" class="pc-cat-band" onclick="toggleBizInfo()" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+    <span>📋 사업안내</span><span id="pc-biz-arrow" style="font-size:11px;font-weight:600;">▶ 펼쳐서 보기</span>
+  </div>
+  <div id="pc-biz-content" style="display:none;">
+  <div class="sec-hd"><div class="sec-title">🗺️ 환자 중심 일차의료 서비스 제공 흐름도</div></div>
+  <div class="discharge-flow" style="margin-bottom:24px;">
+    <p style="font-size:12px;color:var(--gray-400);margin-bottom:18px;">운영지침 기준 시범사업 참여 의원의 표준 진료 흐름입니다</p>
+    <div class="discharge-steps">
+      <div class="ds-step ds-step-c" style="--ds-c:var(--teal);">
+        <div class="ds-circle bg-ts" style="border-color:var(--teal)">🤝</div>
+        <div class="ds-title">① 환자 등록</div>
+        <div class="ds-desc">동의서 작성</div>
+        <div class="ds-meta">🏥 환자 등록</div>
+      </div>
+      <div class="ds-step ds-step-c" style="--ds-c:var(--purple);">
+        <div class="ds-circle bg-ps" style="border-color:var(--purple)">📋</div>
+        <div class="ds-title">② 포괄평가·계획수립</div>
+        <div class="ds-desc">HCC 환자분류</div>
+        <div class="ds-meta">🏢 거점: 계획수립 지원(다학제)</div>
+      </div>
+      <div class="ds-step ds-step-wide ds-step-c" style="--ds-c:var(--orange);">
+        <div class="ds-title" style="margin-bottom:10px;">③ 건강·질환 관리</div>
+        <div class="ds-subgrid">
+          <div class="ds-subitem"><div class="ds-subitem-ico">🏃</div><div class="ds-subitem-lbl">건강예방<br>관리</div></div>
+          <div class="ds-subitem"><div class="ds-subitem-ico">💊</div><div class="ds-subitem-lbl">질환/약물<br>관리</div></div>
+          <div class="ds-subitem"><div class="ds-subitem-ico">📞</div><div class="ds-subitem-lbl">생활습관<br>관리</div></div>
+          <div class="ds-subitem"><div class="ds-subitem-ico">🔁</div><div class="ds-subitem-lbl">진료의뢰/<br>연계</div></div>
+          <div class="ds-subitem"><div class="ds-subitem-ico">🏠</div><div class="ds-subitem-lbl">방문서비스</div></div>
+        </div>
+      </div>
+      <div class="ds-step ds-step-c" style="--ds-c:var(--navy);">
+        <div class="ds-circle" style="background:rgba(47,102,144,.1);border-color:var(--navy)">🔗</div>
+        <div class="ds-title">④ 지역사회 자원연계</div>
+        <div class="ds-desc">돌봄 등 지역사회 자원 활용</div>
+        <div class="ds-meta">🏥 자원 '차림표' 안내</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 사업안내 — 일차의료 제공 서비스 6종 (운영지침 기준) -->
+  <div class="sec-hd"><div class="sec-title">🩺 일차의료 제공 서비스 (운영지침 기준 6종)</div></div>
+  <div class="ic-service-grid" style="margin-bottom:24px;">
+    <div class="ic-svc-card">
+      <div class="ic-svc-ico">🏃</div>
+      <div class="ic-svc-title">① 건강·예방관리</div>
+      <div class="ic-svc-desc">건강검진 수검 독려·결과 상담, 연령·상태별 예방접종 안내, 적정 의료이용 기관 안내</div>
+      <div class="ic-svc-tags"><span class="ic-tag bg-ts tc">예방</span><span class="ic-tag bg-ps pc">상담</span></div>
+    </div>
+    <div class="ic-svc-card">
+      <div class="ic-svc-ico">💊</div>
+      <div class="ic-svc-title">② 질환·약물 관리</div>
+      <div class="ic-svc-desc">중복 처방·약물 상호작용 점검(DUR 활용), 복약 방법 교육 등 종합 약물 관리</div>
+      <div class="ic-svc-tags"><span class="ic-tag bg-gds gdc">약물</span><span class="ic-tag bg-ts tc">관리</span></div>
+    </div>
+    <div class="ic-svc-card">
+      <div class="ic-svc-ico">👥</div>
+      <div class="ic-svc-title">③ 다학제 팀 교육·상담</div>
+      <div class="ic-svc-desc">질환·운동·영양 등 생활습관 자가관리 1:1·1:N 교육, 가정 내 혈압·혈당 측정법 교육</div>
+      <div class="ic-svc-tags"><span class="ic-tag bg-ps pc">교육</span><span class="ic-tag bg-cs cc">다학제</span></div>
+    </div>
+    <div class="ic-svc-card">
+      <div class="ic-svc-ico">📞</div>
+      <div class="ic-svc-title">④ 비대면 환자 관리</div>
+      <div class="ic-svc-desc">전화·문자 등 쌍방향 비대면 상담, 생활습관 실천 모니터링, 야간·휴일 응급상황 1차 대응</div>
+      <div class="ic-svc-tags"><span class="ic-tag bg-gs gc">비대면</span><span class="ic-tag bg-ps pc">모니터링</span></div>
+    </div>
+    <div class="ic-svc-card">
+      <div class="ic-svc-ico">🔁</div>
+      <div class="ic-svc-title">⑤ 적정기관 연계·조정</div>
+      <div class="ic-svc-desc">거점지원기관과 직통 연락망 구축, 신속진료체계(Fast-track) 연계, 상위병원 퇴원 후 후속관리</div>
+      <div class="ic-svc-tags"><span class="ic-tag bg-cs cc">연계</span><span class="ic-tag bg-ts tc">거점</span></div>
+    </div>
+    <div class="ic-svc-card">
+      <div class="ic-svc-ico">🏠</div>
+      <div class="ic-svc-title">⑥ 방문진료·간호</div>
+      <div class="ic-svc-desc">거동불편·와상환자, 퇴원 후 집중관리 필요 환자 등에 방문진료·간호 제공</div>
+      <div class="ic-svc-tags"><span class="ic-tag bg-gds gdc">방문</span><span class="ic-tag bg-gs gc">재택</span></div>
+    </div>
+  </div>
+  <div class="ic-diagram-note" style="margin-bottom:24px;">📚 출처: 지역사회 일차의료 혁신 시범사업 운영지침(2026.9) — 자세한 내용은 위 첨부파일 참고</div>
+  </div><!-- /pc-biz-content -->
+
+  <!-- 통계 + 필터 바 -->
+  <div id="pc-sec-org" class="pc-cat-band">🏥 기관안내</div>
+  <div class="hc-statbar">
+    <div class="hc-filter-row" style="flex-direction:column;align-items:stretch;gap:10px;border-top:none;padding-top:0;">
+      <div class="pc-model-seg">
+        <button class="pc-model-opt active" data-filter="model" data-val="협력" onclick="pcFilter('model','협력',this)">🏥 협력모형 (12)</button>
+        <button class="pc-model-opt" data-filter="model" data-val="단독" onclick="pcFilter('model','단독',this)">🩺 단독모형 (1)</button>
+      </div>
+      <div class="pc-dist-row">
+        <button class="hc-fbtn pc-dist-btn active" data-filter="dist" data-val="all" onclick="pcFilter('dist','all',this)">전체 구</button>
+        <button class="hc-fbtn pc-dist-btn" data-filter="dist" data-val="덕양구" onclick="pcFilter('dist','덕양구',this)">덕양구</button>
+        <button class="hc-fbtn pc-dist-btn" data-filter="dist" data-val="완산구" onclick="pcFilter('dist','완산구',this)">완산구</button>
+        <button class="hc-fbtn pc-dist-btn" data-filter="dist" data-val="덕진구" onclick="pcFilter('dist','덕진구',this)">덕진구</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="vn-toolbar">
+    <input type="text" class="vn-search" id="pc-search-input" placeholder="🔍 병원명, 지역, 주소 검색" oninput="pcSearch(this.value)">
+    <button class="pc-download-btn" onclick="pcDownloadCSV()">📥 다운로드</button>
+  </div>
+
+  <!-- 의원 리스트 (JS 렌더링) -->
+  <div id="pc-render" style="padding:30px;text-align:center;color:var(--gray-400);font-size:12px;">불러오는 중…</div>
+
+  <!-- 지역사회 자원 연계 서식 ([별지 제12호 서식] 연동) -->
+  <div id="pc-sec-form" class="pc-cat-band">📝 연계서식</div>
+  <div class="chk-card" style="margin-top:18px;">
+    <div class="chk-hd ref-hd" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <div><h3>📋 지역사회 자원 연계 서식</h3><p>[별지 제12호 서식] 연계 기관·사업 — 항목을 클릭하면 서식 상세 내용을 펼쳐 볼 수 있고, 화살표를 누르면 관련 정보로 바로 이동합니다</p></div>
+      <a class="pc-download-btn" href="/data/docs/community_resource_linkage_form_12.pdf" target="_blank" style="text-decoration:none;white-space:nowrap;">🖨️ 공식 서식 인쇄(PDF)</a>
+    </div>
+    <div class="chk-body">
+
+      <div class="ref-item2"><div class="ref-num">①</div><div class="ref-cont2" onclick="icToggleDetail(this,'rd1')"><div class="ref-ti">치매안심센터 <span class="ref-caret">▾</span></div><div class="ref-sub">치매 선별검사·등록관리·가족 지원</div></div><span class="ref-arrow2" onclick="openModal('dementia')">상세 보기 ›</span></div>
+      <div class="ref-detail" id="rd1">
+        <div class="ref-detail-ln">□ 치매안심센터 등록 안내 등 ※ 치매상담콜센터 ☎ <a href="tel:1899-9988">1899-9988</a></div>
+        <div class="ref-detail-sub">(대상자 등록서비스, 치매조기검진서비스, 치매치료비지원, 배회인식표 제공, 조호물품 제공, 가족휴가제, 치매예방교실, 인지강화교실 등)</div>
+      </div>
+
+      <div class="ref-item2"><div class="ref-num">②</div><div class="ref-cont2" onclick="icToggleDetail(this,'rd2')"><div class="ref-ti">기초정신건강복지센터 <span class="ref-caret">▾</span></div><div class="ref-sub">정신건강 상담·사례관리</div></div><span class="ref-arrow2" onclick="openModal('mental')">상세 보기 ›</span></div>
+      <div class="ref-detail" id="rd2">
+        <div class="ref-detail-ln">□ 정신건강증진센터 안내 등 ※ 정신건강 위기상담전화 ☎ <a href="tel:1577-0199">1577-0199</a></div>
+        <div class="ref-detail-sub">(맞춤형 마을건강센터, 정신질환자 조기발견, 사례관리 등)</div>
+      </div>
+
+      <div class="ref-item2"><div class="ref-num">③</div><div class="ref-cont2" onclick="icToggleDetail(this,'rd3')"><div class="ref-ti">다제약물관리사업 <span class="ref-caret">▾</span></div><div class="ref-sub">다약제 복용 점검·조정</div></div><span class="ref-arrow2" onclick="openModal('polypharmacy')">상세 보기 ›</span></div>
+      <div class="ref-detail" id="rd3">
+        <div class="ref-detail-ln">○ 다제약물관리사업 지역사회 모형 안내 ☎ <a href="tel:1577-1000">1577-1000</a></div>
+        <div class="ref-detail-ln" style="margin-top:8px;">○ 다제약물관리사업 병원모형 연계</div>
+      </div>
+
+      <div class="ref-item2"><div class="ref-num">④</div><div class="ref-cont2" onclick="icToggleDetail(this,'rd4')"><div class="ref-ti">건강관리·예방사업 <span class="ref-caret">▾</span></div><div class="ref-sub">보건소 방문건강관리</div></div><span class="ref-arrow2" onclick="openModal('visit_health')">상세 보기 ›</span></div>
+      <div class="ref-detail" id="rd4">
+        <div class="ref-detail-sub">(예: 건강관리 사업, AI·IoT사업, 교육강좌 등)</div>
+        <div class="ref-detail-ln" style="margin-top:4px;">□ 보건소　□ 행정복지센터　□ 관할 지자체(시청·구청·군청 등)</div>
+      </div>
+
+      <div class="ref-item2"><div class="ref-num">⑤</div><div class="ref-cont2" onclick="icToggleDetail(this,'rd5')"><div class="ref-ti">장기요양 인정신청 및 관련 제도 안내 <span class="ref-caret">▾</span></div><div class="ref-sub">신청 5단계 바로가기</div></div><span class="ref-arrow2" onclick="switchTab('public', document.querySelector('.tab-btn[data-tab=&quot;public&quot;]'));setTimeout(()=>icScrollTo('.proc-card'),350)">→ 공공 자원 탭 이동 ›</span></div>
+      <div class="ref-detail" id="rd5">
+        <div class="ref-detail-ln">□ 장기요양 인정신청 및 관련 제도 안내 ☎ <a href="tel:1577-1000">1577-1000</a></div>
+        <div class="ref-detail-sub">(방문요양, 방문목욕, 주·야간보호, 단기보호, 복지용구 등)</div>
+        <div class="ref-detail-ln" style="margin-top:4px;">□ 행정복지센터　□ 관할 지자체(시청·구청·군청 등)</div>
+      </div>
+
+      <div class="ref-item2"><div class="ref-num">⑥</div><div class="ref-cont2" onclick="icToggleDetail(this,'rd6')"><div class="ref-ti">일상생활돌봄 <span class="ref-caret">▾</span></div><div class="ref-sub">긴급돌봄·돌봄SOS·독거노인 안전확인</div></div><span class="ref-arrow2" onclick="switchTab('public', document.querySelector('.tab-btn[data-tab=&quot;public&quot;]'));setTimeout(()=>icScrollTo('#dom-livelihood'),350)">→ 공공 자원 탭 이동 ›</span></div>
+      <div class="ref-detail" id="rd6">
+        <div class="ref-detail-ln">□ 노인맞춤돌봄서비스(행정복지센터)</div>
+        <div class="ref-detail-sub">(a) 안전지원(안부확인/안전점검/정보제공 서비스) · (b) 사회참여(여가활동/자조모임) · (c) 생활교육(인지활동/건강·영양교육 등) · (d) 일상생활지원(가사동원/신변돌봄 등) · (e) 특화서비스(자원연계 등) · (f) 보훈 단기가사(위기관리 단기집중 서비스 — 실행 가족돌봄위원회)</div>
+        <div class="ref-detail-ln" style="margin-top:8px;">□ 가사·식사 지원 <span style="font-weight:400;color:var(--gray-400);">(□보건소 □행정복지센터 □관할 지자체)</span></div>
+        <div class="ref-detail-ln">□ 개인위생 지원 <span style="font-weight:400;color:var(--gray-400);">(□보건소 □행정복지센터 □관할 지자체)</span></div>
+        <div class="ref-detail-ln">□ 이동 지원 <span style="font-weight:400;color:var(--gray-400);">(□보건소 □행정복지센터 □관할 지자체)</span></div>
+      </div>
+
+      <div class="ref-item2"><div class="ref-num">⑦</div><div class="ref-cont2" onclick="icToggleDetail(this,'rd7')"><div class="ref-ti">기타 <span class="ref-caret">▾</span></div><div class="ref-sub">그 외 서비스 신청 안내</div></div><span class="ref-arrow2" onclick="switchTab('apply', document.querySelector('.tab-btn[data-tab=&quot;apply&quot;]'))">→ 서비스 신청 탭</span></div>
+      <div class="ref-detail" id="rd7">
+        <div class="ref-detail-ln">□ 돌봄통합사업 신청 <span style="font-weight:400;color:var(--gray-400);">(□행정복지센터 □건강보험공단)</span></div>
+        <div class="ref-detail-ln">□ 장애인 지원 서비스 <span style="font-weight:400;color:var(--gray-400);">(□보건소 □행정복지센터 □관할 지자체)</span></div>
+        <div class="ref-detail-ln">□ 주거환경개선 <span style="font-weight:400;color:var(--gray-400);">(□보건소 □행정복지센터 □관할 지자체)</span></div>
+        <div class="ref-detail-ln">□ 기타 ( 　　　　 )</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 하단 안내 -->
+  <div style="background:rgba(200,146,26,.07);border:1px solid rgba(200,146,26,.25);border-radius:11px;padding:14px 18px;margin-top:18px;font-size:11.5px;color:var(--text);line-height:1.7;">
+    <b style="color:var(--gold);">💡 활용 안내</b><br>
+    ① 환자 등록 → 건강위험평가 → 케어플랜 → 다학제팀 교육·상담 → 지역사회 연계의 흐름에서, 센터는 참여 의원의 <b>의뢰를 받아 본 포털의 자원과 연결</b>하는 거점 역할을 합니다.<br>
+    ② 등록 대상(50세 이상 등)·관할 참여의원 이용 여부는 환자별로 직접 확인이 필요합니다.<br>
+    ③ 구·주소 등 "확인 필요" 항목은 센터가 명단을 확정하는 대로 갱신됩니다. 전화 연결 전 반드시 소속 의원명을 먼저 확인해 주세요.
+  </div>
+
+</div><!-- /tab-pilot -->
+
+<!-- ════════════════════════════
+     탭 1: 공공 자원
+════════════════════════════ -->
+<div class="tab-panel active" id="tab-public">
+
+  <!-- 긴급 배너 -->
+  <div class="emg-banner">
+    <div class="emg-icon">🚨</div>
+    <div class="emg-text"><h3>긴급 상황 즉시 연결</h3><p>위기·응급 발생 시 아래 번호로 즉시 연결</p></div>
+    <div class="emg-tels">
+      <a class="emg-tel" href="tel:119">🚑 응급 119</a>
+      <a class="emg-tel" href="tel:129">📞 복지 129</a>
+      <a class="emg-tel" href="tel:1393">💚 자살예방 1393</a>
+      <a class="emg-tel" href="tel:1577-0199">🧠 정신건강 1577-0199</a>
+      <a class="emg-tel" href="tel:1577-1389">👴 노인보호 1577-1389</a>
+    </div>
+  </div>
+
+  <!-- 4영역 카드 -->
+  <div class="sec-hd">
+    <div class="sec-title">지역사회 연계 자원 4영역</div>
+    <a class="sec-link" onclick="openModal('allResources')">전체 자원 보기 →</a>
+  </div>
+  <div class="domain-grid mono-accent">
+
+    <div class="dom-card">
+      <div class="dom-hd" style="background:linear-gradient(135deg,rgba(42,127,127,.06),rgba(42,127,127,.02));">
+        <div class="dom-ico bg-ts">🏠</div>
+        <div><div class="dom-ti">장기요양 재가서비스</div><div class="dom-sub">노인장기요양보험 급여 서비스</div></div>
+        <a class="dom-tel bg-ts tc" href="tel:1577-1000" style="border:1px solid rgba(42,127,127,.2);">📞 1577-1000</a>
+      </div>
+      <div class="dom-items">
+        <div class="dom-item" onclick="openModal('visiting')"><div class="di-l"><div class="di-dot" style="background:var(--teal)"></div><div class="di-nm">방문요양 서비스</div></div><span class="di-tag bg-ts tc">1~5등급</span><span class="di-lk">상세 보기</span></div>
+        <div class="dom-item" onclick="openModal('bath')"><div class="di-l"><div class="di-dot" style="background:var(--teal)"></div><div class="di-nm">방문목욕·방문간호</div></div><span class="di-tag bg-ts tc">1~5등급</span><span class="di-lk">상세 보기</span></div>
+        <div class="dom-item" onclick="openModal('daycare')"><div class="di-l"><div class="di-dot" style="background:var(--teal)"></div><div class="di-nm">주·야간보호 / 단기보호</div></div><span class="di-tag bg-ts tc">1~5등급</span><span class="di-lk">상세 보기</span></div>
+        <div class="dom-item" onclick="openModal('welfare_tool')"><div class="di-l"><div class="di-dot" style="background:var(--teal)"></div><div class="di-nm">복지용구 지원</div></div><span class="di-tag bg-ts tc">연 160만원</span><span class="di-lk">상세 보기</span></div>
+      </div>
+      <div class="dom-ft"><span class="dom-ft-txt">💡 등급 판정 전 긴급서비스 신청 가능</span><a class="dom-apply bg-ts tc" href="https://www.longtermcare.or.kr/npbs/u/b/101/openLtcRcgtAplyPttnChoice.web" target="_blank">✍️ 신청하기</a></div>
+    </div>
+
+    <div class="dom-card" id="dom-livelihood">
+      <div class="dom-hd" style="background:linear-gradient(135deg,rgba(106,74,138,.06),rgba(106,74,138,.02));">
+        <div class="dom-ico bg-ps">🏙️</div>
+        <div><div class="dom-ti">지자체 돌봄</div><div class="dom-sub">읍면동 주민센터 · 전주시 서비스(확인 필요)</div></div>
+        <span class="dom-tel bg-ps pc" style="border:1px solid rgba(106,74,138,.2);">🏢 주민센터</span>
+      </div>
+      <div class="dom-items">
+        <div class="dom-item" onclick="openModal('emergency_care')"><div class="di-l"><div class="di-dot" style="background:var(--purple)"></div><div class="di-nm">긴급돌봄 파견</div></div><span class="di-tag bg-ps pc">긴급</span><span class="di-lk">상세 보기</span></div>
+        <div class="dom-item" onclick="openModal('care_sos')"><div class="di-l"><div class="di-dot" style="background:var(--purple)"></div><div class="di-nm">돌봄SOS 서비스</div></div><span class="di-tag bg-ps pc">지자체</span><span class="di-lk">상세 보기</span></div>
+        <div class="dom-item" onclick="openModal('elderly_check')"><div class="di-l"><div class="di-dot" style="background:var(--purple)"></div><div class="di-nm">독거노인 안전확인</div></div><span class="di-tag bg-ps pc">예방</span><span class="di-lk">상세 보기</span></div>
+        <div class="dom-item" onclick="switchTab('integrated', document.querySelector('.tab-btn[data-tab=&quot;integrated&quot;]'));document.querySelector('.tabs-wrap').scrollIntoView()"><div class="di-l"><div class="di-dot" style="background:var(--purple)"></div><div class="di-nm">통합사례관리 연계</div></div><span class="di-tag bg-ps pc">통합돌봄</span><span class="di-lk">→ 통합돌봄 탭</span></div>
+      </div>
+      <div class="dom-ft"><span class="dom-ft-txt">💡 주민등록 주소지 읍면동 주민센터</span><a class="dom-apply bg-ps pc" href="https://www.bokjiro.go.kr" target="_blank">✍️ 복지로 신청</a></div>
+    </div>
+
+    <div class="dom-card">
+      <div class="dom-hd" style="background:linear-gradient(135deg,rgba(58,122,90,.06),rgba(58,122,90,.02));">
+        <div class="dom-ico bg-gs">🤝</div>
+        <div><div class="dom-ti">복지·생활지원</div><div class="dom-sub">사회복지관 · 지역사회 자원</div></div>
+        <span class="dom-tel bg-gs gc" style="border:1px solid rgba(58,122,90,.2);">🏛️ 사회복지관</span>
+      </div>
+      <div class="dom-items">
+        <div class="dom-item" onclick="openModal('meal')"><div class="di-l"><div class="di-dot" style="background:var(--green)"></div><div class="di-nm">식사배달 서비스</div></div><span class="di-tag bg-gs gc">생활</span><span class="di-lk">상세 보기</span></div>
+        <div class="dom-item" onclick="openModal('transport')"><div class="di-l"><div class="di-dot" style="background:var(--green)"></div><div class="di-nm">이동 지원 (차량)</div></div><span class="di-tag bg-gs gc">이동</span><span class="di-lk">상세 보기</span></div>
+        <div class="dom-item" onclick="openModal('housing')"><div class="di-l"><div class="di-dot" style="background:var(--green)"></div><div class="di-nm">주거환경 개선</div></div><span class="di-tag bg-gs gc">환경</span><span class="di-lk">상세 보기</span></div>
+        <div class="dom-item" onclick="openModal('energy')"><div class="di-l"><div class="di-dot" style="background:var(--green)"></div><div class="di-nm">에너지바우처·생계지원</div></div><span class="di-tag bg-gs gc">경제</span><span class="di-lk">상세 보기</span></div>
+      </div>
+      <div class="dom-ft"><span class="dom-ft-txt">💡 지역 사회복지관·자원봉사센터 연계 (확인 필요)</span><button class="dom-apply bg-gs gc" style="border:none;cursor:pointer;" onclick="switchTab('private', document.querySelector('.tab-btn[data-tab=&quot;private&quot;]'));document.querySelector('.tabs-wrap').scrollIntoView()">🏘️ 민간 자원 탭</button></div>
+    </div>
+
+    <div class="dom-card">
+      <div class="dom-hd" style="background:linear-gradient(135deg,rgba(200,151,42,.06),rgba(200,151,42,.02));">
+        <div class="dom-ico bg-gds">⚕️</div>
+        <div><div class="dom-ti">보건의료</div><div class="dom-sub">보건소 · 의료기관 연계</div></div>
+        <span class="dom-tel bg-gds gdc" style="border:1px solid rgba(200,151,42,.2);">🏥 보건소</span>
+      </div>
+      <div class="dom-items">
+        <div class="dom-item" onclick="openModal('visit_health')"><div class="di-l"><div class="di-dot" style="background:var(--gold)"></div><div class="di-nm">방문건강관리</div></div><span class="di-tag bg-gds gdc">보건소</span><span class="di-lk">상세 보기</span></div>
+        <div class="dom-item" onclick="openModal('mental')"><div class="di-l"><div class="di-dot" style="background:var(--gold)"></div><div class="di-nm">정신건강 상담</div></div><span class="di-tag bg-gds gdc">031-968-2333</span><span class="di-lk">상세 보기</span></div>
+        <div class="dom-item" onclick="openModal('dementia')"><div class="di-l"><div class="di-dot" style="background:var(--gold)"></div><div class="di-nm">치매관리 서비스</div></div><span class="di-tag bg-gds gdc">치매안심</span><span class="di-lk">상세 보기</span></div>
+        <div class="dom-item" onclick="openModal('hospice')"><div class="di-l"><div class="di-dot" style="background:var(--gold)"></div><div class="di-nm">호스피스·완화의료</div></div><span class="di-tag bg-gds gdc">말기</span><span class="di-lk">상세 보기</span></div>
+      </div>
+      <div class="dom-ft"><span class="dom-ft-txt">💡 거주지 관할 보건소 방문·전화</span><a class="dom-apply bg-gds gdc" href="https://health.kdca.go.kr" target="_blank">🔍 보건소 찾기</a></div>
+    </div>
+
+  </div><!-- /domain-grid -->
+
+  <!-- 장기요양 절차 + 체크리스트 -->
+  <div class="bottom-row">
+    <div class="proc-card">
+      <div class="proc-hd"><h3>📋 장기요양 신청 5단계</h3><p>longtermcare.or.kr 또는 공단 지사 방문</p></div>
+      <div class="proc-steps">
+        <div class="st-item"><div class="st-num bg-ts tc">1</div><div class="st-cont"><div class="st-ti">인정 신청 (본인·가족·대리인)</div><div class="st-desc">공단 지사 방문 또는 온라인. 의사소견서 제출 (60일 이내)</div><a class="st-act bg-ts tc" href="https://www.longtermcare.or.kr/npbs/u/b/101/openLtcRcgtAplyPttnChoice.web" target="_blank">🌐 온라인 신청 →</a></div></div>
+        <div class="st-item"><div class="st-num bg-ts tc">2</div><div class="st-cont"><div class="st-ti">방문조사 (공단 직원)</div><div class="st-desc">가정 방문 → 90개 항목 기능상태 조사</div></div></div>
+        <div class="st-item"><div class="st-num bg-ts tc">3</div><div class="st-cont"><div class="st-ti">등급판정위원회 심의</div><div class="st-desc">1~5등급 또는 인지지원등급 (신청 후 약 30일)</div></div></div>
+        <div class="st-item"><div class="st-num bg-ts tc">4</div><div class="st-cont"><div class="st-ti">인정서 수령 → 기관 선택·계약</div><div class="st-desc">장기요양인정서 + 표준이용계획서 수령</div><a class="st-act bg-ts tc" href="https://www.longtermcare.or.kr" target="_blank">🔍 기관 찾기 →</a></div></div>
+        <div class="st-item"><div class="st-num bg-ts tc">5</div><div class="st-cont"><div class="st-ti">서비스 이용 시작</div><div class="st-desc">재가급여 이용. 본인부담 15% (수급자 감면)</div></div></div>
+      </div>
+    </div>
+    <div class="chk-card">
+      <div class="chk-hd" style="background:linear-gradient(135deg,var(--gold),#d9a93a);"><h3>📞 주요 공공기관 전화번호</h3><p>전주 지역 기관 연락처는 확인 필요</p></div>
+      <div class="chk-body" style="padding:6px 16px;">
+        <div class="gy-mini-row"><span class="gy-mini-name">보건소·치매안심센터 등</span><span style="color:var(--gold);font-weight:700;font-size:11px;">확인 필요</span></div>
+        <div class="gy-mini-row"><span class="gy-mini-name">정신건강복지센터</span><span style="color:var(--gold);font-weight:700;font-size:11px;">확인 필요</span></div>
+        <div class="gy-mini-row"><span class="gy-mini-name">건강보험공단 지사</span><a class="hc-act tel" href="tel:1577-1000">📞 1577-1000</a></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tab-public -->
+
+
+<!-- ════════════════════════════
+     탭 2: 통합 돌봄
+════════════════════════════ -->
+<div class="tab-panel" id="tab-integrated">
+<div class="chk-card" style="margin:18px 0;">
+    <div class="chk-hd" style="background:linear-gradient(135deg,var(--gold),#d9a93a);"><h3>🚧 통합 돌봄 — 준비 중</h3><p>전주 지역 정보가 확인되는 대로 이 영역에 반영될 예정입니다.</p></div>
+    <div class="chk-body">
+      <div class="info-row"><div class="info-label">현재 상태</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요</span> — 아직 전주 지역의 실제 기관·서비스 정보가 확인되지 않았습니다.</div></div>
+      <div class="info-row"><div class="info-label">전국 공통 제도</div><div class="info-val">장기요양·복지로 등 전국 공통 제도는 상단 "서비스 신청" 탭에서 확인하실 수 있습니다.</div></div>
+    </div>
+  </div>
+
+</div><!-- /tab-integrated -->
+
+
+<!-- ════════════════════════════
+     탭 3: 민간 자원
+════════════════════════════ -->
+<div class="tab-panel" id="tab-private">
+<div class="chk-card" style="margin:18px 0;">
+    <div class="chk-hd" style="background:linear-gradient(135deg,var(--gold),#d9a93a);"><h3>🚧 민간 자원 — 준비 중</h3><p>전주 지역 정보가 확인되는 대로 이 영역에 반영될 예정입니다.</p></div>
+    <div class="chk-body">
+      <div class="info-row"><div class="info-label">현재 상태</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요</span> — 아직 전주 지역의 실제 기관·서비스 정보가 확인되지 않았습니다.</div></div>
+      <div class="info-row"><div class="info-label">전국 공통 제도</div><div class="info-val">장기요양·복지로 등 전국 공통 제도는 상단 "서비스 신청" 탭에서 확인하실 수 있습니다.</div></div>
+    </div>
+  </div>
+
+</div><!-- /tab-private -->
+
+
+<!-- ════════════════════════════
+     탭 4: 서비스 신청
+════════════════════════════ -->
+<div class="tab-panel" id="tab-apply">
+
+  <div style="margin-bottom:20px;">
+    <div class="sec-hd"><div class="sec-title">🔗 온라인 서비스 신청 바로가기</div><span style="font-size:12px;color:var(--gray-400);">클릭 시 해당 사이트로 이동</span></div>
+    <div class="apply-grid">
+      <a class="apply-card" href="https://www.longtermcare.or.kr/npbs/u/b/101/openLtcRcgtAplyPttnChoice.web" target="_blank" style="border-color:rgba(42,127,127,.28);">
+        <div class="ac-ico">🏥</div><div class="ac-ti">장기요양 등급 신청</div>
+        <div class="ac-desc">공단 홈페이지 — 신규·갱신 신청 (공동인증서 필요)</div>
+        <div class="ac-badge bg-ts tc">longtermcare.or.kr</div>
+      </a>
+      <a class="apply-card" href="https://www.gov.kr/portal/service/serviceInfo/B55092800030" target="_blank" style="border-color:rgba(26,46,74,.18);">
+        <div class="ac-ico">📋</div><div class="ac-ti">정부24 — 인정서 발급</div>
+        <div class="ac-desc">장기요양 인정서 온라인 발급·조회 (등급 판정 후)</div>
+        <div class="ac-badge bg-ns nc">gov.kr</div>
+      </a>
+      <a class="apply-card" href="https://www.bokjiro.go.kr" target="_blank" style="border-color:rgba(106,74,138,.18);">
+        <div class="ac-ico">🎁</div><div class="ac-ti">복지로 — 복지급여 신청</div>
+        <div class="ac-desc">돌봄SOS·기초생활·장애인 지원 통합 온라인 신청</div>
+        <div class="ac-badge bg-ps pc">bokjiro.go.kr</div>
+      </a>
+      <a class="apply-card" href="https://www.nid.or.kr" target="_blank" style="border-color:rgba(200,151,42,.18);">
+        <div class="ac-ico">🧠</div><div class="ac-ti">치매안심센터 서비스</div>
+        <div class="ac-desc">치매 조기검진·치료비 지원·배회감지기·가족 교육</div>
+        <div class="ac-badge bg-gds gdc">nid.or.kr</div>
+      </a>
+      <a class="apply-card" href="https://www.longtermcare.or.kr" target="_blank" style="border-color:rgba(42,127,127,.18);">
+        <div class="ac-ico">🔍</div><div class="ac-ti">장기요양 기관 찾기</div>
+        <div class="ac-desc">전국 방문요양·주야간보호·요양원 기관 검색</div>
+        <div class="ac-badge bg-ts tc">longtermcare.or.kr</div>
+      </a>
+      <a class="apply-card" href="https://www.hospice.go.kr" target="_blank" style="border-color:rgba(58,122,90,.18);">
+        <div class="ac-ico">🕊️</div><div class="ac-ti">호스피스 완화의료</div>
+        <div class="ac-desc">입원형·가정형·자문형 호스피스 전문기관 찾기</div>
+        <div class="ac-badge bg-gs gc">hospice.go.kr</div>
+      </a>
+      <a class="apply-card" href="https://blog.naver.com/mohw2016/223491886918" target="_blank" style="border-color:rgba(184,50,50,.18);display:flex;gap:12px;align-items:flex-start;">
+        <img src="/data/images/welfare_crisis_alert_qr.png" alt="복지위기알림 앱 QR코드" style="width:88px;height:88px;border-radius:6px;flex-shrink:0;background:white;padding:4px;border:1px solid var(--gray-200);">
+        <div style="min-width:0;">
+          <div class="ac-ti">🚨 복지위기알림 앱</div>
+          <div class="ac-desc">나와 이웃의 위기상황을 QR 스캔으로 빠르게 신고 — 행정복지센터로 즉시 연계</div>
+          <div class="ac-badge bg-cs cc">QR 스캔으로 설치 · 눌러서 안내 보기</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 전화 신청 연락처 -->
+  <div class="sec-hd"><div class="sec-title">📞 전화 신청·문의 연락처</div></div>
+  <div class="goyang-grid">
+    <div class="gy-card"><div class="gy-top"><div><div class="gy-name">장기요양 신청·문의</div><div class="gy-addr">국민건강보험공단</div></div><span class="gy-cat bg-ts tc">전국</span></div><div class="gy-btns"><a class="gy-tel bg-ts tc" href="tel:1577-1000">📞 1577-1000</a></div></div>
+    <div class="gy-card"><div class="gy-top"><div><div class="gy-name">복지·긴급복지 신청</div><div class="gy-addr">보건복지상담센터</div></div><span class="gy-cat bg-ps pc">전국</span></div><div class="gy-btns"><a class="gy-tel bg-ps pc" href="tel:129">📞 129</a></div></div>
+    <div class="gy-card"><div class="gy-top"><div><div class="gy-name">치매 상담·안심센터</div><div class="gy-addr">중앙치매센터</div></div><span class="gy-cat bg-gds gdc">전국</span></div><div class="gy-btns"><a class="gy-tel bg-gds gdc" href="tel:1899-9988">📞 1899-9988</a></div></div>
+    <div class="gy-card"><div class="gy-top"><div><div class="gy-name">정신건강 위기상담</div><div class="gy-addr">정신건강 위기상담전화</div></div><span class="gy-cat bg-cs cc">24시간</span></div><div class="gy-btns"><a class="gy-tel bg-cs cc" href="tel:1577-0199">📞 1577-0199</a></div></div>
+    <div class="gy-card"><div class="gy-top"><div><div class="gy-name">자살예방상담</div><div class="gy-addr">자살예방상담전화</div></div><span class="gy-cat bg-cs cc">24시간</span></div><div class="gy-btns"><a class="gy-tel bg-cs cc" href="tel:1393">📞 1393</a></div></div>
+    <div class="gy-card"><div class="gy-top"><div><div class="gy-name">호스피스 안내</div><div class="gy-addr">중앙호스피스센터</div></div><span class="gy-cat bg-gs gc">전국</span></div><div class="gy-btns"><a class="gy-tel bg-gs gc" href="tel:1833-4673">📞 1833-4673</a></div></div>
+  </div>
+
+</div><!-- /tab-apply -->
+
+
+<!-- ════════════════════════════
+     탭 5: 사정 도구
+════════════════════════════ -->
+<div class="tab-panel" id="tab-assess">
+
+  <!-- 전체 현황 바 -->
+  <div class="assess-summary-bar">
+    <div class="asb-title">📊 검사 현황 — 클릭하여 해당 검사로 이동</div>
+    <div class="asb-chips" id="asb-chips">
+      <div class="asb-chip" onclick="showAssess('mmse')" id="chip-mmse"><span>MMSE-K</span><span class="asb-chip-num" id="chip-num-mmse">—</span></div>
+      <div class="asb-chip" onclick="showAssess('adl')"  id="chip-adl"><span>ADL</span><span class="asb-chip-num" id="chip-num-adl">—</span></div>
+      <div class="asb-chip" onclick="showAssess('iadl')" id="chip-iadl"><span>IADL</span><span class="asb-chip-num" id="chip-num-iadl">—</span></div>
+      <div class="asb-chip" onclick="showAssess('mna')"  id="chip-mna"><span>MNA</span><span class="asb-chip-num" id="chip-num-mna">—</span></div>
+      <div class="asb-chip" onclick="showAssess('gds')"  id="chip-gds"><span>GDS-15</span><span class="asb-chip-num" id="chip-num-gds">—</span></div>
+      <div class="asb-chip" onclick="showAssess('fall')" id="chip-fall"><span>낙상위험</span><span class="asb-chip-num" id="chip-num-fall">—</span></div>
+      <div class="asb-chip" onclick="showAssess('phq')"  id="chip-phq"><span>PHQ-9</span><span class="asb-chip-num" id="chip-num-phq">—</span></div>
+      <div class="asb-chip" onclick="showAssess('nrs')"  id="chip-nrs"><span>통증NRS</span><span class="asb-chip-num" id="chip-num-nrs">—</span></div>
+      <div class="asb-chip" onclick="showAssess('smcq')" id="chip-smcq"><span>SMCQ</span><span class="asb-chip-num" id="chip-num-smcq">—</span></div>
+      <div class="asb-chip" onclick="showAssess('braden')" id="chip-braden"><span>Braden</span><span class="asb-chip-num" id="chip-num-braden">—</span></div>
+      <div class="asb-chip" onclick="showAssess('frail')" id="chip-frail"><span>K-FRAIL</span><span class="asb-chip-num" id="chip-num-frail">—</span></div>
+      <div class="asb-chip" onclick="showAssess('cam')" id="chip-cam"><span>CAM</span><span class="asb-chip-num" id="chip-num-cam">—</span></div>
+      <div class="asb-chip" onclick="showAssess('tug')" id="chip-tug"><span>TUG</span><span class="asb-chip-num" id="chip-num-tug">—</span></div>
+      <button onclick="atPrintReport()" style="margin-left:auto;padding:5px 13px;border:1.5px solid var(--teal);border-radius:8px;background:rgba(42,127,127,.07);color:var(--teal);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">🖨️ 결과 인쇄</button>
+    </div>
+  </div>
+
+  <div class="assess-wrap">
+    <!-- 사이드바 -->
+    <div class="assess-sidebar">
+      <button class="assess-nav-btn a-active" onclick="showAssess('mmse')" id="anb-mmse">🧠 MMSE-K<span class="anb-score" id="ans-mmse">—</span></button>
+      <button class="assess-nav-btn" onclick="showAssess('adl')"  id="anb-adl">🚶 ADL<span class="anb-score" id="ans-adl">—</span></button>
+      <button class="assess-nav-btn" onclick="showAssess('iadl')" id="anb-iadl">🏠 IADL<span class="anb-score" id="ans-iadl">—</span></button>
+      <button class="assess-nav-btn" onclick="showAssess('mna')"  id="anb-mna">🍽️ MNA<span class="anb-score" id="ans-mna">—</span></button>
+      <button class="assess-nav-btn" onclick="showAssess('gds')"  id="anb-gds">💙 GDS-15<span class="anb-score" id="ans-gds">—</span></button>
+      <button class="assess-nav-btn" onclick="showAssess('fall')" id="anb-fall">⚠️ 낙상위험<span class="anb-score" id="ans-fall">—</span></button>
+      <button class="assess-nav-btn" onclick="showAssess('phq')"  id="anb-phq">💚 PHQ-9<span class="anb-score" id="ans-phq">—</span></button>
+      <button class="assess-nav-btn" onclick="showAssess('nrs')"  id="anb-nrs">💊 통증NRS<span class="anb-score" id="ans-nrs">—</span></button>
+      <button class="assess-nav-btn" onclick="showAssess('smcq')" id="anb-smcq">🔍 SMCQ<span class="anb-score" id="ans-smcq">—</span></button>
+      <button class="assess-nav-btn" onclick="showAssess('braden')" id="anb-braden">🛏️ Braden<span class="anb-score" id="ans-braden">—</span></button>
+      <button class="assess-nav-btn" onclick="showAssess('frail')" id="anb-frail">🌿 K-FRAIL<span class="anb-score" id="ans-frail">—</span></button>
+      <button class="assess-nav-btn" onclick="showAssess('cam')" id="anb-cam">🌀 CAM<span class="anb-score" id="ans-cam">—</span></button>
+      <button class="assess-nav-btn" onclick="showAssess('tug')" id="anb-tug">⏱️ TUG<span class="anb-score" id="ans-tug">—</span></button>
+      <button class="assess-nav-btn" onclick="showAssess('hcs')" id="anb-hcs">🏥 건강장수 스크리닝<span class="anb-score" id="ans-hcs">—</span></button>
+      <button class="assess-print-btn" onclick="atPrintReport()">🖨️ 결과 인쇄</button>
+    </div>
+
+    <!-- 콘텐츠 영역 -->
+    <div class="assess-content">
+
+      <!-- ── MMSE-K ── -->
+      <div class="assess-tool active" id="at-mmse">
+        <div class="at-result-banner lvl-pending" id="atb-mmse">
+          <div class="atrb-top"><div class="atrb-left"><div class="atrb-tool" id="atbt-mmse"></div><div class="atrb-lvl pending" id="atbl-mmse">미실시</div></div><div class="atrb-right"><div class="atrb-score" id="atbs-mmse">—</div><div class="atrb-max" id="atbm-mmse"></div></div></div>
+          <div class="atrb-progress"><div class="atrb-progress-fill" id="atbp-mmse"></div></div>
+          <div class="atrb-progress-txt" id="atbpt-mmse">검사를 시작하세요</div>
+        </div>
+        <div class="at-hdr">
+          <div><div class="at-title">간이정신상태검사</div><div class="at-en">MMSE-K</div>
+          <div class="at-desc">시간·장소 지남력, 기억력, 주의집중, 언어기능, 시공간구성 평가 (권용철·박종한, 1989)</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">만점 30점</span><span class="at-tag bg-ns nc">인지 선별</span></div></div>
+          <div class="at-score-box"><div class="atsb-lbl">총점</div><div class="atsb-num" id="atsc-mmse">—</div><div class="atsb-max">/ 30점</div><div class="atsb-lvl" id="atlv-mmse">미실시</div></div>
+        </div>
+        <div class="at-interp"><span class="at-interp-lbl">해석:</span>
+          <div class="at-il" id="ail-mmse-0"><div class="at-dot" style="background:#2d7a4f"></div><span class="at-il-txt gc">정상</span><span class="at-il-rng">24+</span></div>
+          <div class="at-il" id="ail-mmse-1"><div class="at-dot" style="background:#c8921a"></div><span class="at-il-txt yc">경증인지장애</span><span class="at-il-rng">20~23</span></div>
+          <div class="at-il" id="ail-mmse-2"><div class="at-dot" style="background:#c8921a"></div><span class="at-il-txt yc">중등도</span><span class="at-il-rng">10~19</span></div>
+          <div class="at-il" id="ail-mmse-3"><div class="at-dot" style="background:#b83232"></div><span class="at-il-txt rc">중증</span><span class="at-il-rng">0~9</span></div>
+        </div>
+        <div id="aq-mmse"></div>
+        <button class="at-complete-btn" id="cbtn-mmse" onclick="showResult('mmse')"><span class="ico">📊</span>검사 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-mmse" style="display:none"></div>
+      </div>
+
+      <!-- ── ADL ── -->
+      <div class="assess-tool" id="at-adl" style="display:none">
+        <div class="at-result-banner lvl-pending" id="atb-adl">
+          <div class="atrb-top"><div class="atrb-left"><div class="atrb-tool" id="atbt-adl"></div><div class="atrb-lvl pending" id="atbl-adl">미실시</div></div><div class="atrb-right"><div class="atrb-score" id="atbs-adl">—</div><div class="atrb-max" id="atbm-adl"></div></div></div>
+          <div class="atrb-progress"><div class="atrb-progress-fill" id="atbp-adl"></div></div>
+          <div class="atrb-progress-txt" id="atbpt-adl">검사를 시작하세요</div>
+        </div>
+        <div class="at-hdr">
+          <div><div class="at-title">일상생활 수행능력</div><div class="at-en">ADL · Barthel Index</div>
+          <div class="at-desc">기본 일상생활 10가지의 독립적 수행 수준 평가. 재가 서비스 및 장기요양 등급 판정 참고.</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">만점 100점</span><span class="at-tag bg-ns nc">기능 평가</span></div></div>
+          <div class="at-score-box"><div class="atsb-lbl">총점</div><div class="atsb-num" id="atsc-adl">—</div><div class="atsb-max">/ 100점</div><div class="atsb-lvl" id="atlv-adl">미실시</div></div>
+        </div>
+        <div class="at-interp"><span class="at-interp-lbl">해석:</span>
+          <div class="at-il"><div class="at-dot" style="background:#2d7a4f"></div><span class="at-il-txt gc">완전독립</span><span class="at-il-rng">100</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#c8921a"></div><span class="at-il-txt yc">경도의존</span><span class="at-il-rng">75~99</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#c8921a"></div><span class="at-il-txt yc">중등도의존</span><span class="at-il-rng">50~74</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#b83232"></div><span class="at-il-txt rc">심한의존</span><span class="at-il-rng">25~49</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#b83232"></div><span class="at-il-txt rc">완전의존</span><span class="at-il-rng">0~24</span></div>
+        </div>
+        <div id="aq-adl"></div>
+        <button class="at-complete-btn" id="cbtn-adl" onclick="showResult('adl')"><span class="ico">📊</span>검사 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-adl" style="display:none"></div>
+      </div>
+
+      <!-- ── IADL ── -->
+      <div class="assess-tool" id="at-iadl" style="display:none">
+        <div class="at-result-banner lvl-pending" id="atb-iadl">
+          <div class="atrb-top"><div class="atrb-left"><div class="atrb-tool" id="atbt-iadl"></div><div class="atrb-lvl pending" id="atbl-iadl">미실시</div></div><div class="atrb-right"><div class="atrb-score" id="atbs-iadl">—</div><div class="atrb-max" id="atbm-iadl"></div></div></div>
+          <div class="atrb-progress"><div class="atrb-progress-fill" id="atbp-iadl"></div></div>
+          <div class="atrb-progress-txt" id="atbpt-iadl">검사를 시작하세요</div>
+        </div>
+        <div class="at-hdr">
+          <div><div class="at-title">도구적 일상생활 수행능력</div><div class="at-en">IADL · Lawton Scale</div>
+          <div class="at-desc">전화·쇼핑·식사준비 등 복잡한 일상 기능을 평가. 독립적 지역사회 생활 가능 여부 판단.</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">8항목</span><span class="at-tag bg-ns nc">사회 기능</span></div></div>
+          <div class="at-score-box"><div class="atsb-lbl">총점</div><div class="atsb-num" id="atsc-iadl">—</div><div class="atsb-max">/ 8점</div><div class="atsb-lvl" id="atlv-iadl">미실시</div></div>
+        </div>
+        <div class="at-interp"><span class="at-interp-lbl">해석:</span>
+          <div class="at-il"><div class="at-dot" style="background:#2d7a4f"></div><span class="at-il-txt gc">독립적</span><span class="at-il-rng">8점</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#c8921a"></div><span class="at-il-txt yc">경도의존</span><span class="at-il-rng">5~7</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#c8921a"></div><span class="at-il-txt yc">중등도의존</span><span class="at-il-rng">3~4</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#b83232"></div><span class="at-il-txt rc">심한의존</span><span class="at-il-rng">0~2</span></div>
+        </div>
+        <div id="aq-iadl"></div>
+        <button class="at-complete-btn" id="cbtn-iadl" onclick="showResult('iadl')"><span class="ico">📊</span>검사 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-iadl" style="display:none"></div>
+      </div>
+
+      <!-- ── MNA ── -->
+      <div class="assess-tool" id="at-mna" style="display:none">
+        <div class="at-result-banner lvl-pending" id="atb-mna">
+          <div class="atrb-top"><div class="atrb-left"><div class="atrb-tool" id="atbt-mna"></div><div class="atrb-lvl pending" id="atbl-mna">미실시</div></div><div class="atrb-right"><div class="atrb-score" id="atbs-mna">—</div><div class="atrb-max" id="atbm-mna"></div></div></div>
+          <div class="atrb-progress"><div class="atrb-progress-fill" id="atbp-mna"></div></div>
+          <div class="atrb-progress-txt" id="atbpt-mna">검사를 시작하세요</div>
+        </div>
+        <div class="at-hdr">
+          <div><div class="at-title">영양 평가 (간이판)</div><div class="at-en">MNA-SF · Mini Nutritional Assessment</div>
+          <div class="at-desc">노인의 영양불량 및 위험을 조기 발견. Nestlé Nutrition Institute 개발 표준 도구.</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">만점 14점</span><span class="at-tag bg-ns nc">영양 선별</span></div></div>
+          <div class="at-score-box"><div class="atsb-lbl">총점</div><div class="atsb-num" id="atsc-mna">—</div><div class="atsb-max">/ 14점</div><div class="atsb-lvl" id="atlv-mna">미실시</div></div>
+        </div>
+        <div class="at-interp"><span class="at-interp-lbl">해석:</span>
+          <div class="at-il"><div class="at-dot" style="background:#2d7a4f"></div><span class="at-il-txt gc">정상 영양</span><span class="at-il-rng">12~14</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#c8921a"></div><span class="at-il-txt yc">영양불량 위험</span><span class="at-il-rng">8~11</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#b83232"></div><span class="at-il-txt rc">영양불량</span><span class="at-il-rng">0~7</span></div>
+        </div>
+        <div id="aq-mna"></div>
+        <button class="at-complete-btn" id="cbtn-mna" onclick="showResult('mna')"><span class="ico">📊</span>검사 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-mna" style="display:none"></div>
+      </div>
+
+      <!-- ── GDS ── -->
+      <div class="assess-tool" id="at-gds" style="display:none">
+        <div class="at-result-banner lvl-pending" id="atb-gds">
+          <div class="atrb-top"><div class="atrb-left"><div class="atrb-tool" id="atbt-gds"></div><div class="atrb-lvl pending" id="atbl-gds">미실시</div></div><div class="atrb-right"><div class="atrb-score" id="atbs-gds">—</div><div class="atrb-max" id="atbm-gds"></div></div></div>
+          <div class="atrb-progress"><div class="atrb-progress-fill" id="atbp-gds"></div></div>
+          <div class="atrb-progress-txt" id="atbpt-gds">검사를 시작하세요</div>
+        </div>
+        <div class="at-hdr">
+          <div><div class="at-title">노인 우울 척도</div><div class="at-en">GDS-15 · Geriatric Depression Scale</div>
+          <div class="at-desc">예/아니오로 응답하는 15문항 노인 우울 자기보고 척도.</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">15문항</span><span class="at-tag bg-ns nc">우울 선별</span></div></div>
+          <div class="at-score-box"><div class="atsb-lbl">총점</div><div class="atsb-num" id="atsc-gds">—</div><div class="atsb-max">/ 15점</div><div class="atsb-lvl" id="atlv-gds">미실시</div></div>
+        </div>
+        <div class="at-interp"><span class="at-interp-lbl">해석:</span>
+          <div class="at-il"><div class="at-dot" style="background:#2d7a4f"></div><span class="at-il-txt gc">정상</span><span class="at-il-rng">0~4</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#c8921a"></div><span class="at-il-txt yc">경증 우울</span><span class="at-il-rng">5~9</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#b83232"></div><span class="at-il-txt rc">중증 우울</span><span class="at-il-rng">10~15</span></div>
+        </div>
+        <div id="aq-gds"></div>
+        <button class="at-complete-btn" id="cbtn-gds" onclick="showResult('gds')"><span class="ico">📊</span>검사 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-gds" style="display:none"></div>
+      </div>
+
+      <!-- ── 낙상 ── -->
+      <div class="assess-tool" id="at-fall" style="display:none">
+        <div class="at-result-banner lvl-pending" id="atb-fall">
+          <div class="atrb-top"><div class="atrb-left"><div class="atrb-tool" id="atbt-fall"></div><div class="atrb-lvl pending" id="atbl-fall">미실시</div></div><div class="atrb-right"><div class="atrb-score" id="atbs-fall">—</div><div class="atrb-max" id="atbm-fall"></div></div></div>
+          <div class="atrb-progress"><div class="atrb-progress-fill" id="atbp-fall"></div></div>
+          <div class="atrb-progress-txt" id="atbpt-fall">검사를 시작하세요</div>
+        </div>
+        <div class="at-hdr">
+          <div><div class="at-title">낙상 위험 평가</div><div class="at-en">Fall Risk Assessment</div>
+          <div class="at-desc">낙상 위험 요인을 파악하여 예방 중재 계획 수립에 활용. 과거 낙상력·보조기구·보행·투약 등 평가.</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">7항목</span><span class="at-tag bg-ns nc">안전 평가</span></div></div>
+          <div class="at-score-box"><div class="atsb-lbl">위험 점수</div><div class="atsb-num" id="atsc-fall">—</div><div class="atsb-max">점</div><div class="atsb-lvl" id="atlv-fall">미실시</div></div>
+        </div>
+        <div class="at-interp"><span class="at-interp-lbl">해석:</span>
+          <div class="at-il"><div class="at-dot" style="background:#2d7a4f"></div><span class="at-il-txt gc">저위험</span><span class="at-il-rng">0~1</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#c8921a"></div><span class="at-il-txt yc">중위험</span><span class="at-il-rng">2~3</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#b83232"></div><span class="at-il-txt rc">고위험</span><span class="at-il-rng">4+</span></div>
+        </div>
+        <div id="aq-fall"></div>
+        <button class="at-complete-btn" id="cbtn-fall" onclick="showResult('fall')"><span class="ico">📊</span>검사 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-fall" style="display:none"></div>
+      </div>
+
+      <!-- ── PHQ-9 ── -->
+      <div class="assess-tool" id="at-phq" style="display:none">
+        <div class="at-result-banner lvl-pending" id="atb-phq">
+          <div class="atrb-top"><div class="atrb-left"><div class="atrb-tool" id="atbt-phq"></div><div class="atrb-lvl pending" id="atbl-phq">미실시</div></div><div class="atrb-right"><div class="atrb-score" id="atbs-phq">—</div><div class="atrb-max" id="atbm-phq"></div></div></div>
+          <div class="atrb-progress"><div class="atrb-progress-fill" id="atbp-phq"></div></div>
+          <div class="atrb-progress-txt" id="atbpt-phq">검사를 시작하세요</div>
+        </div>
+        <div class="at-hdr">
+          <div><div class="at-title">우울증 선별 검사</div><div class="at-en">PHQ-9 · Patient Health Questionnaire-9</div>
+          <div class="at-desc">지난 2주간의 우울 증상을 0~3점으로 평가하는 9문항 선별 도구.</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">만점 27점</span><span class="at-tag bg-ns nc">지난 2주 기준</span></div></div>
+          <div class="at-score-box"><div class="atsb-lbl">총점</div><div class="atsb-num" id="atsc-phq">—</div><div class="atsb-max">/ 27점</div><div class="atsb-lvl" id="atlv-phq">미실시</div></div>
+        </div>
+        <div class="at-interp"><span class="at-interp-lbl">해석:</span>
+          <div class="at-il"><div class="at-dot" style="background:#2d7a4f"></div><span class="at-il-txt gc">최소</span><span class="at-il-rng">0~4</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#c8921a"></div><span class="at-il-txt yc">경증</span><span class="at-il-rng">5~9</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#c8921a"></div><span class="at-il-txt yc">중등도</span><span class="at-il-rng">10~14</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#b83232"></div><span class="at-il-txt rc">중증</span><span class="at-il-rng">15+</span></div>
+        </div>
+        <div id="aq-phq"></div>
+        <button class="at-complete-btn" id="cbtn-phq" onclick="showResult('phq')"><span class="ico">📊</span>검사 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-phq" style="display:none"></div>
+      </div>
+
+      <!-- ── NRS ── -->
+      <div class="assess-tool" id="at-nrs" style="display:none">
+        <div class="at-result-banner lvl-pending" id="atb-nrs">
+          <div class="atrb-top"><div class="atrb-left"><div class="atrb-tool" id="atbt-nrs"></div><div class="atrb-lvl pending" id="atbl-nrs">미실시</div></div><div class="atrb-right"><div class="atrb-score" id="atbs-nrs">—</div><div class="atrb-max" id="atbm-nrs"></div></div></div>
+          <div class="atrb-progress"><div class="atrb-progress-fill" id="atbp-nrs"></div></div>
+          <div class="atrb-progress-txt" id="atbpt-nrs">검사를 시작하세요</div>
+        </div>
+        <div class="at-hdr">
+          <div><div class="at-title">통증 평가</div><div class="at-en">NRS · Numeric Rating Scale</div>
+          <div class="at-desc">0(통증 없음)에서 10(극심한 통증)까지 슬라이더로 통증 강도를 평가합니다.</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">0~10점</span><span class="at-tag bg-ns nc">통증 강도</span></div></div>
+          <div class="at-score-box"><div class="atsb-lbl">현재 통증</div><div class="atsb-num" id="atsc-nrs">—</div><div class="atsb-max">/ 10점</div><div class="atsb-lvl" id="atlv-nrs">미실시</div></div>
+        </div>
+        <div class="at-interp"><span class="at-interp-lbl">해석:</span>
+          <div class="at-il"><div class="at-dot" style="background:#2d7a4f"></div><span class="at-il-txt gc">없음</span><span class="at-il-rng">0</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#c8921a"></div><span class="at-il-txt yc">경증</span><span class="at-il-rng">1~3</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#c8921a"></div><span class="at-il-txt yc">중등도</span><span class="at-il-rng">4~6</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#b83232"></div><span class="at-il-txt rc">중증</span><span class="at-il-rng">7~10</span></div>
+        </div>
+        <div class="aq-card">
+          <div class="aq-hdr"><div class="aq-num">1</div><div><div class="aq-txt">지금 이 순간 통증 강도</div><div class="aq-sub">0 = 전혀 없음 · 10 = 상상할 수 없을 만큼 심함</div></div></div>
+          <div class="nrs-panel">
+            <input type="range" class="nrs-sl" min="0" max="10" value="0" id="nrs-now" oninput="calcNRS()">
+            <div class="nrs-lbs"><span class="nrs-lb">0<br>없음</span><span class="nrs-lb">2</span><span class="nrs-lb">4</span><span class="nrs-lb">6</span><span class="nrs-lb">8</span><span class="nrs-lb">10<br>극심</span></div>
+            <div class="nrs-disp"><div class="nrs-big" id="nrs-now-v">0</div><div class="nrs-sm" id="nrs-now-d">통증 없음</div></div>
+          </div>
+        </div>
+        <div class="aq-card">
+          <div class="aq-hdr"><div class="aq-num">2</div><div><div class="aq-txt">지난 24시간 중 가장 심했던 통증</div></div></div>
+          <div class="nrs-panel">
+            <input type="range" class="nrs-sl" min="0" max="10" value="0" id="nrs-worst" oninput="calcNRS()">
+            <div class="nrs-lbs"><span class="nrs-lb">0</span><span class="nrs-lb">2</span><span class="nrs-lb">4</span><span class="nrs-lb">6</span><span class="nrs-lb">8</span><span class="nrs-lb">10</span></div>
+            <div class="nrs-disp"><div class="nrs-big" id="nrs-worst-v">0</div><div class="nrs-sm" id="nrs-worst-d">통증 없음</div></div>
+          </div>
+        </div>
+        <button class="at-complete-btn" id="cbtn-nrs" onclick="showResult('nrs')"><span class="ico">📊</span>검사 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-nrs" style="display:none"></div>
+      </div>
+
+      <!-- ── SMCQ ── -->
+      <div class="assess-tool" id="at-smcq" style="display:none">
+        <div class="at-result-banner lvl-pending" id="atb-smcq">
+          <div class="atrb-top"><div class="atrb-left"><div class="atrb-tool" id="atbt-smcq"></div><div class="atrb-lvl pending" id="atbl-smcq">미실시</div></div><div class="atrb-right"><div class="atrb-score" id="atbs-smcq">—</div><div class="atrb-max" id="atbm-smcq"></div></div></div>
+          <div class="atrb-progress"><div class="atrb-progress-fill" id="atbp-smcq"></div></div>
+          <div class="atrb-progress-txt" id="atbpt-smcq">검사를 시작하세요</div>
+        </div>
+        <div class="at-hdr">
+          <div><div class="at-title">주관적 기억 호소 설문</div><div class="at-en">SMCQ · Subjective Memory Complaints Questionnaire</div>
+          <div class="at-desc">스스로 느끼는 기억력 저하 평가. 치매 전 단계 주관적 인지 저하(SCD) 선별. (조은아 외, 2009)</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">14문항</span><span class="at-tag bg-ns nc">주관적 인지</span></div></div>
+          <div class="at-score-box"><div class="atsb-lbl">총점</div><div class="atsb-num" id="atsc-smcq">—</div><div class="atsb-max">/ 14점</div><div class="atsb-lvl" id="atlv-smcq">미실시</div></div>
+        </div>
+        <div class="at-interp"><span class="at-interp-lbl">해석:</span>
+          <div class="at-il"><div class="at-dot" style="background:#2d7a4f"></div><span class="at-il-txt gc">정상</span><span class="at-il-rng">0~5</span></div>
+          <div class="at-il"><div class="at-dot" style="background:#b83232"></div><span class="at-il-txt rc">주관적 기억 호소</span><span class="at-il-rng">6+</span></div>
+        </div>
+        <div id="aq-smcq"></div>
+        <button class="at-complete-btn" id="cbtn-smcq" onclick="showResult('smcq')"><span class="ico">📊</span>검사 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-smcq" style="display:none"></div>
+      </div>
+
+      <!-- ── Braden Scale (욕창 위험) ── -->
+      <div class="assess-tool" id="at-braden" style="display:none">
+        <div class="at-result-banner lvl-pending" id="atb-braden">
+          <div class="atrb-top"><div class="atrb-left"><div class="atrb-tool" id="atbt-braden"></div><div class="atrb-lvl pending" id="atbl-braden">미실시</div></div><div class="atrb-right"><div class="atrb-score" id="atbs-braden">—</div><div class="atrb-max" id="atbm-braden"></div></div></div>
+          <div class="atrb-progress"><div class="atrb-progress-fill" id="atbp-braden"></div></div>
+          <div class="atrb-progress-txt" id="atbpt-braden">검사를 시작하세요</div>
+        </div>
+        <div class="at-hdr">
+          <div><div class="at-title">욕창 위험 평가</div><div class="at-en">Braden Scale</div>
+          <div class="at-desc">와상·반와상 환자의 욕창 발생 위험을 평가하는 표준 도구. 18점 이하는 위험군으로 예방 중재 필요.</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">만점 23점</span><span class="at-tag bg-ns nc">욕창 예방</span></div></div>
+        </div>
+        <div id="aq-braden"></div>
+        <button class="at-complete-btn" id="cbtn-braden" onclick="showResult('braden')"><span class="ico">📊</span>검사 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-braden" style="display:none"></div>
+      </div>
+
+      <!-- ── K-FRAIL (한국형 노쇠) ── -->
+      <div class="assess-tool" id="at-frail" style="display:none">
+        <div class="at-result-banner lvl-pending" id="atb-frail">
+          <div class="atrb-top"><div class="atrb-left"><div class="atrb-tool" id="atbt-frail"></div><div class="atrb-lvl pending" id="atbl-frail">미실시</div></div><div class="atrb-right"><div class="atrb-score" id="atbs-frail">—</div><div class="atrb-max" id="atbm-frail"></div></div></div>
+          <div class="atrb-progress"><div class="atrb-progress-fill" id="atbp-frail"></div></div>
+          <div class="atrb-progress-txt" id="atbpt-frail">검사를 시작하세요</div>
+        </div>
+        <div class="at-hdr">
+          <div><div class="at-title">한국형 노쇠 척도</div><div class="at-en">K-FRAIL</div>
+          <div class="at-desc">5개 항목으로 노인의 노쇠 정도를 간단히 평가. 3점 이상은 노쇠로 분류, 장기요양·통합돌봄 연계 근거.</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">만점 5점</span><span class="at-tag bg-ns nc">노쇠 평가</span></div></div>
+        </div>
+        <div id="aq-frail"></div>
+        <button class="at-complete-btn" id="cbtn-frail" onclick="showResult('frail')"><span class="ico">📊</span>검사 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-frail" style="display:none"></div>
+      </div>
+
+      <!-- ── CAM (섬망 평가) ── -->
+      <div class="assess-tool" id="at-cam" style="display:none">
+        <div class="at-result-banner lvl-pending" id="atb-cam">
+          <div class="atrb-top"><div class="atrb-left"><div class="atrb-tool" id="atbt-cam"></div><div class="atrb-lvl pending" id="atbl-cam">미실시</div></div><div class="atrb-right"><div class="atrb-score" id="atbs-cam">—</div><div class="atrb-max" id="atbm-cam"></div></div></div>
+          <div class="atrb-progress"><div class="atrb-progress-fill" id="atbp-cam"></div></div>
+          <div class="atrb-progress-txt" id="atbpt-cam">검사를 시작하세요</div>
+        </div>
+        <div class="at-hdr">
+          <div><div class="at-title">섬망 평가</div><div class="at-en">CAM · Confusion Assessment Method</div>
+          <div class="at-desc">4가지 특징을 평가하여 섬망 여부 판단. 특히 입원·재택 노인의 급성 의식 변화 선별에 사용.</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">4개 특징</span><span class="at-tag bg-ns nc">알고리즘 진단</span></div></div>
+        </div>
+        <div class="cam-algo">
+          <div class="cam-algo-title">📋 진단 알고리즘</div>
+          <div class="cam-algo-formula"><b>①</b> 급성 발병 · 변동성 <b>AND</b> <b>②</b> 주의력 결핍 <b>AND</b> ( <b>③</b> 사고 비조직화 <b>OR</b> <b>④</b> 의식수준 변화 ) → 섬망 의심</div>
+        </div>
+        <div id="aq-cam"></div>
+        <button class="at-complete-btn" id="cbtn-cam" onclick="showResult('cam')"><span class="ico">📊</span>검사 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-cam" style="display:none"></div>
+      </div>
+
+      <!-- ── TUG (Timed Up and Go) ── -->
+      <div class="assess-tool" id="at-tug" style="display:none">
+        <div class="at-result-banner lvl-pending" id="atb-tug">
+          <div class="atrb-top"><div class="atrb-left"><div class="atrb-tool" id="atbt-tug"></div><div class="atrb-lvl pending" id="atbl-tug">미실시</div></div><div class="atrb-right"><div class="atrb-score" id="atbs-tug">—</div><div class="atrb-max" id="atbm-tug"></div></div></div>
+          <div class="atrb-progress"><div class="atrb-progress-fill" id="atbp-tug"></div></div>
+          <div class="atrb-progress-txt" id="atbpt-tug">시간을 측정하여 입력하세요</div>
+        </div>
+        <div class="at-hdr">
+          <div><div class="at-title">기능적 보행 평가</div><div class="at-en">TUG · Timed Up and Go</div>
+          <div class="at-desc">의자에서 일어나 3m 걸어가서 돌아와 다시 앉기까지의 시간 측정. 낙상·기능 평가의 표준.</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">시간 측정</span><span class="at-tag bg-ns nc">기능 평가</span></div></div>
+        </div>
+        <div class="tug-input-wrap">
+          <div class="tug-input-lbl">측정 시간 입력</div>
+          <div><input type="number" id="tug-seconds" class="tug-input" min="0" max="120" step="0.1" oninput="calcTUG()" placeholder="0"/><span class="tug-input-unit">초</span></div>
+          <div class="tug-help">▶ 검사 방법: 의자에 앉은 환자가 일어나 → 3m 걸어 → 돌아서 → 다시 앉을 때까지 측정. 평소 신발·보조기구 사용 가능.</div>
+        </div>
+        <button class="at-complete-btn" id="cbtn-tug" onclick="showResult('tug')"><span class="ico">📊</span>검사 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-tug" style="display:none"></div>
+      </div>
+
+      <!-- ── 건강장수 스크리닝 (공통 기본정보 + 1~4군) ── -->
+      <div class="assess-tool" id="at-hcs" style="display:none">
+        <div class="at-hdr">
+          <div><div class="at-title">건강장수 스크리닝</div><div class="at-en">공통 기본정보 + 1~4군 자가평가</div>
+          <div class="at-desc">환자군(1~4군)별 맞춤 문항. 1·2군은 K-FRAIL 노쇠 선별 점수표 포함, 3·4군은 본인·보호자가 작성하는 점검표입니다. 대상자 성명·연락처 등 개인정보 항목은 포함하지 않습니다.</div>
+          <div class="at-meta"><span class="at-tag bg-ts tc">군별 맞춤형</span><span class="at-tag bg-ns nc">본인/보호자 작성</span></div></div>
+        </div>
+
+        <div class="hcs-common">
+          <div class="hcs-sec-title">① 공통 기본정보</div>
+          <div class="hcs-field-row"><div class="hcs-field-lbl">만성질환 관리 정기 이용 의원 수</div>
+            <select class="hcs-select" id="hcs-clinics"><option value="">선택</option><option>없음</option><option>1곳</option><option>2곳</option><option>3곳 이상</option></select>
+          </div>
+          <div class="hcs-sub-title">현재 진단받은 질병 (모두 선택)</div>
+          <div class="hcs-dis-grid" id="hcs-dis-grid"></div>
+          <div class="hcs-count-note" id="hcs-disease-note">진단 질병 개수: <b>0</b>개 (5개 이상이면 아래 K-FRAIL "동반질환" 항목이 1·2군에서 자동 체크됩니다)</div>
+          <div class="hcs-field-row"><div class="hcs-field-lbl">장기요양판정 등급 (있을 경우)</div>
+            <select class="hcs-select" id="hcs-ltc"><option value="">선택</option><option>없음</option><option>1급</option><option>2급</option><option>3급</option><option>4급</option><option>5급</option><option>인지지원등급</option></select>
+          </div>
+          <div class="hcs-sub-title">신체기능 상태 (환자군 분류 근거)</div>
+          <div class="hcs-dis-grid" id="hcs-func-grid"></div>
+          <div class="hcs-classify-note" id="hcs-classify-note"></div>
+        </div>
+
+        <div class="hcs-group-tabs" id="hcs-group-tabs">
+          <button class="hcs-gbtn active" onclick="hcsShowGroup('1',this)">1군 건강증진군</button>
+          <button class="hcs-gbtn" onclick="hcsShowGroup('2',this)">2군 만성질환군</button>
+          <button class="hcs-gbtn" onclick="hcsShowGroup('3',this)">3군 거동불편군</button>
+          <button class="hcs-gbtn" onclick="hcsShowGroup('4',this)">4군 와상군</button>
+        </div>
+
+        <div class="hcs-group-panel" id="hcs-group-1"></div>
+        <div class="hcs-group-panel" id="hcs-group-2" style="display:none"></div>
+        <div class="hcs-group-panel" id="hcs-group-3" style="display:none"></div>
+        <div class="hcs-group-panel" id="hcs-group-4" style="display:none"></div>
+
+        <button class="at-complete-btn" id="cbtn-hcs" style="display:flex;" onclick="hcsShowResult()"><span class="ico">📊</span>평가 완료 — 결과 보기</button>
+        <div class="at-result-integrated" id="ar-hcs" style="display:none"></div>
+      </div>
+
+    </div><!-- /assess-content -->
+  </div><!-- /assess-wrap -->
+</div><!-- /tab-assess -->
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━ HOMECARE TAB ━━━━━━━━━━━━━━━━━━━━━ -->
+<div class="tab-panel" id="tab-homecare">
+<div class="chk-card" style="margin:18px 0;">
+    <div class="chk-hd" style="background:linear-gradient(135deg,var(--gold),#d9a93a);"><h3>🚧 재택의료·방문진료 — 준비 중</h3><p>전주 지역 정보가 확인되는 대로 이 영역에 반영될 예정입니다.</p></div>
+    <div class="chk-body">
+      <div class="info-row"><div class="info-label">현재 상태</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요</span> — 아직 전주 지역의 실제 기관·서비스 정보가 확인되지 않았습니다.</div></div>
+      <div class="info-row"><div class="info-label">전국 공통 제도</div><div class="info-val">장기요양·복지로 등 전국 공통 제도는 상단 "서비스 신청" 탭에서 확인하실 수 있습니다.</div></div>
+    </div>
+  </div>
+
+</div><!-- /tab-homecare -->
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━ 방문간호센터 TAB (§4-3) ━━━━━━━━━━━━━━━━━━━━━ -->
+<div class="tab-panel" id="tab-visiting-nursing">
+<div class="chk-card" style="margin:18px 0;">
+    <div class="chk-hd" style="background:linear-gradient(135deg,var(--gold),#d9a93a);"><h3>🚧 방문간호 — 준비 중</h3><p>전주 지역 정보가 확인되는 대로 이 영역에 반영될 예정입니다.</p></div>
+    <div class="chk-body">
+      <div class="info-row"><div class="info-label">현재 상태</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요</span> — 아직 전주 지역의 실제 기관·서비스 정보가 확인되지 않았습니다.</div></div>
+      <div class="info-row"><div class="info-label">전국 공통 제도</div><div class="info-val">장기요양·복지로 등 전국 공통 제도는 상단 "서비스 신청" 탭에서 확인하실 수 있습니다.</div></div>
+    </div>
+  </div>
+
+</div><!-- /tab-visiting-nursing -->
+
+</div><!-- /main -->
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-main">
+      <div class="f-title">지역사회 자원 연계 포털</div>
+      일차의료개발센터 · 돌봄팀 (전주, 구축 준비 중)<br>
+      공공·민간·통합 돌봄 자원을 통합하여 재택 환자의 지역사회 연계를 지원합니다.
+    </div>
+    <div class="footer-links">
+      <a onclick="openModal('guide')">이용 안내</a>
+      
+    </div>
+  </div>
+  <div class="footer-rule">수록 정보는 변경될 수 있으니 이용 전 각 기관에 사전 확인 바랍니다 · Community Resource Portal</div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBg(event)">
+  <div class="modal" id="modalBox">
+    <div class="m-hd">
+      <div><div class="m-title" id="mTitle"></div><div class="m-sub" id="mSub"></div></div>
+      <button class="m-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="m-body" id="mBody"></div>
+  </div>
+</div>
+
+<script src="/shared.js"></script>
+<script>
+const REGION_NAME = '전주시';
+const REGION_HUB_NAME = '전주 거점병원(확인 필요)';
+
+const modals = {
+  allResources: { title:'전체 자원 목록', sub:'4개 영역 주요 연락처', body:`
+    <div class="info-row"><div class="info-label">장기요양</div><div class="info-val">☎ <a href="tel:1577-1000">1577-1000</a> | <a href="https://longtermcare.or.kr" target="_blank">기관 찾기 →</a></div></div>
+    <div class="info-row"><div class="info-label">복지로</div><div class="info-val">☎ <a href="tel:129">129</a> | <a href="https://www.bokjiro.go.kr" target="_blank">bokjiro.go.kr →</a></div></div>
+    <div class="info-row"><div class="info-label">치매안심</div><div class="info-val">☎ <a href="tel:1899-9988">1899-9988</a> | <a href="https://www.nid.or.kr" target="_blank">nid.or.kr →</a></div></div>
+    <div class="info-row"><div class="info-label">정신건강</div><div class="info-val">☎ <a href="tel:1577-0199">1577-0199</a> (24h)</div></div>
+    <div class="info-row"><div class="info-label">자살예방</div><div class="info-val">☎ <a href="tel:1393">1393</a> (24h)</div></div>
+    <div class="info-row"><div class="info-label">호스피스</div><div class="info-val">☎ <a href="tel:1833-4673">1833-4673</a> | <a href="https://hospice.go.kr" target="_blank">hospice.go.kr →</a></div></div>
+    <div class="info-row"><div class="info-label">노인 보호</div><div class="info-val">☎ <a href="tel:1577-1389">1577-1389</a></div></div>
+  `},
+  visiting:{title:'방문요양 서비스',sub:'노인장기요양보험 재가급여',body:`<div class="info-row"><div class="info-label">대상</div><div class="info-val">장기요양 1~5등급 판정자 (재가 거주)</div></div><div class="info-row"><div class="info-label">내용</div><div class="info-val">요양보호사 가정 방문 → 신체활동(세면·식사·배변·이동) + 가사활동(청소·세탁·식사준비)</div></div><div class="info-row"><div class="info-label">이용 시간</div><div class="info-val">등급별 월 한도 (1등급 최대 271시간 / 5등급 97시간)</div></div><div class="info-row"><div class="info-label">본인부담</div><div class="info-val">급여비용의 15% (기초수급자·의료급여 수급자 감면)</div></div><div class="info-row"><div class="info-label">신청</div><div class="info-val">☎ <a href="tel:1577-1000">1577-1000</a> | <a href="https://www.longtermcare.or.kr" target="_blank">온라인 신청 →</a></div></div>`},
+  bath:{title:'방문목욕·방문간호',sub:'노인장기요양보험 재가급여',body:`<div class="info-row"><div class="info-label">방문목욕</div><div class="info-val">전용 차량으로 가정 방문. 요양보호사 2인 목욕 서비스.</div></div><div class="info-row"><div class="info-label">방문간호</div><div class="info-val">의사 지시에 따라 간호사 가정 방문 → 간호·상담·구강위생</div></div><div class="info-row"><div class="info-label">신청</div><div class="info-val">☎ <a href="tel:1577-1000">1577-1000</a></div></div>`},
+  daycare:{title:'주·야간보호 / 단기보호',sub:'노인장기요양보험 재가급여',body:`<div class="info-row"><div class="info-label">주·야간보호</div><div class="info-val">낮 또는 밤 시간 시설에서 돌봄. 가족 부양부담 경감.</div></div><div class="info-row"><div class="info-label">단기보호</div><div class="info-val">주 보호자 부재 시 일정 기간 시설 입소 보호</div></div><div class="info-row"><div class="info-label">신청</div><div class="info-val">☎ <a href="tel:1577-1000">1577-1000</a></div></div>`},
+  welfare_tool:{title:'복지용구 지원',sub:'연간 160만원 한도',body:`<div class="info-row"><div class="info-label">품목 예시</div><div class="info-val">전동침대, 욕창매트리스, 휠체어, 보행기, 이동욕조, 배회감지기</div></div><div class="info-row"><div class="info-label">한도</div><div class="info-val">연간 160만원 (본인부담 15%)</div></div><div class="info-row"><div class="info-label">신청</div><div class="info-val">☎ <a href="tel:1577-1000">1577-1000</a></div></div>`},
+  emergency_care:{title:'긴급돌봄 파견',sub:'지자체 긴급지원',body:`<div class="info-row"><div class="info-label">대상</div><div class="info-val">주 보호자 갑작스러운 부재(입원·사고 등)로 돌봄 공백 발생</div></div><div class="info-row"><div class="info-label">내용</div><div class="info-val">단기 응급 요양보호사 파견 + 장기 서비스 연계</div></div><div class="info-row"><div class="info-label">신청</div><div class="info-val">읍면동 주민센터 또는 ☎ <a href="tel:129">129</a></div></div>`},
+  elderly_check:{title:'독거노인 안전확인',sub:'고독사 예방',body:`<div class="info-row"><div class="info-label">서비스</div><div class="info-val">AI 안부전화·IoT 모니터링·주기적 방문 확인</div></div><div class="info-row"><div class="info-label">신청</div><div class="info-val">읍면동 주민센터 | 노인학대 ☎ <a href="tel:1577-1389">1577-1389</a></div></div>`},
+  energy:{title:'에너지바우처·생계지원',sub:'경제적 취약계층',body:`<div class="info-row"><div class="info-label">에너지바우처</div><div class="info-val">노인·장애인 가구 냉난방 에너지 지원</div></div><div class="info-row"><div class="info-label">긴급복지</div><div class="info-val">☎ <a href="tel:129">129</a></div></div>`},
+  ic_housing:{title:'주거 편의 지원',sub:'통합 돌봄 — 주거 영역',body:`<div class="info-row"><div class="info-label">내용</div><div class="info-val">낙상 예방 시설 설치, 이동 편의 개선, 노후 주택 수선 지원</div></div><div class="info-row"><div class="info-label">신청</div><div class="info-val">LH 콜센터 ☎ 1600-1004 | <a href="https://www.lh.or.kr" target="_blank">LH 마이홈 →</a></div></div>`},
+  ic_casemanage:{title:'통합 사례관리',sub:'복합 욕구 대상자 조정',body:`<div class="info-row"><div class="info-label">대상</div><div class="info-val">의료·돌봄·경제·주거 중 2개 이상 복합 욕구를 가진 대상자</div></div><div class="info-row"><div class="info-label">담당</div><div class="info-val">읍면동 주민센터 통합사례관리사 (전주시 담당부서 확인 필요)</div></div><div class="info-row"><div class="info-label">연계</div><div class="info-val">의뢰서 발송 후 담당 사례관리사 배정</div></div>`},
+  guide: { title:'포털 이용 가이드', sub:'v3.0 — 일차의료개발센터 돌봄팀 제작', body:`
+    <div class="info-row"><div class="info-label">탭 구성</div><div class="info-val">🏛️ 공공자원 / 🔗 통합돌봄 / 🏘️ 민간자원 / 🖱️ 서비스 신청</div></div>
+    <div class="info-row"><div class="info-label">장기요양 신청</div><div class="info-val">longtermcare.or.kr → 민원상담실. 공동인증서 필요. ☎ <a href="tel:1577-1000">1577-1000</a></div></div>
+    <div class="info-row"><div class="info-label">퇴원 연계</div><div class="info-val">통합돌봄 탭 → '퇴원 후 지역 연계 절차' 흐름도 참고</div></div>
+  `},
+  allContacts: { title:'전체 연락처 모음', sub:'전주시 + 전국 공공기관', body:`
+    <div class="info-row"><div class="info-label">장기요양</div><div class="info-val">☎ <a href="tel:1577-1000">1577-1000</a> | <a href="https://longtermcare.or.kr" target="_blank">longtermcare →</a></div></div>
+    <div class="info-row"><div class="info-label">복지 (전국)</div><div class="info-val">☎ <a href="tel:129">129</a></div></div>
+    <div class="info-row"><div class="info-label">자살예방</div><div class="info-val">☎ <a href="tel:1393">1393</a></div></div>
+    <div class="info-row"><div class="info-label">치매상담콜센터 (전국)</div><div class="info-val">☎ <a href="tel:1899-9988">1899-9988</a></div></div>
+    <div class="info-row"><div class="info-label">호스피스</div><div class="info-val">☎ <a href="tel:1833-4673">1833-4673</a></div></div>
+    <div class="info-row"><div class="info-label">전주시 지역 기관</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요 — 보건소·치매안심센터·정신건강복지센터 등 전주 지역 연락처가 확인되는 대로 반영됩니다.</span></div></div>
+  `},
+  polypharmacy: { title:'다제약물관리사업', sub:'국민건강보험공단 — 다약제 복용 점검·조정', body:`
+    <div class="info-row"><div class="info-label">내용</div><div class="info-val">만성질환자가 복용하는 여러 약물의 중복·과다 복용 및 부작용을 줄이기 위해 국민건강보험공단이 운영하는 건강보험 사업입니다. 자문약사의 처방 점검·조정 및 상담을 제공합니다.</div></div>
+    <div class="info-row"><div class="info-label">지역사회모형<br>대상</div><div class="info-val">건강보험 가입자 (전 연령) — 만성질환 1개 이상 + 6개월간 60일 이상 투약, 성분 10개 이상 복용</div></div>
+    <div class="info-row"><div class="info-label">병원모형<br>대상</div><div class="info-val">건강보험 가입자, 만 65세 이상 — 만성질환 1개 이상 + 6개월간 60일 이상 투약하며 성분 10개 이상, 또는 5종 이상+고위험 약물 복용</div></div>
+    <div class="info-row"><div class="info-label">장기요양시설모형<br>대상</div><div class="info-val">참여 장기요양시설 입소자 — 만성질환 보유 + 10종 이상 약물 복용, 또는 시설 내 약물 관리가 필요하다고 판단되는 입소자</div></div>
+    <div class="info-row"><div class="info-label">전주시 참여기관</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요 — 전주 지역 병원모형·지역사회모형·장기요양시설모형 참여기관이 확인되는 대로 반영됩니다.</span></div></div>
+    <div class="info-row"><div class="info-label">신청 문의</div><div class="info-val">☎ <a href="tel:1577-1000">1577-1000</a> (국민건강보험공단)</div></div>
+  `},
+  visit_health: { title:'방문건강관리', sub:'전주시 보건소 서비스', body:`
+    <div class="info-row"><div class="info-label">내용</div><div class="info-val">간호사·영양사 가정 방문 → 만성질환 관리, 건강 교육 (전국 보건소 공통 사업)</div></div>
+    <div class="info-row"><div class="info-label">전주시 보건소</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요 — 완산구·덕진구 보건소 연락처가 확인되는 대로 반영됩니다.</span></div></div>
+    <div class="info-row"><div class="info-label">온라인 보건민원</div><div class="info-val"><a href="https://www.e-health.go.kr" target="_blank">🌐 e보건소 →</a><br>보건소 방문 없이 건강진단결과서(보건증)·예방접종증명서 등 각종 증명서 발급을 온라인으로 처리할 수 있는 보건복지부·사회보장정보원 공공보건포털입니다.</div></div>
+  `},
+  mental: { title:'정신건강 상담', sub:'전주시정신건강복지센터', body:`
+    <div class="info-row"><div class="info-label">전주 센터</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요</span></div></div>
+    <div class="info-row"><div class="info-label">위기상담</div><div class="info-val">☎ <a href="tel:1577-0199">1577-0199</a> (24시간)</div></div>
+    <div class="info-row"><div class="info-label">자살예방</div><div class="info-val">☎ <a href="tel:1393">1393</a> (24시간)</div></div>
+  `},
+  dementia: { title:'치매관리 서비스', sub:'전주시 치매안심센터', body:`
+    <div class="info-row"><div class="info-label">전주시 안내</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요 — 완산구·덕진구 치매안심센터 연락처가 확인되는 대로 반영됩니다.</span></div></div>
+    <div class="info-row"><div class="info-label">전국 콜센터</div><div class="info-val">☎ <a href="tel:1899-9988">1899-9988</a> (치매상담콜센터, 24시간)</div></div>
+    <div class="info-row"><div class="info-label">전국 정보</div><div class="info-val"><a href="https://www.nid.or.kr" target="_blank">🌐 중앙치매센터 →</a></div></div>
+  `},
+  hospice: { title:'호스피스·완화의료', sub:'말기 환자 및 가족 지원 — 전주시 제공기관 확인 필요', body:`
+    <div class="info-row"><div class="info-label">전주시 제공기관</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요 — 확인되는 대로 목록을 반영하겠습니다.</span></div></div>
+    <div class="info-row"><div class="info-label">중앙호스피스센터</div><div class="info-val">☎ <a href="tel:1833-4673">1833-4673</a> | <a href="https://hospice.go.kr" target="_blank">hospice.go.kr →</a> — 전국 호스피스 전문기관 찾기</div></div>
+  `},
+  ic_homecare: { title:'재가 의료급여 서비스', sub:'전주시 — 퇴원환자 지역사회 통합지원', body:`
+    <div class="info-row"><div class="info-label">내용</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요 — 전주시 통합돌봄 사업 내용이 확인되는 대로 반영됩니다.</span></div></div>
+  `},
+  ic_caregiver: { title:'통합 돌봄 (돌봄SOS)', sub:'지자체 긴급·단기 돌봄', body:`
+    <div class="info-row"><div class="info-label">내용</div><div class="info-val">가사·간병·식사·이동·안전확인을 통합적으로 단기 지원 (전국 공통 제도)</div></div>
+    <div class="info-row"><div class="info-label">신청</div><div class="info-val">읍면동 주민센터 또는 ☎ <a href="tel:129">129</a></div></div>
+    <div class="info-row"><div class="info-label">전주시 담당</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요</span></div></div>
+  `},
+  ic_mental: { title:'정신건강 연계', sub:'통합 돌봄 — 정신건강', body:`
+    <div class="info-row"><div class="info-label">전주 센터</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요</span></div></div>
+    <div class="info-row"><div class="info-label">스크리닝</div><div class="info-val">PHQ-9 우울 / GAD-7 불안 / 사회적 고립 위험 평가 후 연계</div></div>
+  `},
+  ic_nutrition: { title:'영양·식사 지원', sub:'통합 돌봄 — 영양 영역', body:`
+    <div class="info-row"><div class="info-label">전주 지역 자원</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요 — 푸드뱅크·도시락 배달 기관이 확인되는 대로 반영됩니다.</span></div></div>
+    <div class="info-row"><div class="info-label">영양상담</div><div class="info-val">관할 보건소 방문건강관리팀 연계</div></div>
+  `},
+  care_sos: { title:'돌봄SOS 서비스', sub:'지자체 통합 돌봄', body:`
+    <div class="info-row"><div class="info-label">내용</div><div class="info-val">가사·간병·식사·이동·안전확인 통합 단기 지원 (전국 공통 제도)</div></div>
+    <div class="info-row"><div class="info-label">신청</div><div class="info-val">읍면동 주민센터 또는 <a href="https://www.bokjiro.go.kr" target="_blank">복지로 →</a></div></div>
+    <div class="info-row"><div class="info-label">전주시 특화사업</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요</span></div></div>
+  `},
+  meal: { title:'식사배달 서비스', sub:'결식 우려 노인·장애인', body:`
+    <div class="info-row"><div class="info-label">신청</div><div class="info-val">읍면동 주민센터 또는 관할 사회복지관</div></div>
+    <div class="info-row"><div class="info-label">전주 지역 기관</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요</span></div></div>
+  `},
+  transport: { title:'이동 지원 서비스', sub:'교통 약자 이동 지원', body:`
+    <div class="info-row"><div class="info-label">전주시 장애인콜택시 등</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요</span></div></div>
+  `},
+  housing: { title:'주거환경 개선', sub:'안전한 주거환경 지원', body:`
+    <div class="info-row"><div class="info-label">내용</div><div class="info-val">낙상 예방 손잡이·미끄럼방지·욕실 개조</div></div>
+    <div class="info-row"><div class="info-label">주거급여</div><div class="info-val">수선유지급여 — <a href="https://www.gov.kr" target="_blank">정부24 →</a></div></div>
+    <div class="info-row"><div class="info-label">전주시 특화사업</div><div class="info-val"><span style="color:var(--gold);font-weight:700;">확인 필요</span></div></div>
+  `}
+};
+
+const AT_RES = {};
+
+const HC_DATA = {
+  meta:{
+    sourceDate: null,
+    nextReview: null,
+    sources: [],
+    note: '전주 지역 재택의료·방문진료 의원 정보는 아직 확인되지 않았습니다. 확인되는 대로 반영될 예정입니다.'
+  },
+  clinics: []
+};
+
+/* 초기 렌더 */
+hcRender();
+pcRender();
+vnRender();
+
+</script>
+</body>
+</html>

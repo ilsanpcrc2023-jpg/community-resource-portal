@@ -46,7 +46,7 @@
           <div class="region-pin active" style="left:40%;top:17%;" onclick="pickRegion('고양시', true)"><span class="region-dot"></span><span class="region-label">고양시</span></div>
           <div class="region-pin" style="left:48%;top:23%;" onclick="pickRegion('서울 성북구', false)"><span class="region-dot"></span><span class="region-label">성북구</span></div>
           <div class="region-pin" style="left:30%;top:25%;" onclick="pickRegion('인천 계양구', false)"><span class="region-dot"></span><span class="region-label">계양구</span></div>
-          <div class="region-pin" style="left:46%;top:57%;" onclick="pickRegion('전북 전주시', false)"><span class="region-dot"></span><span class="region-label">전주시</span></div>
+          <div class="region-pin" style="left:46%;top:57%;" onclick="pickRegion('전북 전주시', false, '/jeonju/')"><span class="region-dot"></span><span class="region-label">전주시</span></div>
           <div class="region-pin" style="left:34%;top:68%;" onclick="pickRegion('광주광역시 북구', false)"><span class="region-dot"></span><span class="region-label">광주 북구</span></div>
           <div class="region-pin" style="left:16%;top:81%;" onclick="pickRegion('광주광역시 광산구', false)"><span class="region-dot"></span><span class="region-label">광산구</span></div>
           <div class="region-pin" style="left:66%;top:80%;" onclick="pickRegion('부산 서구', false)"><span class="region-dot"></span><span class="region-label">부산 서구</span></div>
@@ -1581,6 +1581,7 @@
 <script src="/shared.js"></script>
 <script>
 const REGION_NAME = '고양시';
+const REGION_HUB_NAME = '국민건강보험 일산병원';
 
 const modals = {
   guide: { title:'포털 이용 가이드', sub:'v3.0 — 일차의료개발센터 돌봄팀 제작', body:`
